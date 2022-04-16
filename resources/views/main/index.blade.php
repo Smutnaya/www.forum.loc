@@ -11,4 +11,5 @@ FORUM
 
 @foreach($model['topics'] as $topic)
 <div>{{ $topic['title'] }}</div>
+
 @endforeach

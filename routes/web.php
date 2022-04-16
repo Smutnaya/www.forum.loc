@@ -24,3 +24,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::get('/main', 'MainController@index');
+
+Route::get('/topic/{id}', 'TopicController@index');
+
+Route::post('/topic/{id}/post','TopicController@post'
+);
