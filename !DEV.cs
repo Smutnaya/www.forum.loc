@@ -6,3 +6,6 @@ $ php artisan ui vue --auth         // auth part2
 $ npm install
 $ npm audit fix --force
 $ npm install --save-dev cross-env // windows
+
+
+$ php artisan make:seeder LoaderSeeder
