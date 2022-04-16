@@ -20,6 +20,8 @@ class TopicViewer
         $model = self::init();
 
         $topic = Topic::find($topicId); // eloquent
+        if(is_null($topic)) return $model;
+
         self::setTopic($model, $topic);
 
         $posts = Post::where('topic_id', $topicId)->get();

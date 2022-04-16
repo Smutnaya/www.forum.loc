@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// f.vsmuta.com/t/333-dnevniki-vampira
+// f.vsmuta.com/f/333-novosoti
+// f.vmsuta.com/s/333-vremena-smuti
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,7 +29,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/main', 'MainController@index');
 
-Route::get('/topic/{id}', 'TopicController@index');
+Route::get('/t/{id}', 'TopicController@index');
+    Route::any('/t/{id}/post','TopicController@post');
 
-Route::post('/topic/{id}/post','TopicController@post'
-);
+Route::get('/f/{id}', 'ForumController@index');
+Route::get('/f/{id}/topic', 'ForumController@topic');
+    Route::any('/f/{id}/topic/save', 'ForumController@save');

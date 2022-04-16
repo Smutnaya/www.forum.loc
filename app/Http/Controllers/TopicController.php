@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\AppForum\Viewers\TopicViewer;
 use Illuminate\Http\Request;
+use App\AppForum\Viewers\TopicViewer;
+use App\AppForum\Executors\TopicExecutor;
 
 class TopicController extends Controller
 {
@@ -21,7 +22,16 @@ class TopicController extends Controller
 
     public function post($topicId)
     {
-        dd(request()->input('text'));
+        if(!request()->isMethod('post')) return redirect('/');
 
+        $result = TopicExecutor::post($topicId, request()->all());
+        if($result['success'])
+        {
+            $model = TopicViewer::index($topicId);
+
+            return view('topic', compact('model'));
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
     }
 }
