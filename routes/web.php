@@ -35,3 +35,5 @@ Route::get('/t/{id}', 'TopicController@index');
 Route::get('/f/{id}', 'ForumController@index');
 Route::get('/f/{id}/topic', 'ForumController@topic');
     Route::any('/f/{id}/topic/save', 'ForumController@save');
+
+Route::get('/s/{id}', 'SectionController@index');

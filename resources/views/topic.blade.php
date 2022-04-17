@@ -12,7 +12,7 @@
 <div>{{ $post['text'] }}</div>
 @endforeach
 
-<form method='post' action={{ url('topic/'.$model['topic']['id'].'/post')}}>
+<form method='post' action={{ url('t/'.$model['topic']['id'].'/post')}}>
     @csrf
     <div>
         <p><label>Новый ответ: </label>
