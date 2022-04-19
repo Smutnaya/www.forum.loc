@@ -1,8 +1,9 @@
 
-FORUM
+@extends('layouts.main')
 
+@section('content')
 @foreach($model['sections'] as $section)
-<div><a href="{{ url('/s/'.$section['id'])}}">{{ $section['title'] }} </a></div>
+<div class="text-end"><a href="{{ url('/s/'.$section['id'])}}">{{ $section['title'] }} </a></div>
 @endforeach
 <br>
 <div>TOPIC</div>
@@ -14,4 +15,5 @@ FORUM
 @foreach($model['posts'] as $post)
 <div>{{ $post['text'] }}</div>
 @endforeach
+@endsection
 

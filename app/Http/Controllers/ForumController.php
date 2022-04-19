@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\AppForum\Viewers\ForumViewer;
 use Illuminate\Http\Request;
-
+use App\AppForum\Viewers\ForumViewer;
+use App\AppForum\Executors\ForumExecutor;
 class ForumController extends Controller
 {
     public function index($forumId)
     {
+        //TODO: раздел?
+        // TODO: model?
+
         $model = ForumViewer::index($forumId);
         //dd($model);
 
@@ -18,5 +21,22 @@ class ForumController extends Controller
     public function topic($forumId)
     {
         return view('forum.topic', compact('forumId'));
+    }
+
+    public function save($forumId)
+    {
+        if(!request()->isMethod('post')) return redirect('/');
+
+        $result = ForumExecutor::post($forumId, request()->all());
+
+        if($result['success'])
+        {
+            return redirect('t/'.$result['topicId']);
+        }
+
+        //dd($result);
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+
     }
 }

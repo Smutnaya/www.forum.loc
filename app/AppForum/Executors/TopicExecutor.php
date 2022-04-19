@@ -9,31 +9,39 @@ class TopicExecutor
 {
     public static $result = ['success' => false, 'message' => null];
 
-    public static function post($topicId, $input)
+    public static function post($topicId, $user, $input)
     {
         $out = collect();
-        self::post_valid($topicId, $input, $out);
+        self::post_valid($topicId, $user, $input, $out);
 
         if(self::$result['success'])
         {
             PostManager::post($out['topic'], $out['text']);
 
             self::$result['message'] = 'OK';
+            self::$result['topicId'] = $topicId;
+            self::$result['user'] = $user;
         }
 
         return self::$result;
     }
 
-    private static function post_valid($topicId, $input, $out)
+    private static function post_valid($topicId, $user, $input, $out)
     {
+        if(is_null($user))  return self::$result['message'] = 'не залогинились';
         $topic = Topic::find($topicId);
         if(is_null($topic)) return self::$result['message'] = 'Tema ne najdena!!!';
 
-        if(!isset($input['text']) || empty(trim($input['text']))) return self::$result['message'] = 'vvedite text';
+        //dd($input['text']);
+
+        if(!isset($input['text']) || empty($input['text'])) return self::$result['message'] = 'vvedite text!';
 
         //dd($input);
         // TODO: a est li text soobwenia?
         // TODO: dlinna
+
+        if(strlen($input['text']) > 13000) return self::$result['message'] = 'max dlina posta 13k simvolov';
+        if(strlen($input['text']) < 2) return self::$result['message'] = 'min dlina posta 2 simvola';
         // html encode & -> &amp;
 
         $out['topic'] = $topic;

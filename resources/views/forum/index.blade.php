@@ -4,4 +4,4 @@
 
 <p><u><a href="{{ url('/f/'.$forumId.'/topic')}}">New topic</a></u></p>
 
-@dd($forumId);
+

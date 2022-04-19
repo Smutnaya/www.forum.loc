@@ -24,12 +24,16 @@ class TopicController extends Controller
     {
         if(!request()->isMethod('post')) return redirect('/');
 
-        $result = TopicExecutor::post($topicId, request()->all());
+        $user = $this->user(); //null ili net $user->email, is_null($user)
+
+        $result = TopicExecutor::post($topicId, $user, request()->all());
+        //$result = TopicExecutor::post($topicId, request()->all());
         if($result['success'])
         {
-            $model = TopicViewer::index($topicId);
+            //$model = TopicViewer::index($topicId);
 
-            return view('topic', compact('model'));
+            return redirect('t/'.$result['topicId']);
+            //return view('topic', compact('model'));
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
