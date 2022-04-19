@@ -33,7 +33,7 @@ class TopicExecutor
 
         //dd($input);
         // TODO: a est li text soobwenia?
-        // TODO dlinna
+        // TODO: dlinna
         // html encode & -> &amp;
 
         $out['topic'] = $topic;

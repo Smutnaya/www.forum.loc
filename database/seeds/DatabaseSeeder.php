@@ -113,14 +113,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Topic::insert([
-            ['title' => 'aaa', 'text' => 'textttt', 'datatime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
-            ['title' => 'bbb', 'text' => 'textttt', 'datatime' => strtotime('+10 hours'), 'user_id' => 1, 'forum_id' => 1],
-            ['title' => 'ccc', 'text' => 'textttt', 'datatime' => strtotime('+5 days'), 'user_id' => 1, 'forum_id' => 1]
+            ['title' => 'aaa', 'text' => 'textttt1', 'datatime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
+            ['title' => 'bbb', 'text' => 'textttt2', 'datatime' => strtotime('+10 hours'), 'user_id' => 1, 'forum_id' => 1],
+            ['title' => 'ccc', 'text' => 'textttt3', 'datatime' => strtotime('+5 days'), 'user_id' => 1, 'forum_id' => 1]
         ]);
 
         Post::insert([
-            ['text' => 'textttt', 'datatime' => strtotime('+10 minutes'), 'user_id' => 1, 'topic_id' => 1],
-            ['text' => 'textttt222', 'datatime' => strtotime('+15 minutes'), 'user_id' => 1, 'topic_id' => 1]
+            ['text' => 'textttt4', 'datatime' => strtotime('+10 minutes'), 'user_id' => 1, 'topic_id' => 1],
+            ['text' => 'textttt5', 'datatime' => strtotime('+15 minutes'), 'user_id' => 1, 'topic_id' => 1]
         ]);
 
     }
