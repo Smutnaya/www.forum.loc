@@ -11313,6 +11313,11 @@ footer {
   margin: 0px;
 }
 
+.text {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
 .news {
   text-align: center;
 }

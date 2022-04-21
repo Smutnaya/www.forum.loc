@@ -10,7 +10,7 @@
 @endif
 
 <div>{{ $model['topic']['title'] }}</div>
-<div>{{ $model['topic']['text'] }}</div>
+<div class="text">{{ $model['topic']['text'] }}</div>
 @foreach($model['posts'] as $post)
 <div>{{ $post['text'] }}</div>
 @endforeach

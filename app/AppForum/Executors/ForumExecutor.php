@@ -9,15 +9,16 @@ class ForumExecutor
 {
     public static $result = ['success' => false, 'message' => null];
 
-    public static function post($forumId, $input)
+    public static function post($forumId, $user, $input)
     {
         $out = collect();
 
-        self::topic_valid($forumId, $input, $out);
+
+        self::topic_valid($forumId, $input, $out, $user);
 
         if(self::$result['success'])
         {
-            $topicId = TopicManager::post($out['forum'], $out['text'], $out['title']);
+            $topicId = TopicManager::post($out['forum'], $out['text'], $out['title'], $user);
 
             self::$result['topicId'] = $topicId;
             self::$result['message'] = 'OK';
@@ -27,8 +28,11 @@ class ForumExecutor
         return self::$result;
     }
 
-    private static function topic_valid($forumId, $input, $out)
+    private static function topic_valid($forumId, $input, $out, $user)
     {
+        //dd($user);
+        if(is_null($user))  return self::$result['message'] = 'не залогинились';
+
         $forum = Forum::find($forumId);
 
         if(is_null($forum)) return self::$result['message'] = 'Razdel s topicami ne najden!!!';

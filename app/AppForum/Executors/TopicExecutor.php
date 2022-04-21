@@ -14,9 +14,10 @@ class TopicExecutor
         $out = collect();
         self::post_valid($topicId, $user, $input, $out);
 
+
         if(self::$result['success'])
         {
-            PostManager::post($out['topic'], $out['text'], $out['user']);
+            PostManager::post($out['topic'], $out['text'], $user);
 
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;

@@ -13,6 +13,7 @@
 //   lg: 960px
 // );
 
+
 body {
     //background: rgba(223, 212, 192, 0.877);
     //background: rgba(218, 201, 172, 0.74);
@@ -40,6 +41,10 @@ footer {
 .container-fluid {
     padding: 0px;
     margin: 0px;
+}
+.text {
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .news {

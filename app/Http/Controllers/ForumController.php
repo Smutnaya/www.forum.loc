@@ -27,7 +27,11 @@ class ForumController extends Controller
     {
         if(!request()->isMethod('post')) return redirect('/');
 
-        $result = ForumExecutor::post($forumId, request()->all());
+        $user = $this->user(); //null ili net $user->email, is_null($user)
+
+        //dd($user);
+
+        $result = ForumExecutor::post($forumId, $user, request()->all());
 
         if($result['success'])
         {

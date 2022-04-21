@@ -16,7 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             //$table->timestamps();
-            $table->string('text');
+            $table->longtext('text');
             $table->unsignedInteger('datatime');
             $table->boolean('moderation')->default(false);
             $table->boolean('block')->default(false);

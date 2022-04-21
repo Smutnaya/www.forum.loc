@@ -17,7 +17,7 @@ class CreateTopicsTable extends Migration
             $table->id();
             //$table->timestamps();
             $table->string('title');
-            $table->string('text');
+            $table->longtext('text');
             $table->unsignedInteger('datatime');
             $table->boolean('moderation')->default(false);
             $table->boolean('block')->default(false);

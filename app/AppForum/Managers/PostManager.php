@@ -11,7 +11,7 @@ class PostManager
         $post = Post::create([
             'text' => $text,
             'datatime' => time(),
-            'user_id' => $user,
+            'user_id' => $user->id,
             'topic_id' => $topic->id,
         ]);
 

@@ -7,13 +7,13 @@ use App\Topic;
 
 class TopicManager
 {
-    public static function post($forum, $text, $title)
+    public static function post($forum, $text, $title, $user)
     {
         $topic = Topic::create([
             'title' => $title,
             'text' => $text,
             'datatime' => time(),
-            'user_id' => 1,
+            'user_id' => $user->id,
             'forum_id' => $forum->id,
         ]);
 
