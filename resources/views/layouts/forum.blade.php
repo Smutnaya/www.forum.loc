@@ -27,14 +27,14 @@
         @include('inc.header')
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2  col-sm-12" >
+                <div class="col-md-2">
                     @include('inc.aside')
                 </div>
-                <div class="col-md-8 col-sm-12" >
-                    @include("news.index")
-                </div>
-                <div class="col-md-2 col-sm-12">
+                <div class="col content">
                     @yield("content")
+                </div>
+                <div class="col-md-2 info-post">
+                    здесь мб последние апнутые темы или популярные
                 </div>
             </div>
         </div>

@@ -12,6 +12,6 @@ class SectionController extends Controller
         $model = SectionViewer::index($sectionId);
         //dd($model);
 
-        return view('section', compact('model'));
+        return view('section.index', compact('model'));
     }
 }

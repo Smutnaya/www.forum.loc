@@ -1,3 +1,6 @@
+
+@extends('layouts.forum')
+@section('content')
 @if(is_null($model['topic']))
 <div>Tema ne najdena</div>
 @else
@@ -22,3 +25,5 @@
     </div>
 </form>
 @endif
+
+@endsection

@@ -16,7 +16,7 @@ class TopicExecutor
 
         if(self::$result['success'])
         {
-            PostManager::post($out['topic'], $out['text']);
+            PostManager::post($out['topic'], $out['text'], $out['user']);
 
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;

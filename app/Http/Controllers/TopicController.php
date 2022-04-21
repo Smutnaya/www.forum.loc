@@ -16,7 +16,7 @@ class TopicController extends Controller
         $model = TopicViewer::index($topicId);
         //dd($model);
 
-        return view('topic', compact('model'));
+        return view('topic.index', compact('model'));
 
     }
 

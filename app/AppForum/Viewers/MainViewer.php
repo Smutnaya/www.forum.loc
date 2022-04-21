@@ -12,8 +12,8 @@ class MainViewer
     {
         return collect([
             'sections' => collect(), // id, title, description
-            'posts' => collect(),
-            'topics' => collect(),
+            // 'posts' => collect(),
+            // 'topics' => collect(),
         ]);
     }
 
@@ -25,15 +25,15 @@ class MainViewer
         $sections = Section::all();
         self::setSection($model, $sections);
 
-        // post
+        // // post
 
-        $posts = Post::all();
-        self::setPost($model, $posts);
+        // $posts = Post::all();
+        // self::setPost($model, $posts);
 
-        // topic
+        // // topic
 
-        $topics = Topic::all();
-        self::setTopic($model, $topics);
+        // $topics = Topic::all();
+        // self::setTopic($model, $topics);
 
         return $model;
     }
@@ -50,26 +50,26 @@ class MainViewer
         }
     }
 
-    private static function setPost($model, $posts)
-    {
-        foreach($posts as $post)
-        {
-            $model['posts']->push([
-            'id' => $post->id,
-            'text' => $post->text
-            ]);
-        }
-    }
+    // private static function setPost($model, $posts)
+    // {
+    //     foreach($posts as $post)
+    //     {
+    //         $model['posts']->push([
+    //         'id' => $post->id,
+    //         'text' => $post->text
+    //         ]);
+    //     }
+    // }
 
-    private static function setTopic($model, $topics)
-    {
-        foreach($topics as $topic)
-        {
-            $model['topics']->push([
-                'title' => $topic->title
-            ]);
-        }
-    }
+    // private static function setTopic($model, $topics)
+    // {
+    //     foreach($topics as $topic)
+    //     {
+    //         $model['topics']->push([
+    //             'title' => $topic->title
+    //         ]);
+    //     }
+    // }
 
 
 
