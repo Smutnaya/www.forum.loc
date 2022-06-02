@@ -4,12 +4,14 @@ namespace App\AppForum\Viewers;
 
 use App\Post;
 use App\Topic;
+use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class TopicViewer
 {
     private static function init()
     {
         return collect([
+            'breadcramp' => null,
             'topic' => null,
             'posts' => collect()
         ]);
@@ -27,6 +29,9 @@ class TopicViewer
         $posts = Post::where('topic_id', $topicId)->get();
         //dd($posts);
         self::setPost($model, $posts);
+
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic($topicId);
+
 
         return $model;
     }

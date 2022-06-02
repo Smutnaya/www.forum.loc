@@ -11,5 +11,10 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').vue()
-    .sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/app.js', 'public/js')
+   .vue()
+   .sass('resources/sass/app.scss', 'public/css')
+   .version();
+
+mix.sourceMaps(!mix.inProduction()) // console.log fix DevTools failed to load SourceMap: Could not load content for
+

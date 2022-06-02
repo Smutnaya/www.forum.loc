@@ -41,9 +41,12 @@ class TopicExecutor
         // TODO: a est li text soobwenia?
         // TODO: dlinna
 
-        if(strlen($input['text']) > 13000) return self::$result['message'] = 'max dlina posta 13k simvolov';
+        //if(strlen($input['text']) > 13000) return self::$result['message'] = 'max dlina posta 13k simvolov';
         if(strlen($input['text']) < 2) return self::$result['message'] = 'min dlina posta 2 simvola';
         // html encode & -> &amp;
+
+
+        if(strlen($input['text']) > 13000) $input['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
         $out['topic'] = $topic;
         $out['text'] = $input['text'];

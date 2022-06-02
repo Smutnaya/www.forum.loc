@@ -32,6 +32,8 @@ Route::get('/main', 'MainController@index')->name('main');
 Route::get('/t/{topic_id}', 'TopicController@index');
     Route::any('/t/{id}/post','TopicController@post');
 
+Route::get('/fs', 'AllForumController@index');
+
 Route::get('/f/{id}', 'ForumController@index');
 Route::get('/f/{id}/topic', 'ForumController@topic');
     Route::any('/f/{id}/topic/save', 'ForumController@save');

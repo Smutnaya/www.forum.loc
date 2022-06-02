@@ -1,4 +1,4 @@
-window._ = require('lodash');
+//window._ = require('lodash');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -7,10 +7,13 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('popper.js').default;
+    // window.Popper = require('popper.js').default;
+    // require('bootstrap');
+
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+    window.Popper = require('@popperjs/core');
+    window.bootstrap = require('bootstrap'); // ctobi zarabotali popover
 } catch (e) {}
 
 /**

@@ -1,10 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-@foreach($model['sections'] as $section)
-<div class="text-end "><a href="{{ url('/s/'.$section['id'])}}">{{ $section['title'] }} </a></div>
-@endforeach
-<br>
+здесь статистика форума или последние 5-10 постов
 {{-- <div>TOPIC</div>
 @foreach($model['topics'] as $topic)
 <div>{{ $topic['title'] }}</div>

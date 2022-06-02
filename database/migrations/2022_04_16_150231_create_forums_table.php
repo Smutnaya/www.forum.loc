@@ -20,6 +20,7 @@ class CreateForumsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('moderation')->default(false);
             $table->boolean('hide')->default(false);
+            $table->json('DATA')->nullable();
             $table->unsignedBigInteger('section_id');
         });
     }

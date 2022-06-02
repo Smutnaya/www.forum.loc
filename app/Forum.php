@@ -8,4 +8,14 @@ class Forum extends Model
 {
     protected $guarded = [];
     public $timestamps = false;
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class);
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
 }

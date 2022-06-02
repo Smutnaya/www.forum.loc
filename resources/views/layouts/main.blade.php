@@ -21,25 +21,25 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="p-3 mb-2 bg-teal">
-
-    <main class="py-4">
+<body class="p-2 fs-6">
+    <main>
         @include('inc.header')
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2  col-sm-12" >
+                <div class="col-lg-2 col-md-2 col-sm-3" >
                     @include('inc.aside')
                 </div>
-                <div class="col-md-8 col-sm-12" >
+                <div class="col-lg-8 col-md-10 col-sm-9" >
                     @include("news.index")
                 </div>
-                <div class="col-md-2 col-sm-12">
+                <div class="col-lg-2 col-md-11 col-sm-11">
                     @yield("content")
                 </div>
             </div>
         </div>
+        @include('inc.footer')
     </main>
-    {{-- @include('inc.footer') --}}
+
 </body>
 
 </html>
