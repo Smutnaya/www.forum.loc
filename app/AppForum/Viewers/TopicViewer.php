@@ -12,42 +12,51 @@ class TopicViewer
     {
         return collect([
             'breadcramp' => null,
+            'user' => null,
             'topic' => null,
             'posts' => collect()
         ]);
     }
 
-    public static function index($topicId)
+    public static function index($topicId, $user)
     {
         $model = self::init();
 
         $topic = Topic::find($topicId); // eloquent
         if(is_null($topic)) return $model;
-
         self::setTopic($model, $topic);
 
         $posts = Post::where('topic_id', $topicId)->get();
-        //dd($posts);
+        if($posts->isEmpty()) return $model;
         self::setPost($model, $posts);
-
+/*
+        $filelist = array();
+        if ($handle = opendir("C:/OpenServer/domains/www.forum.loc/public/images/smiley")) {
+            while ($entry = readdir($handle)) {
+                    $filelist[] = $entry;
+            }
+            closedir($handle);
+        }
+        dd($filelist);
+*/
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic($topicId);
-
+        if(is_null($user)) return $model;
+        $model['user'] = $user;
 
         return $model;
     }
 
     private static function setTopic($model, $topic)
     {
-
             $model['topic'] = [
                 'title' => $topic->title,
                 'text' => $topic->text,
+                'hide' => $topic->hide,
+                'block' => $topic->block,
+                'pin' => $topic->pin,
+                'moderation' => $topic->moderation,
                 'id' => $topic->id
             ];
-
-
-        //dd($model);
-
     }
 
     private static function setPost($model, $posts)
@@ -55,22 +64,16 @@ class TopicViewer
         foreach($posts as $post)
         {
             $model['posts']->push([
-                'text' => $post->text
+                'text' => $post->text,
+                'date' => date("d.m.Y H:i", $post->datatime),
+                'hide' => $post->hide,
+                'moderation' => $post->moderation,
+                'DATA' => $post->DATA,
+                'id' => $post->id,
+                'user_id' => $post->user_id,
+                'user_post' => $post->user
+
             ]);
         }
-        //dd($model);
-
     }
-
-
-
-
-
-
 }
-
-
-
-
-
-?>

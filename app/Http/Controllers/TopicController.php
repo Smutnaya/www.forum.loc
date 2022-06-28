@@ -10,14 +10,9 @@ class TopicController extends Controller
 {
     public function index($topicId)
     {
-        // TODO: а сушествует ли такая тема?
-
-        //dd($topicId);
-        $model = TopicViewer::index($topicId);
-        //dd($model);
-
+        $user = $this->user();
+        $model = TopicViewer::index($topicId, $user);
         return view('topic.index', compact('model'));
-
     }
 
     public function post($topicId)
@@ -25,15 +20,11 @@ class TopicController extends Controller
         if(!request()->isMethod('post')) return redirect('/');
 
         $user = $this->user(); //null ili net $user->email, is_null($user)
-
+        //if(is_null($user)) return redirect()->back()->withErrors(['message' => 'login!']);
         $result = TopicExecutor::post($topicId, $user, request()->all());
-        //$result = TopicExecutor::post($topicId, request()->all());
         if($result['success'])
         {
-            //$model = TopicViewer::index($topicId);
-
             return redirect('t/'.$result['topicId']);
-            //return view('topic', compact('model'));
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);

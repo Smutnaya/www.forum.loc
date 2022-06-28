@@ -13,7 +13,8 @@ class ForumViewer
         return collect([
             'breadcrump' => null,
             'forumTitle' => null,
-            'topics' => collect()
+            'topics' => collect(),
+            'sections' => collect()
         ]);
     }
 
@@ -21,17 +22,30 @@ class ForumViewer
     {
         $model = self::init();
 
-        $model['forumTitle'] = Forum::find($forumId)->title;
-
         $topics = Topic::where('forum_id', $forumId)->get();
-        if(is_null($topics)) return $model;
+
+        if($topics->isEmpty()) return $model;
 
         self::setForum($model, $topics);
-
+        $model['forumTitle'] = Forum::find($forumId)->title;
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum($forumId);
 
         return $model;
 
+    }
+
+    public static function topic($forumId)
+    {
+        $model = self::init();
+
+        $forum = Forum::find($forumId);
+        if(is_null($forum)) return $model;
+        $model['forumTitle'] = Forum::find($forumId)->title;
+        $model['sections']['moderation'] = $forum->section->moderation;
+        $model['sections']['hide'] = $forum->section->hide;
+        $model['sections']['id'] = $forum->section->id;
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum($forumId);
+        return $model;
     }
 
     private static function setForum($model, $topics)
@@ -42,6 +56,10 @@ class ForumViewer
                 'id' => $topic->id,
                 'title' => $topic->title,
                 'description' => $topic->description,
+                'hide' => $topic->hide,
+                'block' => $topic->block,
+                'pin' => $topic->pin,
+                'moderation' => $topic->moderation,
                 'forum_id' => $topic->forum_id,
             ]);
         }

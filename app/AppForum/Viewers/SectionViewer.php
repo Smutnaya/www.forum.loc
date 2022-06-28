@@ -20,12 +20,9 @@ class SectionViewer
     public static function index($sectionId)
     {
         $model = self::init();
-
         $forums = Forum::where('section_id', $sectionId)->get();
+        if($forums->isEmpty()) return $model;
         $model['sectionTitle'] = Section::find($sectionId)->title;
-
-        if(is_null($forums)) return $model;
-
         self::setForum($model, $forums);
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlSection($sectionId);
 

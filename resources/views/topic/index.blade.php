@@ -1,34 +1,30 @@
-
-@extends('layouts.forum')
+@extends('layouts.topic')
 @section('content')
-<?php
-echo htmlspecialchars_decode($model['breadcrump']);
-?>
-@if(is_null($model['topic']))
-<div>Tema ne najdena</div>
-@else
+    <div class="conteiner">
 
-@if($errors->has('message'))
-    <div class="error" style="color:red">{{ $errors->first('message') }}</div>
-@endif
+        @if (is_null($model['topic']))
+            <div>Тема не найдена</div>
+        @else
+            @if ($errors->has('message'))
+                <div class="error" style="color:red">{{ $errors->first('message') }}</div>
+            @endif
+            @include('inc.breadcrump', ['posts' => $model['breadcrump']])
+            <div class="row">
+                <div class="col-1 d-flex justify-content-start align-items-center pb-1" id="title">
+                    <h4 class="m-0">{{ $model['topic']['title'] }} </h4>
+                    <i class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;"></i>
+                </div>
+            </div>
+            @include('topic.inc.post', ['model' => $model])
 
-
-
-<div>{{ $model['topic']['title'] }}</div>
-<div>{{ $model['topic']['text'] }}</div>
-@foreach($model['posts'] as $post)
-<div class="text">{{ $post['text'] }}</div>
-@endforeach
-
-<form method='post' action={{ url('t/'.$model['topic']['id'].'/post')}}>
-    @csrf
-    <div>
-        <p><label>Новый ответ: </label>
-            <input type="text" name="text" id="text" onkeypress="if(event.keyCode == 13) return false;"></p>
-        <p><input type="submit" value="Добавить">
-            <input type="reset" value="Очистить"></p>
+            <form method='post' action={{ url('t/' . $model['topic']['id'] . '/post') }}>
+                @csrf
+                <label>Новый ответ: </label>
+                @include('inc.ckeditor')
+                <input type="submit" value="Добавить">
+            </form>
+            <input id="reset" type="submit" value="Очистить">
+        @endif
     </div>
-</form>
-@endif
 
 @endsection

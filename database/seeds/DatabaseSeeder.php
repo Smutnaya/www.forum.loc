@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Сенат'],
             ['title' => 'Кланы и альянсы - Политика'],
             ['title' => 'Клановые форумы'],
-            ['title' => 'Сенат. Рабочий'],
+            ['title' => '[Сенат. Рабочий]'],
         ]);
 
         Forum::insert([
@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             ['title'=> 'Справочная система', 'description' => 'Ветка форума для обсуждения "Справки по игре"', 'section_id' => 1],
             ['title'=> 'Форум - Идеи и предложения', 'description' => 'Обсуждение функциональности форума', 'section_id' => 1],
             ['title'=> 'Жалобы на модераторов форума', 'description' => 'Прием жалоб на действия модераторов форума', 'section_id' => 1],
-            ['title'=> 'Дайджест - ВС', 'description' => 'Лента новостей игры: Анонсы, Статистика и т.д.', 'section_id' => 1],
+            ['title'=> 'Дайджест - ВС', 'description' => 'Лента новостей игры: Анонсы, Статистика и т.д.','section_id' => 1],
             ['title'=> 'Дайджест - Форум', 'description' => 'Лента новостей форума: Анонсы, Конкурсы и т.д.', 'section_id' => 1],
 
             // ПОлитика
@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
             ['title'=> 'Ветка дважды Укупника Бори', 'description' => 'Ветка для СВшных троллей и их поклонников - ихтиандров, ведомых голубой луной. Осторожно - маты! 18+', 'section_id' => 2],
             ['title'=> 'Топка', 'description' => 'Cкрытая ветка для всякого ненужного хлама и топиков с системным нарушением правил', 'section_id' => 2],
             ['title'=> 'Архив', 'description' => 'Место где желтеют старые темы', 'section_id' => 2],
-            ['title'=> 'Форум. Рабочий', 'description' => 'Скрытый раздел модераторов форума', 'section_id' => 2],
+            ['title'=> '[Форум. Рабочий]', 'description' => 'Скрытый раздел модераторов форума', 'section_id' => 2],
 
             // Сенат
 
@@ -113,9 +113,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Topic::insert([
-            ['title' => 'aaa', 'text' => 'textttt1', 'datatime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
-            ['title' => 'bbb', 'text' => 'textttt2', 'datatime' => strtotime('+10 hours'), 'user_id' => 1, 'forum_id' => 1],
-            ['title' => 'ccc', 'text' => 'textttt3', 'datatime' => strtotime('+5 days'), 'user_id' => 1, 'forum_id' => 1]
+            ['title' => 'aaa', 'datatime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
         ]);
 
         Post::insert([

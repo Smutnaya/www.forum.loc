@@ -13,24 +13,28 @@ class ForumController extends Controller
         // TODO: model?
 
         $model = ForumViewer::index($forumId);
-        //dd($model);
-
         return view('forum.index', compact('model', 'forumId'));
     }
 
     public function topic($forumId)
     {
-        return view('forum.topic', compact('forumId'));
+        $user = $this->user();
+        $result = ForumExecutor::forum($forumId, $user);
+
+        if($result['success'])
+        {
+            $model = ForumViewer::topic($forumId);
+            return view('forum.topic', compact('model', 'forumId'));
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+
     }
 
     public function save($forumId)
     {
         if(!request()->isMethod('post')) return redirect('/');
-
         $user = $this->user(); //null ili net $user->email, is_null($user)
-
-        //dd($user);
-
         $result = ForumExecutor::post($forumId, $user, request()->all());
 
         if($result['success'])
@@ -41,6 +45,5 @@ class ForumController extends Controller
         //dd($result);
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
-
     }
 }

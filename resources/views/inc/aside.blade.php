@@ -16,7 +16,7 @@
                 <a class="m-0 p-0" href="{{ url('/s/5') }}">Клановые форумы</a>
             </li>
             <li class="nav-item p-0">
-                <a class="m-0 p-0" href="{{ url('/s/6') }}">Сенат. Рабочий</a>
+                <a class="m-0 p-0" href="{{ url('/s/6') }}">[Сенат. Рабочий]</a>
             </li>
         </ul>
         <br>

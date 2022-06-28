@@ -19,9 +19,7 @@ class CreatePostsTable extends Migration
             $table->longtext('text');
             $table->unsignedInteger('datatime');
             $table->boolean('moderation')->default(false);
-            $table->boolean('block')->default(false);
             $table->boolean('hide')->default(false);
-            $table->boolean('pin')->default(false);
             $table->json('DATA')->nullable();
             $table->unsignedBigInteger('topic_id');
             $table->unsignedBigInteger('user_id');

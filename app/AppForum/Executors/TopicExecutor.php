@@ -4,6 +4,7 @@ namespace App\AppForum\Executors;
 
 use App\Topic;
 use App\AppForum\Managers\PostManager;
+use App\AppForum\Helpers\CheckedHelper;
 
 class TopicExecutor
 {
@@ -17,7 +18,8 @@ class TopicExecutor
 
         if(self::$result['success'])
         {
-            PostManager::post($out['topic'], $out['text'], $user);
+            //dd($out['check']);
+            PostManager::post($out['topic'], $out['text'], $out['check'], $user);
 
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;
@@ -29,20 +31,17 @@ class TopicExecutor
 
     private static function post_valid($topicId, $user, $input, $out)
     {
-        if(is_null($user))  return self::$result['message'] = 'не залогинились';
+        if(is_null($user))  return self::$result['message'] = 'Пожалуйста, выполните вход на форум!';
         $topic = Topic::find($topicId);
-        if(is_null($topic)) return self::$result['message'] = 'Tema ne najdena!!!';
+        if(is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
-        //dd($input['text']);
+        if(!isset($input['text']) || empty($input['text'])) return self::$result['message'] = 'Введите текст!';
 
-        if(!isset($input['text']) || empty($input['text'])) return self::$result['message'] = 'vvedite text!';
-
-        //dd($input);
         // TODO: a est li text soobwenia?
         // TODO: dlinna
 
         //if(strlen($input['text']) > 13000) return self::$result['message'] = 'max dlina posta 13k simvolov';
-        if(strlen($input['text']) < 2) return self::$result['message'] = 'min dlina posta 2 simvola';
+        if(strlen($input['text']) < 2) return self::$result['message'] = 'Минимальнная длина сообщения 2 символа';
         // html encode & -> &amp;
 
 
@@ -50,6 +49,7 @@ class TopicExecutor
 
         $out['topic'] = $topic;
         $out['text'] = $input['text'];
+        $out['check'] = CheckedHelper::checkPost($input, $topic);
 
         self::$result['success'] = true;
     }

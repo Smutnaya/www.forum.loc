@@ -11,9 +11,9 @@
     </div>
 
     @foreach ($model['sections'] as $section)
-    <h4>{{ $section->title }}</h4>
+    <h4 class="title-shadow">{{ $section->title }}</h4> <i class="bi bi-eye-slash"></i>
 
-    <div class="border border-ligh">
+    <div class="border border-ligh shadow-sm">
         @foreach ($section->forums as $forum)
         <div class="table-color">
             <div class="row forum-border ms-1">
@@ -41,7 +41,7 @@
                     <hr class="d-xl-none d-block my-1 hr-color">
                     <div class="row">
                         <div class="col-2">
-                            <img class="min-avatar" alt="Cinque Terre" src="https://avatarko.ru/img/avatar/12/zhivotnye_ptica_sova_11535.jpg"></div>
+                            <img style="border-color: #ced4da;" class="min-avatar border bg-white rounded" alt="Cinque Terre" src="https://avatarko.ru/img/avatar/12/zhivotnye_ptica_sova_11535.jpg"></div>
                         <div class=" col-10">
                         <a class="post-a-color" href="{{ url('#') }}">Времена Смуты - об игре</a>
                         <br>

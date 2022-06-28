@@ -7,16 +7,20 @@ use App\Topic;
 
 class TopicManager
 {
-    public static function post($forum, $text, $title, $user)
+    public static function post($forum, $title, $check, $user)
     {
+        //dd($check);
         $topic = Topic::create([
             'title' => $title,
-            'text' => $text,
             'datatime' => time(),
             'user_id' => $user->id,
+            'pin' => $check['pin'],
+            'block' => $check['block'],
+            'hide' => $check['hide'],
+            'moderation' => $check['moder'],
             'forum_id' => $forum->id,
         ]);
 
-        return $topic->id;
+        return $topic;
     }
 }

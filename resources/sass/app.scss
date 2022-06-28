@@ -7,15 +7,11 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-// $container-max-widths: (
-//   sm: 420px,
-//   md: 720px,
-//   lg: 960px
-// );
-
-//7a6c56
-// eee9e07d
-
+// Font-Awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
 
 body {
     //background: rgba(223, 212, 192, 0.877);
@@ -43,31 +39,31 @@ footer {
     height: 60px;
 }
 
-.container-fluid {
-    padding: 0px;
-    margin: 0px;
-}
-.text {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-all;
-}
-
-.news {
-    text-align: center;
-}
-
 .forum-desc {
     margin-left: 5px;
     font-size: 9pt;
-    color: dimgrey;
+    color: #989e9a !important;
     padding: 0px;
     margin: 0px;
 }
 
 .forum-desc-user {
     font-size: 8.5pt;
-    color: dimgrey;
+    color: #989e9a !important;
+}
+
+.input-text:hover,
+.input-text:focus {
+    width: 100%;
+    background: #ffffe0d9;
+    border-color: #c9c1a2 !important;
+    outline: 0;
+}
+.input-text {
+    width: 100%;
+    background: #fdfddbb3;
+    border-color: #c9c1a2 !important;
+    outline: 0;
 }
 
 .btn-custom {
@@ -75,15 +71,48 @@ footer {
     color: #FFF;
     border: 0 !important;
     border-radius: 0;
-    height: 28px;
+    height: 28px !important;
+    width: 85px !important;
 }
 .btn-custom:hover {
     background-color: #88734e;
-}
-
-A:hover.btn-custom {
+    height: 28px !important;
     color:#FFF;
     text-decoration: none;
+}
+
+.new-tema {
+    .btn-check:checked + .btn-outline-primary, .btn-outline-primary:hover, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+        color: #ffffe0;
+        background-color: #b59a6b;
+        border-color: #cec6a7d9;
+        padding-top: 3px;
+        border-radius: 0;
+        width: 100% !important;
+        i {
+            color: #e3e3cb !important;
+        }
+    }
+
+    .btn-outline-primary {
+        color: #000000;
+        border-color: #c9c1a2;
+        background-color: #fdfddbb3;
+        padding-top: 3px;
+        border-radius: 0;
+        width: 100% !important;
+        i {
+            color: #888477 !important;
+        }
+    }
+
+    .btn-check:checked + .btn-outline-primary:focus, .btn-check:active + .btn-outline-primary:focus, .btn-outline-primary:active:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus, .btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
+        box-shadow: 0 0 0 0;
+    }
+
+    .btn-group {
+        width: 100% !important;
+    }
 }
 
 .centre {
@@ -98,10 +127,10 @@ A:hover.btn-custom {
 }
 .table-color:nth-child(2n) {
     background:#f9f1c5;
- }
+}
 
 .table-bord {
-    border-color: #ced4da;
+    border-color: light;
     box-shadow: 0 0 0 0.1rem rgba(206, 212, 218, 0.253);
 }
 
@@ -135,15 +164,13 @@ A:hover.btn-custom {
     padding: 0.5rem 1rem;
     text-decoration: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-
 }
 
 A {
     color: black;
     //display: block;
     text-decoration: none;
-   }
-
+}
 A:hover {
     text-decoration: underline;
     color: black;
@@ -168,12 +195,7 @@ A:hover {
     min-width: 15px;
     text-align: center;
 }
-/*
-.last-post {
-    //min-width: 100px;
-    //max-width: 200px;
-}
-*/
+
 .title_table {
     text-align: center;
     text-decoration: solid;
@@ -187,9 +209,30 @@ A:hover {
     background: #b59a6b;
 }
 
-.title_r {
-    font-size: small;
-    text-align: center;
+.post {
+    background: #f9f1c5;
+    border-color: #ced4da;
+    .text {
+        background: #ffffde;
+    }
+    .logo {
+        width: 100px;
+    }
+    .inf {
+        min-width: 125px;
+    }
+    .text-centre {
+        text-align: center !important;
+    }
+
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+}
+
+.title-shadow {
+    text-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.3);
 }
 
 .forum_comment {
@@ -198,11 +241,6 @@ A:hover {
     padding-left: 2px;
 }
 
-.forumNew {
-    padding: 5px;
-    border: 10px;
-    font-size: medium;
-}
 .sidenav {
     position: static;
     font-size: medium;
@@ -210,7 +248,6 @@ A:hover {
     padding: 2px;
     flex-direction: column;
 }
-
 
 .alert-success {
     color: #009766d6;
@@ -233,4 +270,3 @@ A:hover {
 .text-begin {
     text-align: left;
 }
-

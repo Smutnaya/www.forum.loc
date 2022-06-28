@@ -14,6 +14,10 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
    .vue()
    .sass('resources/sass/app.scss', 'public/css')
+   .copy(
+        'node_modules/@fortawesome/fontawesome-free/webfonts',
+        'public/webfonts'
+    )
    .version();
 
 mix.sourceMaps(!mix.inProduction()) // console.log fix DevTools failed to load SourceMap: Could not load content for

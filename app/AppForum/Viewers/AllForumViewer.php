@@ -20,7 +20,7 @@ class AllForumViewer
         $model = self::init();
 
         $sections = Section::all();
-        if(is_null($sections)) return $model;
+        if($sections->isEmpty()) return $model;
 
         $model['sections'] = Section::all();
         //dd(Forum::find(1)->section);
