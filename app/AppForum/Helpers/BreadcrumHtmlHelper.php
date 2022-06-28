@@ -10,7 +10,7 @@ class BreadcrumHtmlHelper
 {
     public static function breadcrumpHtmlForum($forumId)
     {
-        $forum = Forum::find($forumId);
+        $forum = Forum::find(intval($forumId));
 
         $breadcrumpForum = [];
 
@@ -48,7 +48,7 @@ class BreadcrumHtmlHelper
     public static function breadcrumpHtmlSection($sectionId)
     {
         $breadcrumpForum = [];
-        $section = Section::find($sectionId);
+        $section = Section::find(intval($sectionId));
 
         $inf =[
             'title' => 'Главная',
@@ -75,7 +75,7 @@ class BreadcrumHtmlHelper
     public static function breadcrumpHtmlTopic($topicId)
     {
         $breadcrumpForum = [];
-        $topic = Topic::find($topicId);
+        $topic = Topic::find(intval($topicId));
 
         $inf =[
             'title' => 'Главная',

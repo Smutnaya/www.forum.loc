@@ -37,10 +37,12 @@
                     <p class="forum_comment mb-0">Текст:</p>
                     <textarea name="text" type="text" id="text" onkeypress="if(event.keyCode == 13) return false;">{{ $model['post']['text'] }}</textarea>
 
-                    <input type="submit" value="Добавить">
+                    <div class="col d-grid gap-2 d-flex justify-content-end my-2">
+                        <a id="reset" class="btn btn-sm btn-dark btn-custom ">Очистить</a>
+                        <input  class="btn btn-sm btn-dark btn-custom" type="submit" value="Добавить">
+                    </div>
             </form>
             </div>
-            <input id="reset" type="submit" value="Очистить">
         @else
             <div class="text-danger">У Вас нет прав для редактирования!</div>
         @endif
@@ -59,6 +61,9 @@
         $('#reset').click(function(e) {
             CKEDITOR.instances.text.setData("");
         });
+            $('#reset').click(function(e) {
+        CKEDITOR.instances.text.setData("");
+    });
     </script>
 
 @endsection

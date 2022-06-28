@@ -23,4 +23,15 @@ class TopicManager
 
         return $topic;
     }
+
+    public static function edit($topic, $title, $check, $user)
+    {
+        $topic->fill([
+            'title' => $title,
+            'hide' => $check['hide'],
+            'moderation' => $check['moder'],
+            'pin' => $check['pin'],
+            'block' => $check['block']
+        ])->save();
+    }
 }

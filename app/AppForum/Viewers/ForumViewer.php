@@ -22,13 +22,13 @@ class ForumViewer
     {
         $model = self::init();
 
-        $topics = Topic::where('forum_id', $forumId)->get();
+        $topics = Topic::where('forum_id', intval($forumId))->get();
 
         if($topics->isEmpty()) return $model;
 
         self::setForum($model, $topics);
-        $model['forumTitle'] = Forum::find($forumId)->title;
-        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum($forumId);
+        $model['forumTitle'] = Forum::find(intval($forumId))->title;
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
 
         return $model;
 
@@ -38,13 +38,13 @@ class ForumViewer
     {
         $model = self::init();
 
-        $forum = Forum::find($forumId);
+        $forum = Forum::find(intval($forumId));
         if(is_null($forum)) return $model;
-        $model['forumTitle'] = Forum::find($forumId)->title;
+        $model['forumTitle'] = Forum::find(intval($forumId))->title;
         $model['sections']['moderation'] = $forum->section->moderation;
         $model['sections']['hide'] = $forum->section->hide;
         $model['sections']['id'] = $forum->section->id;
-        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum($forumId);
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
         return $model;
     }
 

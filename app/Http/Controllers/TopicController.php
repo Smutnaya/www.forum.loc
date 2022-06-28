@@ -19,9 +19,22 @@ class TopicController extends Controller
     {
         if(!request()->isMethod('post')) return redirect('/');
 
-        $user = $this->user(); //null ili net $user->email, is_null($user)
-        //if(is_null($user)) return redirect()->back()->withErrors(['message' => 'login!']);
+        $user = $this->user();
         $result = TopicExecutor::post($topicId, $user, request()->all());
+        if($result['success'])
+        {
+            return redirect('t/'.$result['topicId']);
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+    }
+
+    public function edit($topicId)
+    {
+        if(!request()->isMethod('post')) return redirect('/');
+
+        $user = $this->user();
+        $result = TopicExecutor::edit($topicId, $user, request()->all());
         if($result['success'])
         {
             return redirect('t/'.$result['topicId']);

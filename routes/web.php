@@ -31,6 +31,7 @@ Route::get('/main', 'MainController@index')->name('main');
 
 Route::get('/t/{topic_id}', 'TopicController@index');
     Route::any('/t/{id}/post','TopicController@post');
+    Route::any('/t/{id}/edit', 'TopicController@edit');
 
 Route::get('/p/{id}/edit', 'PostController@index');
 Route::any('p/{id}/save','PostController@edit');
@@ -42,6 +43,7 @@ Route::get('/fs', 'AllForumController@index');
 Route::get('/f/{id}', 'ForumController@index');
 Route::get('/f/{id}/topic', 'ForumController@topic');
     Route::any('/f/{id}/t/save', 'ForumController@save');
+
 
 Route::get('/s/{id}', 'SectionController@index');
 

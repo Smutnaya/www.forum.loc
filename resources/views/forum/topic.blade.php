@@ -19,7 +19,7 @@
     <div >
         <h5 class="title-shadow mb-4">Создание новой темы</h5>
         <p class="forum_comment mb-0">Тема:</p>
-        <input type="text" name="title" id="title" class="border border-1 input-text"></p>
+        <input type="text" name="title" id="title" maxlength="100" title="*не более 100 символов" class="border border-1 input-text"></p>
         <p class="forum_comment mb-0">Настройки:</p>
         <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
 
@@ -39,10 +39,13 @@
         @if($model['sections']['moderation'] == 1 ) <p class="small" style="color:#660000 !important">* премодерация тем на форуме</p>@endif
         <p class="forum_comment mb-0">Текст:</p>
         @include('inc.ckeditor')
-        <input type="submit" value="Добавить">
+        <div class="col d-grid gap-2 d-flex justify-content-end my-2">
+            <a id="reset" class="btn btn-sm btn-dark btn-custom" href="{{ url('/f/'.$forumId) }}">Отмена</a>
+            <input  class="btn btn-sm btn-dark btn-custom" type="submit" value="Добавить">
+        </div>
 </form>
     </div>
-    <input id="reset" type="submit" value="Очистить">
+
 
 @endsection
 

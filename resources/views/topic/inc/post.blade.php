@@ -3,14 +3,14 @@
         class="row post border border-ligh shadow-sm m-0 text-centre mb-2 @if ($post['moderation']) border border-danger @endif">
         <div class="col-md-3 col-xl-2 col-sm-12 inf text-centre my-1">
             <div class="col-12 my-1">
-                <a class="fw-bold" href="{{ url('#') }}">{{ $post['user_post']['name'] }}</a>
+                <a class="fw-bold text-break" href="{{ url('#') }}">{{ $post['user_post']['name'] }}</a>
             </div>
             <div class="col-12">
                 <img style="border-color: #ced4da;" class="logo border bg-white rounded" alt="Cinque Terre"
                     src="https://avatarko.ru/img/avatar/25/igra_Dota_2_Natures_Prophet_24356.jpg">
             </div>
             <div class="col-12 my-1">
-                <span class="fw-bold text-black my-2">Пользователь</span><br>
+                <span class="fw-bold text-black my-2 text-break">Пользователь</span><br>
                 <span class="text-muted"><i class="fa-regular fa-message me-1" style="color:rgb(0, 0, 116)"
                         title="Ответы"></i> <span style="color:rgb(0, 0, 116)">10</span></span>
                 <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:DarkGreen"
@@ -44,6 +44,7 @@
                             </button>
                             <ul style="background: #fbf6d1; font-size: small;" class="dropdown-menu"
                                 aria-labelledby="dropdownMenuButton1">
+                                @if(!is_null($model['user']))
                                 @if ($post['user_id'] == $model['user']['id'] && time() <= strtotime($post['date']) + 3600)
                                     <li><a class="dropdown-item" style="background: #fbf6d1;"
                                             href={{ url('/p/' . $post['id'] . '/edit') }}>
@@ -56,6 +57,7 @@
                                                 </div>
                                             </div>
                                         </a></li>
+                                @endif
                                 @endif
                                 <li><a class="dropdown-item" style="background: #fbf6d1;" href="#">
                                         <div class="row">
@@ -99,12 +101,12 @@
                     <i class="fa-solid fa-share me-1"></i> Ответить
                 </div>
             </div>
-            <div class="col-12 forum-desc fs-6 pb-3">
+            <div class="col-12 forum-desc fs-6 pb-3 text-break">
                 <hr class="mt-0">
                 Подпись ⋙ 👍
                 <div class="col-12 mt-4">
                     <div class="row">
-                        <div class="col d-flex justify-content-start align-items-center text-center">
+                        <div class="col d-flex justify-content-start align-items-center text-center ">
                             <i class="fa-regular fa-comment-dots me-1" style="color:rgb(0, 0, 116)"></i> <span
                                 style="color:rgb(0, 0, 116)">0</span>
                         </div>

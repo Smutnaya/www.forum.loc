@@ -11,8 +11,9 @@ class TopicViewer
     private static function init()
     {
         return collect([
-            'breadcramp' => null,
+            'breadcrump' => null,
             'user' => null,
+            'forum' => null,
             'topic' => null,
             'posts' => collect()
         ]);
@@ -22,13 +23,15 @@ class TopicViewer
     {
         $model = self::init();
 
-        $topic = Topic::find($topicId); // eloquent
+        $topic = Topic::find(intval($topicId)); // eloquent
         if(is_null($topic)) return $model;
         self::setTopic($model, $topic);
 
-        $posts = Post::where('topic_id', $topicId)->get();
+        $posts = Post::where('topic_id', intval($topicId))->get();
         if($posts->isEmpty()) return $model;
         self::setPost($model, $posts);
+
+        $model['forum'] = $topic->forum;
 /*
         $filelist = array();
         if ($handle = opendir("C:/OpenServer/domains/www.forum.loc/public/images/smiley")) {
@@ -39,7 +42,7 @@ class TopicViewer
         }
         dd($filelist);
 */
-        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic($topicId);
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
         if(is_null($user)) return $model;
         $model['user'] = $user;
 
@@ -55,7 +58,9 @@ class TopicViewer
                 'block' => $topic->block,
                 'pin' => $topic->pin,
                 'moderation' => $topic->moderation,
-                'id' => $topic->id
+                'id' => $topic->id,
+                'datatime' => $topic->datatime,
+                'user_id' => $topic->user_id
             ];
     }
 

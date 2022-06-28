@@ -6,15 +6,17 @@ use App\Post;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Helpers\CheckedHelper;
 
-class PostExecutor
+class PostExecutor extends BaseExecutor
 {
     public static $result = ['success' => false, 'message' => null];
 
     public static function save($postId, $user, $input)
     {
         $out = collect();
-        self::post_valid($postId, $user, $input, $out);
-
+        self::post_valid(intval($postId), $input, $out);
+        if(!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
+        else if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result['success'] = true;  $out['text'] = $input['text'];
 
         if(self::$result['success'])
         {
@@ -28,20 +30,14 @@ class PostExecutor
         return self::$result;
     }
 
-    private static function post_valid($postId, $user, $input, $out)
+    private static function post_valid($postId, $input, $out)
     {
-        if(is_null($user))  return self::$result['message'] = 'Пожалуйста, выполните вход на форум!';
         $post = Post::find(intval($postId));
         if(is_null($post)) return self::$result['message'] = 'Пост не найден';
 
-        if(!isset($input['text']) || empty($input['text'])) return self::$result['message'] = 'Введите текст!';
-
-        //if(strlen($input['text']) > 13000) return self::$result['message'] = 'max dlina posta 13k simvolov';
-        if(mb_strlen($input['text']) < 2) return self::$result['message'] = 'Минимальнная длина сообщения 2 символа';
-        if(mb_strlen($input['text']) > 13000) $input['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+        if(mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
         $out['post'] = $post;
-        $out['text'] = $input['text'];
         $out['check'] = CheckedHelper::checkPost($input, $post->topic);
 
         self::$result['success'] = true;
@@ -50,7 +46,9 @@ class PostExecutor
     public static function premod($postId, $user)
     {
         $out = collect();
-        self::premodUnhide_valid($postId, $user, $out);
+        self::premodUnhide_valid(intval($postId), $out);
+        if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result['success'] = true;  $out['user'] = $user;
 
         if(self::$result['success'])
         {
@@ -64,22 +62,21 @@ class PostExecutor
         return self::$result;
     }
 
-    private static function premodUnhide_valid($postId, $user, $out)
+    private static function premodUnhide_valid($postId, $out)
     {
-        if(is_null($user))  return self::$result['message'] = 'Пожалуйста, выполните вход на форум!';
-        $post = Post::find($postId);
+        $post = Post::find(intval($postId));
         if(is_null($post)) return self::$result['message'] = 'Пост не найден';
-
         $out['post'] = $post;
-        $out['user'] = $user;
-
         self::$result['success'] = true;
     }
 
     public static function unhide($postId, $user)
     {
         $out = collect();
-        self::premodUnhide_valid($postId, $user, $out);
+        self::premodUnhide_valid(intval($postId), $out);
+
+        if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result['success'] = true;  $out['user'] = $user;
 
         if(self::$result['success'])
         {

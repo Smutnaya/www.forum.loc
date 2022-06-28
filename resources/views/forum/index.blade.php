@@ -24,8 +24,8 @@
         <div class="border border-ligh shadow-sm">
             @foreach ($model['topics'] as $topic)
                 <div class="table-color">
-                    <div class="row ms-1">
-                        <div class="col-xl-6 col-lg-9 col-sm-10 col-12">
+                    <div class="row ms-1 pe-2">
+                        <div class="col-xl-6 col-lg-9 col-sm-10 col-12 text-break">
                             @if($topic['pin'])<i class="fa fa-thumb-tack forum-desc" title="Закрепеленная тема"></i>@endif
                             @if($topic['block'])<i class="fa-solid fa-lock forum-desc" title="Тема закрыта"></i>@endif
                             @if($topic['hide'])<i class="fa-regular fa-eye-slash forum-desc" title="Скрытая тема"></i>@endif

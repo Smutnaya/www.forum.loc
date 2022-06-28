@@ -25,16 +25,6 @@ class MainViewer
         $sections = Section::all();
         self::setSection($model, $sections);
 
-        // // post
-
-        // $posts = Post::all();
-        // self::setPost($model, $posts);
-
-        // // topic
-
-        // $topics = Topic::all();
-        // self::setTopic($model, $topics);
-
         return $model;
     }
 
@@ -49,28 +39,5 @@ class MainViewer
             ]);
         }
     }
-
-    // private static function setPost($model, $posts)
-    // {
-    //     foreach($posts as $post)
-    //     {
-    //         $model['posts']->push([
-    //         'id' => $post->id,
-    //         'text' => $post->text
-    //         ]);
-    //     }
-    // }
-
-    // private static function setTopic($model, $topics)
-    // {
-    //     foreach($topics as $topic)
-    //     {
-    //         $model['topics']->push([
-    //             'title' => $topic->title
-    //         ]);
-    //     }
-    // }
-
-
 
 }

@@ -1,4 +1,4 @@
-<div class="pb-1 align-self-center" id="breadcrump">
+<div class="pb-1 align-self-center text-break" id="breadcrump">
     <?php
     echo htmlspecialchars_decode($model['breadcrump']);
     ?>
