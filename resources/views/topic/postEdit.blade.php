@@ -1,6 +1,5 @@
 @extends('layouts.topic')
 @section('content')
-
     @if (is_null($model['post']))
         <div class="text-danger">Пост не найден!</div>
     @else
@@ -19,7 +18,6 @@
                     <h5 class="title-shadow mb-4">Редактирование поста</h5>
                     <p class="forum_comment mb-0">Настройки:</p>
                     <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
-
                         <input type="checkbox" class="btn-check" name="check[]" id="btncheck3" autocomplete="off"
                             value="hide" @if ($model['post']['hide'] == 1) checked @endif
                             @if ($model['topic']['hide'] == 1) checked disabled @endif>
@@ -47,6 +45,7 @@
             <div class="text-danger">У Вас нет прав для редактирования!</div>
         @endif
     @endif
+
     <script>
         CKEDITOR.addCss(".cke_editable{cursor:text; font-size: 13px; font-family: Arial, sans-serif;} p{margin:1;}")
         CKEDITOR.replace('text', {
@@ -61,4 +60,5 @@
             CKEDITOR.instances.text.setData("");
         });
     </script>
+
 @endsection
