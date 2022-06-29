@@ -9,8 +9,11 @@ body
 	/* Emoji fonts are added to visualise them nicely in Internet Explorer. */
 	font-family: "Open Sans", "Arial", Helvetica, sans-serif, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 	font-size: 12px;
+	/* Text color */
 	color: #333;
+	/* Remove the background color to make it transparent. */
 	background-color: #fff;
+
 	margin: 20px;
 }
 
@@ -18,14 +21,16 @@ body
 {
 	font-size: 13px;
 	line-height: 1.6;
+
     font-family: "Arial", sans-serif !important;
+	/* Fix for missing scrollbars with RTL texts. (#10488) */
 	word-wrap: break-word;
 }
 
 blockquote
 {
 	font-style: italic;
-	font-family: "Open Sans", "Arial", Helvetica, sans-serif !important;
+	font-family: "Open Sans", "Arial", Helvetica, serif !important;
 	padding: 2px 0;
 	border-style: solid;
 	border-color: #ccc;

@@ -61,7 +61,7 @@
 
                         <div class="col d-grid gap-2 d-flex justify-content-end my-2">
                             <a id="topic-edit-hide" class="btn btn-sm btn-dark btn-custom my-0 py-0" style="height: 21px !important">Отмена</a>
-                            <input class="btn btn-sm btn-dark btn-custom my-0 py-0" style="height: 21px !important" type="submit" value="Добавить">
+                            <input class="btn btn-sm btn-dark btn-custom my-0 py-0" style="height: 21px !important" type="submit" value="Сохранить">
                         </div>
                 </form>
     </div>

@@ -60,6 +60,7 @@ class TopicViewer
                 'moderation' => $topic->moderation,
                 'id' => $topic->id,
                 'datatime' => $topic->datatime,
+                'DATA' => $topic->DATA,
                 'user_id' => $topic->user_id
             ];
     }
@@ -73,7 +74,7 @@ class TopicViewer
                 'date' => date("d.m.Y H:i", $post->datatime),
                 'hide' => $post->hide,
                 'moderation' => $post->moderation,
-                'DATA' => $post->DATA,
+                'DATA' => json_decode($post->DATA, false), //$post->DATA,
                 'id' => $post->id,
                 'user_id' => $post->user_id,
                 'user_post' => $post->user

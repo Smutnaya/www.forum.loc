@@ -36,7 +36,7 @@ class TopicExecutor extends BaseExecutor
         $topic = Topic::find(intval($topicId));
         if(is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
-        if(strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+        if(mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkPost($input, $topic);
@@ -69,7 +69,7 @@ class TopicExecutor extends BaseExecutor
         $topic = Topic::find(intval($topicId));
         if(is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
-        if(strlen($input['title']) > 13000 && !is_null($input['title'])) $out['title'] = mb_strimwidth($input['title'], 0, 100, "...");
+        if(mb_strlen($input['title']) > 13000 && !is_null($input['title'])) $out['title'] = mb_strimwidth($input['title'], 0, 100, "...");
 
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkTopic($input, $topic->forum);

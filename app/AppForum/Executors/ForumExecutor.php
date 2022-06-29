@@ -39,7 +39,7 @@ class ForumExecutor extends BaseExecutor
         $forum = Forum::find(intval($forumId));
 
         if(is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
-        if(strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+        if(mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
         $out['forum'] = $forum;
         $out['check'] = CheckedHelper::checkTopic($input, $forum);

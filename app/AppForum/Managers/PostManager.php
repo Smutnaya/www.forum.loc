@@ -29,10 +29,13 @@ class PostManager
             'moderation' => $check['moder'],
         ]); */
 
+        //$data = ['user_name' => $user->name, 'date' => time()];
+
         $post->fill([
             'text' => $text,
             'hide' => $check['hide'],
             'moderation' => $check['moder'],
+            'DATA' => json_encode(['user_name' => $user->name, 'date' => time()], JSON_UNESCAPED_UNICODE)
         ])->save();
     }
 

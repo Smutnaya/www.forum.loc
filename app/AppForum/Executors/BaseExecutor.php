@@ -14,7 +14,7 @@ class BaseExecutor
     public static function text_valid($input)
     {
         if(is_null($input)) return self::$message = 'Введите текст!';
-        if(strlen($input) < 2) return self::$message =  'Минимальнная длина сообщения 2 символа';
+        if(mb_strlen($input) < 2) return self::$message =  'Минимальнная длина сообщения 2 символа';
         return self::$message;
     }
 

@@ -22,6 +22,22 @@ body {
     //background: url("/images/background/background.jpg");
 }
 
+p {margin: 0 !important;}
+blockquote
+{
+	background:#f1e9c282;
+    color: #4a4741;
+    margin: 0 0 1rem 1rem;
+    font-size: 14px;
+    font-style: italic;
+	font-family: "Open Sans", "Arial", Helvetica, serif !important;
+	padding: 10px;
+	border-style: solid;
+	border-color: #e7e3d1a1;
+	border-width: 0.005rem;
+    border-radius: 0px 15px;
+}
+
 footer {
     color: rgb(0, 0, 0);
     width: 98%;

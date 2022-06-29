@@ -22,7 +22,7 @@ class ForumViewer
     {
         $model = self::init();
 
-        $topics = Topic::where('forum_id', intval($forumId))->get();
+        $topics = Topic::where('forum_id', intval($forumId))->orderByDesc('pin')->orderByDesc('id')->get();
 
         if($topics->isEmpty()) return $model;
 

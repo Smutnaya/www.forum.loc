@@ -21568,6 +21568,24 @@ body {
   font-family: "Open Sans", Arial, Helvetica, sans-serif;
 }
 
+p {
+  margin: 0 !important;
+}
+
+blockquote {
+  background: rgba(241, 233, 194, 0.5098039216);
+  color: #4a4741;
+  margin: 0 0 1rem 1rem;
+  font-size: 14px;
+  font-style: italic;
+  font-family: "Open Sans", "Arial", Helvetica, serif !important;
+  padding: 10px;
+  border-style: solid;
+  border-color: rgba(231, 227, 209, 0.631372549);
+  border-width: 0.005rem;
+  border-radius: 0px 15px;
+}
+
 footer {
   color: rgb(0, 0, 0);
   width: 98%;

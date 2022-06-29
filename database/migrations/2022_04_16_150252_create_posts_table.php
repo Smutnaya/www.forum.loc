@@ -20,6 +20,8 @@ class CreatePostsTable extends Migration
             $table->unsignedInteger('datatime');
             $table->boolean('moderation')->default(false);
             $table->boolean('hide')->default(false);
+            $table->integer('like')->default(0);
+            $table->integer('dislike')->default(0);
             $table->json('DATA')->nullable();
             $table->unsignedBigInteger('topic_id');
             $table->unsignedBigInteger('user_id');

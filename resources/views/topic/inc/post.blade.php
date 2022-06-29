@@ -34,7 +34,7 @@
                                     class="fa-regular fa-eye-slash me-2" style="color: #5c625e;"
                                     title="Публикация скрыта"></i></a>
                         @endif
-                        {{ $post['date'] }}
+                        {{ $post['date'] }} &bull;
                     </div>
                     <div class="col-1 d-flex justify-content-end align-items-center">
                         <div class="dropdown">
@@ -93,14 +93,17 @@
                 <br>
                 BETAJIb
             </div>
+            @if(!is_null($post['DATA']))
             <div class="row forum-desc">
-                <div class="col  p-0 d-flex justify-content-start align-items-center text-center">
-                    <i class="fa-solid fa-pencil me-1"></i> 03.06.2022 14:52
+                <div class="col fst-italic p-0 d-flex justify-content-start align-items-center text-center">
+                    <i class="fa-solid fa-pencil me-1"></i> &nbsp; {{ $post['DATA']->user_name }} &middot; {{ date("d.m.Y H:i", $post['DATA']->date) }}
                 </div>
                 <div class="col p-0 d-flex justify-content-end align-items-center text-center">
                     <i class="fa-solid fa-share me-1"></i> Ответить
                 </div>
             </div>
+            @endif
+
             <div class="col-12 forum-desc fs-6 pb-3 text-break">
                 <hr class="mt-0">
                 Подпись ⋙ 👍
