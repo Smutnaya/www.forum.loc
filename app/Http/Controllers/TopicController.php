@@ -20,6 +20,7 @@ class TopicController extends Controller
         if(!request()->isMethod('post')) return redirect('/');
 
         $user = $this->user();
+
         $result = TopicExecutor::post($topicId, $user, request()->all());
         if($result['success'])
         {

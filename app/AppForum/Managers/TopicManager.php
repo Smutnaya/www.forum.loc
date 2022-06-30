@@ -4,7 +4,6 @@ namespace App\AppForum\Managers;
 
 use App\Topic;
 
-
 class TopicManager
 {
     public static function post($forum, $title, $check, $user)
@@ -32,6 +31,13 @@ class TopicManager
             'moderation' => $check['moder'],
             'pin' => $check['pin'],
             'block' => $check['block']
+        ])->save();
+    }
+
+    public static function dataedit($topic, $DATA)
+    {
+        $topic->fill([
+            'DATA' => $DATA
         ])->save();
     }
 }

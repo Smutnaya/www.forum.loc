@@ -2,6 +2,7 @@
 @section('content')
     <div class="conteiner">
 
+
         @if (is_null($model['topic']))
             <div>Тема не найдена</div>
         @else

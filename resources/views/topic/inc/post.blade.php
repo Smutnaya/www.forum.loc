@@ -12,9 +12,9 @@
             <div class="col-12 my-1">
                 <span class="fw-bold text-black my-2 text-break">Пользователь</span><br>
                 <span class="text-muted"><i class="fa-regular fa-message me-1" style="color:rgb(0, 0, 116)"
-                        title="Ответы"></i> <span style="color:rgb(0, 0, 116)">10</span></span>
+                        title="Ответы"></i> <span style="color:rgb(0, 0, 116)">{{ $post['user_DATA']->post_count }}</span></span>
                 <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:DarkGreen"
-                        title="Рейтинг"></i> <span style="color:DarkGreen">1</span></span> <br>
+                        title="Рейтинг"></i> <span style="color:DarkGreen">{{ $post['user_DATA']->like }}</span></span> <br>
                 <span class="text-muted"><i class="fa-regular fa-envelope me-1" style="color:#2f4f4fe8"></i> <span
                         style="color:#2f4f4fe8">написать</span></span>
             </div>
@@ -34,7 +34,10 @@
                                     class="fa-regular fa-eye-slash me-2" style="color: #5c625e;"
                                     title="Публикация скрыта"></i></a>
                         @endif
-                        {{ $post['date'] }} &bull;
+                        {{ date('d.m.Y в H:i', $post['date']) }}
+                        @if (!is_null($post['ip']))
+                            &bull; {{ $post['ip'] }}
+                        @endif
                     </div>
                     <div class="col-1 d-flex justify-content-end align-items-center">
                         <div class="dropdown">
@@ -44,20 +47,20 @@
                             </button>
                             <ul style="background: #fbf6d1; font-size: small;" class="dropdown-menu"
                                 aria-labelledby="dropdownMenuButton1">
-                                @if(!is_null($model['user']))
-                                @if ($post['user_id'] == $model['user']['id'] && time() <= strtotime($post['date']) + 3600)
-                                    <li><a class="dropdown-item" style="background: #fbf6d1;"
-                                            href={{ url('/p/' . $post['id'] . '/edit') }}>
-                                            <div class="row">
-                                                <div class="col-1">
-                                                    <i class="fa-solid fa-pencil forum-desc ms-1"></i>
+                                @if (!is_null($model['user']))
+                                    @if ($post['user_id'] == $model['user']['id'] && time() <= strtotime($post['date']) + 3600)
+                                        <li><a class="dropdown-item" style="background: #fbf6d1;"
+                                                href={{ url('/p/' . $post['id'] . '/edit') }}>
+                                                <div class="row">
+                                                    <div class="col-1">
+                                                        <i class="fa-solid fa-pencil forum-desc ms-1"></i>
+                                                    </div>
+                                                    <div class="col">
+                                                        Редактировать
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    Редактировать
-                                                </div>
-                                            </div>
-                                        </a></li>
-                                @endif
+                                            </a></li>
+                                    @endif
                                 @endif
                                 <li><a class="dropdown-item" style="background: #fbf6d1;" href="#">
                                         <div class="row">
@@ -93,15 +96,34 @@
                 <br>
                 BETAJIb
             </div>
-            @if(!is_null($post['DATA']))
-            <div class="row forum-desc">
-                <div class="col fst-italic p-0 d-flex justify-content-start align-items-center text-center">
-                    <i class="fa-solid fa-pencil me-1"></i> &nbsp; {{ $post['DATA']->user_name }} &middot; {{ date("d.m.Y H:i", $post['DATA']->date) }}
+            {{-- @dd($post['DATA']) --}}
+            @if (!is_null($post['DATA']->user_name_moder) && !is_null($post['DATA']->date_moder) && !is_null($post['DATA']->first))
+                <div class="row forum-desc">
+                    <div class="col fst-italic p-0 d-flex justify-content-start align-items-center text-center">
+                        <i class="fa-solid fa-pencil me-1"></i> &nbsp; {{ $post['DATA']->user_name_moder }} &middot;
+                        {{ date('d.m.Y в H:i', $post['DATA']->date_moder) }}
+                    </div>
+                    <div class="row forum-desc">
+                        <div class="col fst-italic p-0 d-flex justify-content-start align-items-center text-center">
+                            <details>
+                                <summary>Исходный пост:</summary>
+                                <p><?php
+                                    echo htmlspecialchars_decode($post['DATA']->first);
+                                    ?></p>
+                               </details>
+                        </div>
+                    </div>
+                   {{--  <div class="row forum-desc">
+                        <div class="col ms-4 fst-italic p-0 d-flex justify-content-start align-items-center text-center">
+                            <?php
+                            echo htmlspecialchars_decode($post['DATA']->first);
+                            ?>
+                        </div>
+                    </div> --}}
+                    <div class="col p-0 d-flex justify-content-end align-items-center text-center">
+                        <i class="fa-solid fa-share me-1"></i> Ответить
+                    </div>
                 </div>
-                <div class="col p-0 d-flex justify-content-end align-items-center text-center">
-                    <i class="fa-solid fa-share me-1"></i> Ответить
-                </div>
-            </div>
             @endif
 
             <div class="col-12 forum-desc fs-6 pb-3 text-break">

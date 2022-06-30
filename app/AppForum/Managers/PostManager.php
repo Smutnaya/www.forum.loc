@@ -6,21 +6,22 @@ use App\Post;
 
 class PostManager
 {
-    public static function post($topic, $text, $check, $user)
+    public static function post($topic, $text, $check, $user, $ip)
     {
         $post = Post::create([
             'text' => $text,
+            'ip' => $ip,
             'datatime' => time(),
             'hide' => $check['hide'],
             'moderation' => $check['moder'],
             'user_id' => $user->id,
             'topic_id' => $topic->id,
         ]);
-
+        return $post;
         // TODO: obnovit data
     }
 
-    public static function edit($post, $text, $check, $user)
+    public static function edit($post, $text, $check, $data, $user)
     {
         /* $post = Post::where('id', $post->id)
         ->update([
@@ -35,7 +36,7 @@ class PostManager
             'text' => $text,
             'hide' => $check['hide'],
             'moderation' => $check['moder'],
-            'DATA' => json_encode(['user_name' => $user->name, 'date' => time()], JSON_UNESCAPED_UNICODE)
+            'DATA' => $data
         ])->save();
     }
 

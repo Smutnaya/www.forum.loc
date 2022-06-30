@@ -12,7 +12,7 @@ class AllForumController extends Controller
         // TODO: model?
 
         $model = AllForumViewer::index();
-        //dd($model);
+       // dd($model);
 
         return view('allForum.index', compact('model'));
     }

@@ -26,7 +26,7 @@ class ForumViewer
 
         if($topics->isEmpty()) return $model;
 
-        self::setForum($model, $topics);
+        self::setTopic($model, $topics);
         $model['forumTitle'] = Forum::find(intval($forumId))->title;
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
 
@@ -48,19 +48,22 @@ class ForumViewer
         return $model;
     }
 
-    private static function setForum($model, $topics)
+    private static function setTopic($model, $topics)
     {
         foreach($topics as $topic)
         {
             $model['topics']->push([
                 'id' => $topic->id,
                 'title' => $topic->title,
-                'description' => $topic->description,
+                'datatime' => $topic->datatime,
                 'hide' => $topic->hide,
                 'block' => $topic->block,
                 'pin' => $topic->pin,
                 'moderation' => $topic->moderation,
+                'DATA' => json_decode($topic->DATA, false),
                 'forum_id' => $topic->forum_id,
+                'user_id' => $topic->user_id,
+                'user' => $topic->user->name
             ]);
         }
     }

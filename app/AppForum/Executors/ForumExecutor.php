@@ -3,8 +3,11 @@
 namespace App\AppForum\Executors;
 
 use App\Forum;
+use App\AppForum\Helpers\IpHelper;
 use App\AppForum\Managers\PostManager;
+use App\AppForum\Managers\UserManager;
 use App\AppForum\Helpers\CheckedHelper;
+use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
 use App\AppForum\Executors\BaseExecutor;
 use Symfony\Component\Console\Input\Input;
@@ -22,13 +25,30 @@ class ForumExecutor extends BaseExecutor
         else if(!is_null(BaseExecutor::tema_valid($input['title']))) self::$result = ['success' => false, 'message' => BaseExecutor::tema_valid($input['title'])];
         else if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result['success'] = true;  $out['text'] = $input['text']; $out['title'] = $input['title'];
-
+        $ip = IpHelper::getIp();
         if(self::$result['success'])
         {
             $topic = TopicManager::post($out['forum'], $out['title'], $out['check'], $user);
             self::$result['topicId'] = $topic->id;
             $out['check'] = CheckedHelper::checkPostTopic($input, $topic);
-            PostManager::post($topic, $out['text'], $out['check'], $user);
+            $post = PostManager::post($topic, $out['text'], $out['check'], $user, $ip);
+
+            $data = json_decode($post->user->DATA, false);
+            $data->post_count++;
+            $out['DATA'] = json_encode($data);
+            UserManager::dataedit($user, $out['DATA']);
+
+            $data = json_decode($post->topic->forum['DATA'], false);
+            $data->inf->topic_count++;
+            $data->last_post->user_name = $post->user->name;
+            $data->last_post->user_id = $post->user->id;
+            $data->last_post->title = $post->topic->title;
+            $data->last_post->post_id = $post->topic->id;
+            $data->last_post->date = $post->datatime;
+            $out['DATA'] = json_encode($data);
+
+            ForumManager::dataedit($post->topic->forum, $out['DATA']);
+
             self::$result['message'] = 'OK';
         }
         return self::$result;

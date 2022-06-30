@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             ['title'=> 'Дайджест - Форум', 'description' => 'Лента новостей форума: Анонсы, Конкурсы и т.д.', 'section_id' => 1],
 
             // ПОлитика
-            ['title'=> 'Политика - Официальные заявления', 'description' => 'Официальные заявления, обращения, объявления и прочи дипломатические документоы, касающиеся политической жизни ВС', 'section_id' => 4],
+            ['title'=> 'Политика - Официальные заявления', 'description' => 'Официальные заявления, обращения, объявления и прочи дипломатические документоы, касающиеся политической жизни ВС (полная премодерация тем)', 'section_id' => 4],
             ['title'=> 'Политика - Переговоры', 'description' => 'Дипломатические переговоры в официальной обстановке (полная премодерация тем)', 'section_id' => 4],
             ['title'=> 'Политика - Обсуждения', 'description' => 'Политика и дипломатия Времен Смуты. Обсуждения и комментарии', 'section_id' => 4],
 
@@ -112,14 +112,13 @@ class DatabaseSeeder extends Seeder
             //['title'=> '', 'description' => '', 'section_id' => 1],
         ]);
 
-        Topic::insert([
+/*         Topic::insert([
             ['title' => 'aaa', 'datatime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
         ]);
 
         Post::insert([
             ['text' => 'textttt4', 'datatime' => strtotime('+10 minutes'), 'user_id' => 1, 'topic_id' => 1],
             ['text' => 'textttt5', 'datatime' => strtotime('+15 minutes'), 'user_id' => 1, 'topic_id' => 1]
-        ]);
-
+        ]); */
     }
 }

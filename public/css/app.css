@@ -21717,6 +21717,11 @@ footer {
   padding: 0.1rem !important;
 }
 
+.min-avatar-post {
+  width: 39px;
+  padding: 0.1rem !important;
+}
+
 .logo {
   width: 80px;
   padding: 0.1rem !important;

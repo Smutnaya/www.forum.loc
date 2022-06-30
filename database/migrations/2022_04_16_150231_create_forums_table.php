@@ -20,7 +20,7 @@ class CreateForumsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('moderation')->default(false);
             $table->boolean('hide')->default(false);
-            $table->json('DATA')->nullable();
+            $table->json('DATA')->default('{"last_post":{"user_name":null,"user_id":null,"title":null,"post_id":null,"date":null},"inf":{"post_count":0,"topic_count":0}}');
             $table->unsignedBigInteger('section_id');
         });
     }
