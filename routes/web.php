@@ -32,6 +32,7 @@ Route::get('/main', 'MainController@index')->name('main');
 Route::get('/t/{topic_id}', 'TopicController@index');
     Route::any('/t/{id}/post','TopicController@post');
     Route::any('/t/{id}/edit', 'TopicController@edit');
+    Route::any('/t/{id}/move', 'TopicController@move');
 
 Route::get('/p/{id}/edit', 'PostController@index');
 Route::any('p/{id}/save','PostController@edit');

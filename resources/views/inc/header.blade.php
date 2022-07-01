@@ -64,7 +64,7 @@
             <div class="offcanvas-body py-3" style="background:#f8f3eb;">
               <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="py-1" aria-current="page" href={{ url('/fs') }}>Форумы</a>
+                    <a class="py-1" aria-current="page" href="{{ url('/fs') }}">Форумы</a>
                 </li>
                 <li class="nav-item">
                     <a class="py-1" aria-current="page" href=#>Газеты</a>

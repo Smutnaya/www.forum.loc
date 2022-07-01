@@ -9,6 +9,8 @@ use App\AppForum\Managers\UserManager;
 use App\AppForum\Helpers\CheckedHelper;
 use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
+use App\Forum;
+use App\Post;
 
 class TopicExecutor extends BaseExecutor
 {
@@ -34,6 +36,8 @@ class TopicExecutor extends BaseExecutor
             $data = json_decode($out['topic']->DATA, false);
             $data->last_post->user_name = $post->user->name;
             $data->last_post->user_id = $post->user->id;
+            $data->last_post->title = $post->topic->title;
+            $data->last_post->post_id = $post->topic->id;
             $data->last_post->date = $post->datatime;
             $data->inf->post_count++;
             $out['DATA'] = json_encode($data);
@@ -103,6 +107,94 @@ class TopicExecutor extends BaseExecutor
         $out['check'] = CheckedHelper::checkTopic($input, $topic->forum);
 
         self::$result['success'] = true;
+    }
+
+    public static function move($topicId, $user, $input)
+    {
+        $out = collect();
+        //dd($input['check']['0']);
+        self::topicMove_valid(intval($topicId), $input, $out);
+
+        if (self::$result['success']) {
+            $forum_id = $out['topic']->forum_id;
+            $out['forum_id_from'] = $forum_id;
+            $out['forum_id_in'] = $out['forum_id'];
+            TopicManager::move($out['topic'], $out['forum_id']);
+            self::$result['message'] = 'OK';
+            self::$result['topicId'] = $topicId;
+            self::$result['user'] = $user;
+            if($out['forum_id_from'] != $out['forum_id_in'])
+            {
+                self::DATAMove_valid($out['forum_id_from'], $out['forum_id_in'], $out);
+                ForumManager::dataedit($out['forum_from'], $out['dafa_from']);
+                ForumManager::dataedit($out['forum_in'], $out['dafa_in']);
+            }
+        }
+
+        return self::$result;
+    }
+    private static function topicMove_valid($topicId, $input, $out)
+    {
+        $topic = Topic::find(intval($topicId));
+        if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
+        if(empty($input['check'])) return self::$result['message'] = 'Не выбран путь для перемещения';
+
+        $forum = Forum::find(intval($input['check']['0']));
+        if (is_null($forum)) return self::$result['message'] = 'Путь для перемещения не найден';
+
+        $out['topic'] = $topic;
+        $out['forum_id'] = intval($input['check']['0']);
+
+        self::$result['success'] = true;
+    }
+
+    private static function DATAMove_valid($forum_id_from, $forum_id_in, $out)
+    {
+        $forum_from = Forum::find(intval($forum_id_from));
+        $forum_in = Forum::find(intval($forum_id_in));
+
+        $forum_data_from = json_decode($forum_from->DATA, false);
+        $forum_data_in = json_decode($forum_in->DATA, false);
+
+        if($forum_data_from->inf->topic_count > 0) $forum_data_from->inf->topic_count--;
+        $forum_data_in->inf->topic_count++;
+        if($forum_data_from->inf->topic_count < 0) $forum_data_from->inf->topic_count = 0;
+
+        $forum_data_in->inf->topic_count += $forum_data_from->inf->post_count;
+        if($forum_data_from->inf->post_count > 0) $forum_data_from->inf->post_count -= $forum_data_from->inf->post_count;
+        if($forum_data_from->inf->post_count < 0) $forum_data_from->inf->post_count = 0;
+
+        $last_post_from = Post::join('topics', 'topic_id', '=', 'topics.id')
+                                ->join('forums', 'forum_id', '=', 'forums.id')->where('forums.id', $forum_from->id)->orderBy('posts.datatime', 'desc')->first();
+        $last_post_in = Post::join('topics', 'topic_id', '=', 'topics.id')
+                                ->join('forums', 'forum_id', '=', 'forums.id')->where('forums.id', $forum_in->id)->orderBy('posts.datatime', 'desc')->first();
+
+        $forum_data_from->last_post = self::DATAlastPost_valid($last_post_from, $forum_data_from->last_post);
+        $forum_data_in->last_post =self::DATAlastPost_valid($last_post_in, $forum_data_in->last_post);
+
+        $out['forum_from'] = $forum_from;
+        $out['forum_in'] = $forum_in;
+        $out['dafa_from'] = json_encode($forum_data_from);
+        $out['dafa_in'] = json_encode($forum_data_in);
+    }
+
+    private static function DATAlastPost_valid($post, $last_post_data)
+    {
+        if(is_null($post))
+        {
+            $last_post_data->user_name = null;
+            $last_post_data->user_id = null;
+            $last_post_data->title = null;
+            $last_post_data->post_id = null;
+            $last_post_data->date = null;
+        } else {
+            $last_post_data->user_name = $post->user->name;
+            $last_post_data->user_id = $post->user->id;
+            $last_post_data->title = $post->topic->title;
+            $last_post_data->post_id = $post->topic->id;
+            $last_post_data->date = $post->datatime;
+        }
+        return $last_post_data;
     }
 
 }

@@ -40,4 +40,13 @@ class TopicManager
             'DATA' => $DATA
         ])->save();
     }
+
+    public static function move($topic, $forum_id)
+    {
+        $topic->fill([
+            'forum_id' => $forum_id
+        ])->save();
+
+        return $topic;
+    }
 }

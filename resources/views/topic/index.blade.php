@@ -13,15 +13,20 @@
             <div class="row">
                 <div class="col text-break d-flex justify-content-start align-items-center py-1 " id="title">
                     <h4 class="m-0 ">{{ $model['topic']['title'] }} </h4>
-                    <i id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;"></i>
+                    <i id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;"
+                        title="Редактировать тему"></i>
+                    {{-- <i class="fa-regular fa-folder ms-2 mt-1" style="color: #989e9a;"></i> --}}
+                    <i class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+
                 </div>
             </div>
 
+            @include('topic.inc.topicMove', ['model' => $model])
             @include('topic.inc.topicEdit', ['model' => $model])
             @if (is_null($model['topic']) || is_null($model['posts']) || $model['posts']->count() == 0)
-        <div>Постов не найдено</div>
-        @else
-            @include('topic.inc.post', ['model' => $model])
+                <div>Постов не найдено</div>
+            @else
+                @include('topic.inc.post', ['model' => $model])
             @endif
             <div class="col d-grid gap-2 d-flex justify-content-end mb-2">
                 <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom ">Ответить</a>
@@ -42,6 +47,8 @@
             </div>
         @endif
     </div>
+
+
     <br>
     <script>
         $(document).ready(function() {
@@ -66,5 +73,11 @@
         $('#reset').click(function(e) {
             CKEDITOR.instances.text.setData("");
         });
+        var myModal = document.getElementById('myModal')
+        var myInput = document.getElementById('myInput')
+
+        myModal.addEventListener('shown.bs.modal', function() {
+            myInput.focus()
+        })
     </script>
 @endsection

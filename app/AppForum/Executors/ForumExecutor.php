@@ -33,6 +33,15 @@ class ForumExecutor extends BaseExecutor
             $out['check'] = CheckedHelper::checkPostTopic($input, $topic);
             $post = PostManager::post($topic, $out['text'], $out['check'], $user, $ip);
 
+            $data = json_decode($post->topic->DATA, false);
+            $data->last_post->user_name = $post->user->name;
+            $data->last_post->user_id = $post->user->id;
+            $data->last_post->title = $post->topic->title;
+            $data->last_post->post_id = $post->topic->id;
+            $data->last_post->date = $post->datatime;
+            $out['DATA'] = json_encode($data);
+            TopicManager::dataedit($topic, $out['DATA']);
+
             $data = json_decode($post->user->DATA, false);
             $data->post_count++;
             $out['DATA'] = json_encode($data);

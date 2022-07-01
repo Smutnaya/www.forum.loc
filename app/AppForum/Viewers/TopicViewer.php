@@ -4,6 +4,7 @@ namespace App\AppForum\Viewers;
 
 use App\Post;
 use App\Topic;
+use App\Section;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class TopicViewer
@@ -14,6 +15,7 @@ class TopicViewer
             'breadcrump' => null,
             'user' => null,
             'forum' => null,
+            'section' => null,
             'topic' => null,
             'posts' => collect()
         ]);
@@ -32,6 +34,9 @@ class TopicViewer
         self::setPost($model, $posts);
 
         $model['forum'] = $topic->forum;
+        $section = Section::all();
+        if (is_null($section)) return $model;
+        $model['section'] = $section;
 
         /*
         $filelist = array();

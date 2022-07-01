@@ -43,4 +43,21 @@ class TopicController extends Controller
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
     }
+
+    public function move($topicId)
+    {
+        if(!request()->isMethod('post')) return redirect('/');
+
+        $user = $this->user();
+
+        $result = TopicExecutor::move($topicId, $user, request()->all());
+        if($result['success'])
+        {
+            return redirect('t/'.$result['topicId']);
+        }
+
+        //TODO: разобраться с переполнением
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+    }
 }

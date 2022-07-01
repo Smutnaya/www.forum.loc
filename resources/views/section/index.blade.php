@@ -11,7 +11,7 @@
             <h4 class="title-shadow">{{ $model['sectionTitle'] }}</h4>
         </div>
 
-        <div class="border border-ligh shadow-sm">
+        <div class="border border-ligh shadow-sm ">
             @foreach ($model['forums'] as $forum)
                 <div class="table-color ">
                     <div class="row mx-1 py-1">

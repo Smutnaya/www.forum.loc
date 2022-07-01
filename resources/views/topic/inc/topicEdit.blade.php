@@ -1,6 +1,6 @@
 
 <div class="row my-2 mx-auto ">
-    <div id="topic-edit-field" style="display:none; background: #ffffe04d;" class="borderborder border-ligh shadow-sm">
+    <div id="topic-edit-field" style="display:none; background: #f6f0cc;" class="borderborder border-ligh shadow-sm">
 
         @if (is_null($model['posts']))
             <div class="text-danger">Пост не найден!</div>

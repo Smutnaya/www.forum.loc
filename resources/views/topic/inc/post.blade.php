@@ -12,9 +12,11 @@
             <div class="col-12 my-1">
                 <span class="fw-bold text-black my-2 text-break">Пользователь</span><br>
                 <span class="text-muted"><i class="fa-regular fa-message me-1" style="color:rgb(0, 0, 116)"
-                        title="Ответы"></i> <span style="color:rgb(0, 0, 116)">{{ $post['user_DATA']->post_count }}</span></span>
+                        title="Ответы"></i> <span
+                        style="color:rgb(0, 0, 116)">{{ $post['user_DATA']->post_count }}</span></span>
                 <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:DarkGreen"
-                        title="Рейтинг"></i> <span style="color:DarkGreen">{{ $post['user_DATA']->like }}</span></span> <br>
+                        title="Рейтинг"></i> <span
+                        style="color:DarkGreen">{{ $post['user_DATA']->like }}</span></span> <br>
                 <span class="text-muted"><i class="fa-regular fa-envelope me-1" style="color:#2f4f4fe8"></i> <span
                         style="color:#2f4f4fe8">написать</span></span>
             </div>
@@ -39,6 +41,7 @@
                             &bull; {{ $post['ip'] }}
                         @endif
                     </div>
+
                     <div class="col-1 d-flex justify-content-end align-items-center">
                         <div class="dropdown">
                             <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
@@ -48,9 +51,9 @@
                             <ul style="background: #fbf6d1; font-size: small;" class="dropdown-menu"
                                 aria-labelledby="dropdownMenuButton1">
                                 @if (!is_null($model['user']))
-                                    @if ($post['user_id'] == $model['user']['id'] && time() <= strtotime($post['date']) + 3600)
+                                    @if ($post['user_id'] == $model['user']['id'] && time() <= $post['date'] + 3600)
                                         <li><a class="dropdown-item" style="background: #fbf6d1;"
-                                                href={{ url('/p/' . $post['id'] . '/edit') }}>
+                                                href="{{ url('/p/' . $post['id'] . '/edit') }}">
                                                 <div class="row">
                                                     <div class="col-1">
                                                         <i class="fa-solid fa-pencil forum-desc ms-1"></i>
@@ -108,12 +111,12 @@
                             <details>
                                 <summary>Исходный пост:</summary>
                                 <p><?php
-                                    echo htmlspecialchars_decode($post['DATA']->first);
-                                    ?></p>
-                               </details>
+                                echo htmlspecialchars_decode($post['DATA']->first);
+                                ?></p>
+                            </details>
                         </div>
                     </div>
-                   {{--  <div class="row forum-desc">
+                    {{-- <div class="row forum-desc">
                         <div class="col ms-4 fst-italic p-0 d-flex justify-content-start align-items-center text-center">
                             <?php
                             echo htmlspecialchars_decode($post['DATA']->first);
