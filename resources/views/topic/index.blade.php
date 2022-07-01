@@ -16,7 +16,7 @@
                     <i id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;"
                         title="Редактировать тему"></i>
                     {{-- <i class="fa-regular fa-folder ms-2 mt-1" style="color: #989e9a;"></i> --}}
-                    <i class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                    <i id="topic-move" class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
 
                 </div>
             </div>
@@ -69,15 +69,20 @@
                 // TODO: scroll down
                 $('#topic-edit-field').hide();
             });
+            $('#topic-move').click(function(e) {
+                e.preventDefault();
+                // TODO: scroll down
+                $('#topic-move-field').show();
+            });
+            $('#topic-move-hide').click(function(e) {
+                e.preventDefault();
+                // TODO: scroll down
+                $('#topic-move-field').hide();
+            });
         });
         $('#reset').click(function(e) {
             CKEDITOR.instances.text.setData("");
         });
-        var myModal = document.getElementById('myModal')
-        var myInput = document.getElementById('myInput')
 
-        myModal.addEventListener('shown.bs.modal', function() {
-            myInput.focus()
-        })
     </script>
 @endsection
