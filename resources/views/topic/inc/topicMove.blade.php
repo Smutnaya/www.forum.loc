@@ -7,9 +7,9 @@
                 <div class="row d-flex justify-content-center ">
 
                     @foreach ($model['section'] as $section)
-                        <div class="col-xl-3 col-lg-4 col-md-12 ">
+                        <div class="col-xl-3 col-lg-4 col-md-12  scroll">
                             <h6 class="fw-bold my-1">{{ $section['title'] }}</h6>
-                            <div class="overflow-auto" style="max-height: 57px;">
+                            <div class="overflow-auto" style="max-height: 83px;" id="myDiv">
                                 @foreach ($section->forums as $forum)
                                     <div class="form-check p-0 new-tema">
                                         <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0"

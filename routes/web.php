@@ -29,7 +29,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/main', 'MainController@index')->name('main');
 
-Route::get('/t/{topic_id}', 'TopicController@index');
+Route::get('/t/{id}', 'TopicController@index');
     Route::any('/t/{id}/post','TopicController@post');
     Route::any('/t/{id}/edit', 'TopicController@edit');
     Route::any('/t/{id}/move', 'TopicController@move');

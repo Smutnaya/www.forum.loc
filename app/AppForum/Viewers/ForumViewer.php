@@ -21,14 +21,15 @@ class ForumViewer
     public static function index($forumId)
     {
         $model = self::init();
+        $forum = Forum::find(intval($forumId));
+
+        if(is_null($forum)) return $model;
+        $model['forumTitle'] = $forum->title;
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
 
         $topics = Topic::where('forum_id', intval($forumId))->orderByDesc('pin')->orderByDesc('id')->get();
-
-        if($topics->isEmpty()) return $model;
-
         self::setTopic($model, $topics);
-        $model['forumTitle'] = Forum::find(intval($forumId))->title;
-        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
+        if($topics->isEmpty()) return $model;
 
         return $model;
 
@@ -55,7 +56,7 @@ class ForumViewer
             $model['topics']->push([
                 'id' => $topic->id,
                 'title' => $topic->title,
-                'datatime' => $topic->datatime,
+                'datetime' => $topic->datetime,
                 'hide' => $topic->hide,
                 'block' => $topic->block,
                 'pin' => $topic->pin,

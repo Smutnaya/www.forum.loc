@@ -4,6 +4,7 @@ use App\Post;
 use App\Forum;
 use App\Topic;
 use App\Section;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -113,12 +114,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
 /*         Topic::insert([
-            ['title' => 'aaa', 'datatime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
+            ['title' => 'aaa', 'datetime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
         ]);
 
         Post::insert([
-            ['text' => 'textttt4', 'datatime' => strtotime('+10 minutes'), 'user_id' => 1, 'topic_id' => 1],
-            ['text' => 'textttt5', 'datatime' => strtotime('+15 minutes'), 'user_id' => 1, 'topic_id' => 1]
+            ['text' => 'textttt4', 'datetime' => strtotime('+10 minutes'), 'user_id' => 1, 'topic_id' => 1],
+            ['text' => 'textttt5', 'datetime' => strtotime('+15 minutes'), 'user_id' => 1, 'topic_id' => 1]
         ]); */
     }
 }

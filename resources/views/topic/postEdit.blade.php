@@ -3,7 +3,7 @@
     @if (is_null($model['post']))
         <div class="text-danger">Пост не найден!</div>
     @else
-        @if ($model['post']['user_id'] == $model['user']['id']  && time() <= ($model['post']['datatime'] + 3600))
+        @if ($model['post']['user_id'] == $model['user']['id']  && time() <= ($model['post']['datetime'] + 3600))
             @if (!is_null($model['breadcrump']))
                 @include('inc.breadcrump', ['posts' => $model['breadcrump']])
             @endif

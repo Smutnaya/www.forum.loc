@@ -11,11 +11,12 @@ class PostManager
         $post = Post::create([
             'text' => $text,
             'ip' => $ip,
-            'datatime' => time(),
+            'datetime' => time(),
             'hide' => $check['hide'],
             'moderation' => $check['moder'],
             'user_id' => $user->id,
             'topic_id' => $topic->id,
+            'forum_id' => $topic->forum_id,
         ]);
         return $post;
         // TODO: obnovit data
@@ -51,5 +52,10 @@ class PostManager
         $post->fill([
             'hide' => 0,
         ])->save();
+    }
+
+    public static function move($topic_id, $forum_id)
+    {
+        Post::where('topic_id', $topic_id)->update(['forum_id' => $forum_id]);
     }
 }

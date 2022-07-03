@@ -64,7 +64,7 @@ class TopicViewer
             'pin' => $topic->pin,
             'moderation' => $topic->moderation,
             'id' => $topic->id,
-            'datatime' => $topic->datatime,
+            'datetime' => $topic->datetime,
             'user_id' => $topic->user_id
         ];
     }
@@ -75,7 +75,7 @@ class TopicViewer
             $model['posts']->push([
                 'text' => $post->text,
                 'ip' => $post->ip,
-                'date' => $post->datatime,
+                'date' => $post->datetime,
                 'hide' => $post->hide,
                 'moderation' => $post->moderation,
                 'DATA' => json_decode($post->DATA, false), //$post->DATA,

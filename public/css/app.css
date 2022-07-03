@@ -21606,14 +21606,13 @@ footer {
 .forum-desc {
   margin-left: 5px;
   font-size: 9pt;
-  color: #989e9a !important;
+  color: #6a6a6a !important;
   padding: 0px;
   margin: 0px;
 }
 
-.forum-desc-user {
-  font-size: 8.5pt;
-  color: #989e9a !important;
+i.forum-desc {
+  color: #8f8f8f !important;
 }
 
 .input-text:hover,
@@ -21833,4 +21832,38 @@ A:hover {
 
 .text-begin {
   text-align: left;
+}
+
+.scroll {
+  scroll-behavior: smooth;
+}
+.scroll ::-webkit-scrollbar {
+  width: 3px;
+}
+.scroll ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(98, 96, 86, 0.2509803922);
+  border-radius: 3px;
+  display: none;
+}
+.scroll ::-webkit-scrollbar-thumb {
+  background: rgba(151, 133, 103, 0.5019607843);
+  border-radius: 3px;
+  display: none;
+}
+
+.scroll:hover {
+  scroll-behavior: smooth;
+}
+.scroll:hover ::-webkit-scrollbar {
+  width: 3px;
+}
+.scroll:hover ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(98, 96, 86, 0.2509803922);
+  border-radius: 3px;
+  display: inline;
+}
+.scroll:hover ::-webkit-scrollbar-thumb {
+  background: rgba(151, 133, 103, 0.5019607843);
+  border-radius: 3px;
+  display: inline;
 }

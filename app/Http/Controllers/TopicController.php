@@ -12,6 +12,8 @@ class TopicController extends Controller
     {
         $user = $this->user();
         $model = TopicViewer::index($topicId, $user);
+        if(!is_null($model['topic'])) TopicExecutor::view($topicId, $user);
+
         return view('topic.index', compact('model'));
     }
 

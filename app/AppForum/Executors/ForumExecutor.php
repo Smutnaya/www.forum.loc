@@ -38,7 +38,7 @@ class ForumExecutor extends BaseExecutor
             $data->last_post->user_id = $post->user->id;
             $data->last_post->title = $post->topic->title;
             $data->last_post->post_id = $post->topic->id;
-            $data->last_post->date = $post->datatime;
+            $data->last_post->date = $post->datetime;
             $out['DATA'] = json_encode($data);
             TopicManager::dataedit($topic, $out['DATA']);
 
@@ -53,7 +53,7 @@ class ForumExecutor extends BaseExecutor
             $data->last_post->user_id = $post->user->id;
             $data->last_post->title = $post->topic->title;
             $data->last_post->post_id = $post->topic->id;
-            $data->last_post->date = $post->datatime;
+            $data->last_post->date = $post->datetime;
             $out['DATA'] = json_encode($data);
 
             ForumManager::dataedit($post->topic->forum, $out['DATA']);

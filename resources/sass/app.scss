@@ -58,15 +58,12 @@ footer {
 .forum-desc {
     margin-left: 5px;
     font-size: 9pt;
-    color: #989e9a !important;
+    color: #6a6a6a !important;
     padding: 0px;
     margin: 0px;
 }
 
-.forum-desc-user {
-    font-size: 8.5pt;
-    color: #989e9a !important;
-}
+i.forum-desc { color: #8f8f8f !important;}
 
 .input-text:hover,
 .input-text:focus {
@@ -289,4 +286,39 @@ A:hover {
 
 .text-begin {
     text-align: left;
+}
+
+
+.scroll {
+    ::-webkit-scrollbar {
+        width: 3px;
+    }
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px #62605640;
+        border-radius: 3px;
+        display:none;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #97856780;
+        border-radius: 3px;
+        display: none;
+    }
+    scroll-behavior: smooth;
+}
+
+.scroll:hover {
+    ::-webkit-scrollbar {
+        width: 3px;
+    }
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px #62605640;
+        border-radius: 3px;
+        display:inline;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #97856780;
+        border-radius: 3px;
+        display: inline;
+    }
+    scroll-behavior: smooth;
 }

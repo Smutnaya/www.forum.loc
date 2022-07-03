@@ -4,7 +4,7 @@
 
 
         @if (is_null($model['topic']))
-            <div>Тема не найдена</div>
+            <div class="my-3 mb-5 centre error" style="color:red">Тема не найдена</div>
         @else
             @if ($errors->has('message'))
                 <div class="error" style="color:red">{{ $errors->first('message') }}</div>

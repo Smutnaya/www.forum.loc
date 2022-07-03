@@ -21,10 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
 
-            $table->longtext('ip')->nullable();
-            $table->unsignedInteger('datatime')->nullable();
+/*             $table->longtext('ip')->nullable();
+            $table->unsignedInteger('datetime')->nullable();
             $table->string('last_url')->nullable();
-            $table->unsignedBigInteger('topic_id')->nullable();
+            $table->unsignedBigInteger('topic_id')->nullable(); */
             $table->json('DATA')->default('{"post_count":0,"like":0}');
 
             //$table->timestamps();

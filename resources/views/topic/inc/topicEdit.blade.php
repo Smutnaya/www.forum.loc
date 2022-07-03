@@ -9,7 +9,7 @@
         <div class="text-danger">Что-то пошло не так</div>
         @else
 
-            @if ($model['topic']['user_id'] == $model['user']['id'] && time() <= $model['topic']['datatime'] + 3600)
+            @if ($model['topic']['user_id'] == $model['user']['id'] && time() <= $model['topic']['datetime'] + 3600)
 
                 @if ($errors->has('message'))
                     <div class="error pb-1 text-danger">{{ $errors->first('message') }}</div>

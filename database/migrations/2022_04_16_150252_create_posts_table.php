@@ -18,13 +18,14 @@ class CreatePostsTable extends Migration
             //$table->timestamps();
             $table->longtext('text');
             $table->longtext('ip')->nullable();
-            $table->unsignedInteger('datatime');
+            $table->unsignedInteger('datetime');
             $table->boolean('moderation')->default(false);
             $table->boolean('hide')->default(false);
             $table->integer('like')->default(0);
             $table->integer('dislike')->default(0);
             $table->json('DATA')->default('{"user_name_moder":null,"date_moder":null,"first":null}');
             $table->unsignedBigInteger('topic_id');
+            $table->unsignedBigInteger('forum_id');
             $table->unsignedBigInteger('user_id');
         });
     }
