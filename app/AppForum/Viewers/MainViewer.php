@@ -2,6 +2,7 @@
 
 namespace App\AppForum\Viewers;
 
+use App\Online;
 use App\Post;
 use App\Topic;
 use App\Section;
@@ -12,6 +13,7 @@ class MainViewer
     {
         return collect([
             'sections' => collect(), // id, title, description
+            'onlines' => collect(),
             // 'posts' => collect(),
             // 'topics' => collect(),
         ]);
@@ -24,6 +26,12 @@ class MainViewer
         // section
         $sections = Section::all();
         self::setSection($model, $sections);
+
+        $onlines = Online::where('datetime','>=', strtotime('-15 minute'))->orderBy('datetime','desc')->get();
+        //$onlines = Online::all();
+        //dd($onlines);
+        if(is_null($onlines)) return $model;
+        $model['onlines'] = $onlines;
 
         return $model;
     }

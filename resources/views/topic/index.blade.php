@@ -13,10 +13,12 @@
             <div class="row">
                 <div class="col text-break d-flex justify-content-start align-items-center py-1 " id="title">
                     <h4 class="m-0 ">{{ $model['topic']['title'] }} </h4>
-                    <i id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;"
+                    <i type="button" id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;"
                         title="Редактировать тему"></i>
                     {{-- <i class="fa-regular fa-folder ms-2 mt-1" style="color: #989e9a;"></i> --}}
-                    <i id="topic-move" class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                    <i type="button" id="topic-move" class="fa-solid fa-truck-arrow-right ms-3 mt-1"
+                        style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"></i>
 
                 </div>
             </div>

@@ -14,9 +14,9 @@
                 <span class="text-muted"><i class="fa-regular fa-message me-1" style="color:rgb(0, 0, 116)"
                         title="Ответы"></i> <span
                         style="color:rgb(0, 0, 116)">{{ $post['user_DATA']->post_count }}</span></span>
-                <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:DarkGreen"
-                        title="Рейтинг"></i> <span
-                        style="color:DarkGreen">{{ $post['user_DATA']->like }}</span></span> <br>
+                <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d"
+                        title="Рейтинг"></i> <span style="color:#0e583d">{{ $post['user_DATA']->like }}</span></span>
+                <br>
                 <span class="text-muted"><i class="fa-regular fa-envelope me-1" style="color:#2f4f4fe8"></i> <span
                         style="color:#2f4f4fe8">написать</span></span>
             </div>
@@ -27,12 +27,12 @@
                 <div class="row pt-1" style="padding-left: 12px !important;">
                     <div class="col d-flex justify-content-start align-items-center text-center forum-desc">
                         @if ($post['moderation'])
-                            <a href="{{ url('p/' . $post['id'] . '/premod') }}"><i
+                            <a href="{{ url('/p/' . $post['id'] . '/premod') }}"><i
                                     class="fa-regular fa-hourglass me-2" style="color: #b80000"
                                     title="Ожидание публикации"></i></a>
                         @endif
                         @if ($post['hide'])
-                            <a class="fw-bold" href="{{ url('p/' . $post['id'] . '/unhide') }}"><i
+                            <a class="fw-bold" href="{{ url('/p/' . $post['id'] . '/unhide') }}"><i
                                     class="fa-regular fa-eye-slash me-2" style="color: #5c625e;"
                                     title="Публикация скрыта"></i></a>
                         @endif
@@ -100,7 +100,9 @@
                 BETAJIb
             </div>
             {{-- @dd($post['DATA']) --}}
-            @if (!is_null($post['DATA']->user_name_moder) && !is_null($post['DATA']->date_moder) && !is_null($post['DATA']->first))
+            @if (!is_null($post['DATA']->user_name_moder) &&
+                !is_null($post['DATA']->date_moder) &&
+                !is_null($post['DATA']->first))
                 <div class="row forum-desc">
                     <div class="col fst-italic p-0 d-flex justify-content-start align-items-center text-center">
                         <i class="fa-solid fa-pencil me-1"></i> &nbsp; {{ $post['DATA']->user_name_moder }} &middot;
@@ -128,7 +130,7 @@
                     </div>
                 </div>
             @endif
-
+            {{-- @dd($post['DATA']) --}}
             <div class="col-12 forum-desc fs-6 pb-3 text-break">
                 <hr class="mt-0">
                 Подпись ⋙ 👍
@@ -139,10 +141,8 @@
                                 style="color:rgb(0, 0, 116)">0</span>
                         </div>
                         <div class="col d-flex justify-content-end align-items-center text-center">
-                            <i class="fa-regular fa-thumbs-up me-1" style="color:DarkGreen"></i> <span
-                                style="color:DarkGreen">0</span>
-                            <i class="fa-regular fa-thumbs-down me-1 ms-2" style="color: #660000"></i> <span
-                                style="color: #660000">0</span>
+                            @include('topic.inc.like', ['model' => $model])
+
                         </div>
                     </div>
                 </div>
@@ -150,3 +150,5 @@
         </div>
     </div>
 @endforeach
+
+

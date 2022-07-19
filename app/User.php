@@ -33,6 +33,7 @@ class User extends Authenticatable
 
     protected $guarded = [];
     public $timestamps = false;
+    protected $with = ['online']; // Eager Loading By default
 
 
     public function posts()
@@ -48,5 +49,15 @@ class User extends Authenticatable
     public function views()
     {
         return $this->hasMany(View::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function online()
+    {
+        return $this->hasOne(Online::class, 'id');
     }
 }

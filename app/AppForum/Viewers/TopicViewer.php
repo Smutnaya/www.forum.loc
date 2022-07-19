@@ -2,6 +2,7 @@
 
 namespace App\AppForum\Viewers;
 
+use App\Like;
 use App\Post;
 use App\Topic;
 use App\Section;
@@ -31,7 +32,7 @@ class TopicViewer
 
         $posts = Post::where('topic_id', intval($topicId))->get();
         if ($posts->isEmpty()) return $model;
-        self::setPost($model, $posts);
+        self::setPost($model, $posts, $user);
 
         $model['forum'] = $topic->forum;
         $section = Section::all();
@@ -50,6 +51,8 @@ class TopicViewer
 */
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
         if (is_null($user)) return $model;
+
+
         $model['user'] = $user;
 
         return $model;
@@ -69,21 +72,38 @@ class TopicViewer
         ];
     }
 
-    private static function setPost($model, $posts)
+    private static function setPost($model, $posts, $user)
     {
         foreach ($posts as $post) {
-            $model['posts']->push([
-                'text' => $post->text,
-                'ip' => $post->ip,
-                'date' => $post->datetime,
-                'hide' => $post->hide,
-                'moderation' => $post->moderation,
-                'DATA' => json_decode($post->DATA, false), //$post->DATA,
-                'id' => $post->id,
-                'user_id' => $post->user_id,
-                'user_post' => $post->user,
-                'user_DATA' => json_decode($post->user->DATA, false)
-            ]);
+            if (!is_null($user)) {
+                $model['posts']->push([
+                    'text' => $post->text,
+                    'ip' => $post->ip,
+                    'date' => $post->datetime,
+                    'hide' => $post->hide,
+                    'moderation' => $post->moderation,
+                    'DATA' => json_decode($post->DATA, false), //$post->DATA,
+                    'id' => $post->id,
+                    'user_id' => $post->user_id,
+                    'user_post' => $post->user,
+                    'user_DATA' => json_decode($post->user->DATA, false),
+                    'like' => Like::select('action')->where([['post_id', $post->id], ['user_id', $user->id]])->first()
+                ]);
+            } else {
+                $model['posts']->push([
+                    'text' => $post->text,
+                    'ip' => $post->ip,
+                    'date' => $post->datetime,
+                    'hide' => $post->hide,
+                    'moderation' => $post->moderation,
+                    'DATA' => json_decode($post->DATA, false), //$post->DATA,
+                    'id' => $post->id,
+                    'user_id' => $post->user_id,
+                    'user_post' => $post->user,
+                    'user_DATA' => json_decode($post->user->DATA, false),
+                    'like' => null
+                ]);
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\AppForum\Viewers;
 
+use App\Forum;
 use App\Topic;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
-use App\Forum;
 
 class ForumViewer
 {

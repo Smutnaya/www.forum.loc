@@ -8,7 +8,7 @@ class PostManager
 {
     public static function post($topic, $text, $check, $user, $ip)
     {
-        $post = Post::create([
+        return $post = Post::create([
             'text' => $text,
             'ip' => $ip,
             'datetime' => time(),
@@ -18,8 +18,6 @@ class PostManager
             'topic_id' => $topic->id,
             'forum_id' => $topic->forum_id,
         ]);
-        return $post;
-        // TODO: obnovit data
     }
 
     public static function edit($post, $text, $check, $data, $user)
@@ -57,5 +55,12 @@ class PostManager
     public static function move($topic_id, $forum_id)
     {
         Post::where('topic_id', $topic_id)->update(['forum_id' => $forum_id]);
+    }
+
+    public static function updata($post, $data)
+    {
+        $post->fill([
+            'DATA' => $data
+        ])->save();
     }
 }

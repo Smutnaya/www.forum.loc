@@ -20,11 +20,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-
-/*             $table->longtext('ip')->nullable();
-            $table->unsignedInteger('datetime')->nullable();
-            $table->string('last_url')->nullable();
-            $table->unsignedBigInteger('topic_id')->nullable(); */
             $table->json('DATA')->default('{"post_count":0,"like":0}');
 
             //$table->timestamps();

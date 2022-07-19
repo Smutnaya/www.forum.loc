@@ -26,18 +26,17 @@
         @include('inc.header')
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-3" >
+                <div class="col-lg-2 col-md-2 col-sm-3">
                     @include('inc.aside')
                 </div>
-                <div class="col-lg-8 col-md-10 col-sm-9" >
-                    @include("news.index")
+                <div class="col-lg-10 col-md-10 col-sm-9">
+                    @yield('content')
                 </div>
-                <div class="col-lg-2 col-md-11 col-sm-11">
-                    @yield("content")
-                </div>
+
             </div>
+
         </div>
-        @include('inc.footer')
+
     </main>
 
 </body>

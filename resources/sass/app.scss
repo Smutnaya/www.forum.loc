@@ -13,28 +13,31 @@
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
+
 body {
     //background: rgba(223, 212, 192, 0.877);
     //background: rgba(218, 201, 172, 0.74);
-    background:#f1e9c2;
+    background: #f1e9c2;
     margin: 2px;
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
     //background: url("/images/background/background.jpg");
 }
 
-p {margin: 0 !important;}
-blockquote
-{
-	background:#f1e9c282;
+p {
+    margin: 0 !important;
+}
+
+blockquote {
+    background: #f1e9c282;
     color: #4a4741;
     margin: 0 0 1rem 1rem;
     font-size: 14px;
     font-style: italic;
-	font-family: "Open Sans", "Arial", Helvetica, serif !important;
-	padding: 10px;
-	border-style: solid;
-	border-color: #e7e3d1a1;
-	border-width: 0.005rem;
+    font-family: "Open Sans", "Arial", Helvetica, serif !important;
+    padding: 10px;
+    border-style: solid;
+    border-color: #e7e3d1a1;
+    border-width: 0.005rem;
     border-radius: 0px 15px;
 }
 
@@ -63,7 +66,9 @@ footer {
     margin: 0px;
 }
 
-i.forum-desc { color: #8f8f8f !important;}
+i.forum-desc {
+    color: #8f8f8f !important;
+}
 
 .input-text:hover,
 .input-text:focus {
@@ -72,6 +77,7 @@ i.forum-desc { color: #8f8f8f !important;}
     border-color: #c9c1a2 !important;
     outline: 0;
 }
+
 .input-text {
     width: 100%;
     background: #fdfddbb3;
@@ -87,21 +93,29 @@ i.forum-desc { color: #8f8f8f !important;}
     height: 28px !important;
     width: 85px !important;
 }
+
 .btn-custom:hover {
     background-color: #88734e;
     height: 28px !important;
-    color:#FFF;
+    color: #FFF;
     text-decoration: none;
 }
 
 .new-tema {
-    .btn-check:checked + .btn-outline-primary, .btn-outline-primary:hover, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+
+    .btn-check:checked+.btn-outline-primary,
+    .btn-outline-primary:hover,
+    .btn-check:active+.btn-outline-primary,
+    .btn-outline-primary:active,
+    .btn-outline-primary.active,
+    .btn-outline-primary.dropdown-toggle.show {
         color: #ffffe0;
         background-color: #b59a6b;
         border-color: #cec6a7d9;
         padding-top: 3px;
         border-radius: 0;
         width: 100% !important;
+
         i {
             color: #e3e3cb !important;
         }
@@ -114,12 +128,19 @@ i.forum-desc { color: #8f8f8f !important;}
         padding-top: 3px;
         border-radius: 0;
         width: 100% !important;
+
         i {
             color: #888477 !important;
         }
     }
 
-    .btn-check:checked + .btn-outline-primary:focus, .btn-check:active + .btn-outline-primary:focus, .btn-outline-primary:active:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus, .btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
+    .btn-check:checked+.btn-outline-primary:focus,
+    .btn-check:active+.btn-outline-primary:focus,
+    .btn-outline-primary:active:focus,
+    .btn-outline-primary.active:focus,
+    .btn-outline-primary.dropdown-toggle.show:focus,
+    .btn-check:focus+.btn-outline-primary,
+    .btn-outline-primary:focus {
         box-shadow: 0 0 0 0;
     }
 
@@ -134,12 +155,14 @@ i.forum-desc { color: #8f8f8f !important;}
     justify-content: center;
     text-align: center;
 }
+
 .table-color {
     background: #ffffde;
     //ffffde
 }
+
 .table-color:nth-child(2n) {
-    background:#f9f1c5;
+    background: #f9f1c5;
 }
 
 .table-bord {
@@ -163,10 +186,12 @@ i.forum-desc { color: #8f8f8f !important;}
     width: 47px;
     padding: 0.1rem !important;
 }
+
 .min-avatar-mob {
     width: 28px;
     padding: 0.1rem !important;
 }
+
 .min-avatar-post {
     width: 39px;
     padding: 0.1rem !important;
@@ -188,13 +213,14 @@ A {
     //display: block;
     text-decoration: none;
 }
+
 A:hover {
     text-decoration: underline;
     color: black;
 }
 
 .post-a-color {
-    color:#660000;
+    color: #660000;
 }
 
 .tema {
@@ -229,15 +255,19 @@ A:hover {
 .post {
     background: #f9f1c5;
     border-color: #ced4da;
+
     .text {
         background: #ffffde;
     }
+
     .logo {
         width: 100px;
     }
+
     .inf {
         min-width: 125px;
     }
+
     .text-centre {
         text-align: center !important;
     }
@@ -275,8 +305,7 @@ A:hover {
     padding: 0;
 }
 
-.links
-{
+.links {
     color: black;
 }
 
@@ -288,21 +317,56 @@ A:hover {
     text-align: left;
 }
 
+.popover {
+    background: #e8e0bf;
+    border: 1px #d6d1b2;
+
+    .popover-body {
+        padding: 5px 10px !important;
+        min-width: 40px;
+        text-align: center;
+    }
+}
+
+.popover .popover-arrow::before, .popover .popover-arrow::after
+{
+    border: none !important;
+}
+
+/*
+ span {
+    position: relative;
+    display: inline-block;
+    margin-top: 2px;
+  }
+span[title]:hover::after {
+    content: attr(title);
+    //position: absolute;
+    top: -100%;
+    left: 0;
+    border: solid 1px #d6d1b2;
+    border-radius: 5px;
+    background: #e8e0bf;
+    text-align: center;
+} */
 
 .scroll {
     ::-webkit-scrollbar {
         width: 3px;
     }
+
     ::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px #62605640;
         border-radius: 3px;
-        display:none;
+        display: none;
     }
+
     ::-webkit-scrollbar-thumb {
         background: #97856780;
         border-radius: 3px;
         display: none;
     }
+
     scroll-behavior: smooth;
 }
 
@@ -310,15 +374,18 @@ A:hover {
     ::-webkit-scrollbar {
         width: 3px;
     }
+
     ::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px #62605640;
         border-radius: 3px;
-        display:inline;
+        display: inline;
     }
+
     ::-webkit-scrollbar-thumb {
         background: #97856780;
         border-radius: 3px;
         display: inline;
     }
+
     scroll-behavior: smooth;
 }
