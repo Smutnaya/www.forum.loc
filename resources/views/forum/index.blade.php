@@ -1,34 +1,43 @@
+@php
+use App\AppForum\Helpers\ForumHelper;
+@endphp
 @extends('layouts.forum')
 @section('content')
     <div class="container px-0">
 
-
-       {{--  @dd($model) --}}
-
-
         @if (!is_null($model['breadcrump']))
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
 
-        @if ($errors->has('message'))
-            <div class="error" style="color:red">{{ $errors->first('message') }}</div>
+            @if ($errors->has('message'))
+                <div class="error" style="color:red">{{ $errors->first('message') }}</div>
+            @endif
+            <div class="row mb-2">
+                <div class="pb-1 col-8" id="title">
+                    <h4 class="title-shadow">{{ $model['forumTitle'] }}</h4>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="col">
+                        @if (!is_null($model['pagination']['forumId']))
+                        @include('forum.inc.pagination', ['model' => $model['pagination']])
+                        @endif
+                    </div>
+                    @if (!is_null($model['user']))
+                        <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                            <a class="btn btn-sm btn-custom shadow"
+                                href="{{ url('/f/' . $model['forumId'] . '/topic') }}">Новая
+                                тема</a>
+                        </div>
+                </div>
         @endif
-        <div class="row mb-1">
-            <div class="pb-1 col-8" id="title">
-                <h4 class="title-shadow">{{ $model['forumTitle'] }}</h4>
-            </div>
-            <div class="pb-1 col-4 d-flex justify-content-end " id="title">
-                <a class="btn btn-sm btn-custom shadow" href="{{ url('/f/' . $forumId . '/topic') }}">Новая тема</a>
-            </div>
-        </div>
+    </div>
 
-        @if ($model['topics']->count() == 0)
-            <div class="my-3 mb-5 centre">Темы отсутствуют</div>
-        @else
-
+    @if ($model['topics']->count() == 0)
+        <div class="my-3 mb-5 centre">Темы отсутствуют</div>
+    @else
         <div class="border border-ligh shadow-sm">
             @foreach ($model['topics'] as $topic)
-            <div class="table-color text-break">
-                <div class="row mx-1 py-1 ">
+                <div class="table-color text-break">
+                    <div class="row mx-1 py-1 ">
                         <div class="col align-self-center">
                             @if ($topic['pin'])
                                 <i class="fa fa-thumb-tack forum-desc" title="Закрепеленная тема"></i>
@@ -44,12 +53,13 @@
                                     title="Премодерация публикаций в теме"></i>
                             @endif
                             <span class="fw-bold">
-                                <a href="{{ url('/t/' . $topic['id']) }}">{{ $topic['title'] }} </a>
+                                <a href="{{ url('/t/' . $topic['id'] . '-' . $topic['title_slug']) }}">{{ $topic['title'] }}
+                                </a>
                             </span>
                             <div class="forum-desc">
                                 <a class="post-a-color" href="{{ url('#') }}">
                                     {{ $topic['user'] }}
-                                </a> &bull; {{ date('d.m.Y в H:i', $topic['datetime']) }}
+                                </a> &bull; {{ $topic['datetime'] }}
                             </div>
                         </div>
 
@@ -57,7 +67,8 @@
                             <div class="container-fluid forum-desc">
                                 <div class="row">
                                     <div class="col d-flex justify-content-end">
-                                        Просмотры: &nbsp; <span class="fw-bold"> {{ $topic['DATA']->inf->views }}</span>
+                                        Просмотры: &nbsp; <span class="fw-bold">
+                                            {{ $topic['DATA']->inf->views }}</span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -70,7 +81,9 @@
                         <div class="col-xl-3 col-lg-12 ">
                             <hr class="d-xl-none d-block my-1 hr-color">
 
-                            @if (!is_null($topic['DATA']->last_post->user_name) && !is_null($topic['DATA']->last_post->user_id) && !is_null($topic['DATA']->last_post->date))
+                            @if (!is_null($topic['DATA']->last_post->user_name) &&
+                                !is_null($topic['DATA']->last_post->user_id) &&
+                                !is_null($topic['DATA']->last_post->date))
                                 <div class="row">
                                     <div class="col-2 d-none d-xl-block p-1 align-self-center">
                                         <img style="border-color: #ced4da;" class="min-avatar border bg-white rounded"
@@ -89,9 +102,8 @@
                                             </div>
                                         </div>
                                         <div class="row ps-3">
-                                            <div class="col"><span
-                                                    class="forum-desc"
-                                                    style="font-size: 8pt;">{{ date('d.m.Y в H:i', $topic['DATA']->last_post->date) }}</span>
+                                            <div class="col"><span class="forum-desc"
+                                                    style="font-size: 8pt;">{{ ForumHelper::timeFormat($topic['DATA']->last_post->date) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -107,12 +119,13 @@
             @endforeach
 
         </div>
-        @endif
-        @else
-        <div class="my-3 mb-5 centre error" style="color:red">Форум с темами не найден</div>
-        @endif
-
-
+        <div class="col mt-2">
+            @include('forum.inc.pagination', ['model' => $model['pagination']])
+        </div>
+    @endif
+@else
+    <div class="my-3 mb-5 centre error" style="color:red">Форум с темами не найден</div>
+    @endif
 
     </div>
 @endsection

@@ -1,11 +1,10 @@
 @extends('layouts.topic')
 @section('content')
 
-
     @if (is_null($model['post']))
         <div class="text-danger">Пост не найден!</div>
     @else
-        @if ($model['post']['user_id'] == $model['user']['id']  && time() <= ($model['post']['datetime'] + 3600) && is_null($model['DATA']->date_moder))
+        @if (time() <= ($model['post']['datetime'] + 1113600))
             @if (!is_null($model['breadcrump']))
                 @include('inc.breadcrump', ['posts' => $model['breadcrump']])
             @endif
@@ -14,10 +13,10 @@
                 <div class="error pb-1 text-danger">{{ $errors->first('message') }}</div>
             @endif
 
-            <form method='post' action='{{ url('/p/' . $model['post']['id'] . '/save/' . $model['page']) }}'>
+            <form method='post' action='{{ url('/p/' . $model['post']['id'] . '/save_moder/' . $model['page']) }}'>
                 @csrf
                 <div>
-                    <h5 class="title-shadow mb-4">Редактирование поста</h5>
+                    <h5 class="title-shadow mb-4 text-danger">Модерация поста</h5>
                     <p class="forum_comment mb-0">Настройки:</p>
                     <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
                         <input type="checkbox" class="btn-check" name="check[]" id="btncheck3" autocomplete="off"

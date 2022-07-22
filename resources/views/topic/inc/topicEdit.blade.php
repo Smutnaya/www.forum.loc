@@ -1,5 +1,5 @@
 
-<div class="row my-2 mx-auto ">
+<div class="row my-1 mx-auto ">
     <div id="topic-edit-field" style="display:none; background: #f6f0cc;" class="borderborder border-ligh shadow-sm">
 
         @if (is_null($model['posts']))
@@ -9,7 +9,7 @@
         <div class="text-danger">Что-то пошло не так</div>
         @else
 
-            @if ($model['topic']['user_id'] == $model['user']['id'] && time() <= $model['topic']['datetime'] + 3600)
+            @if ($model['topic']['user_id'] == $model['user']['id'] && time() <= ($model['topic']['datetime_d'] + 3600))
 
                 @if ($errors->has('message'))
                     <div class="error pb-1 text-danger">{{ $errors->first('message') }}</div>
@@ -52,11 +52,11 @@
                                     class="d-sm-inline d-none">модерация</span></label>
                         </div>
                         @if ($model['forum']['hide'] == 1)
-                            <p class="small" style="color:#660000 !important">* возможно создавать только скрытые темы
+                            <p class="small" style="color:#700000 !important">* возможно создавать только скрытые темы
                             </p>
                         @endif
                         @if ($model['forum']['moderation'] == 1)
-                            <p class="small" style="color:#660000 !important">* премодерация тем на форуме</p>
+                            <p class="small" style="color:#700000 !important">* премодерация тем на форуме</p>
                         @endif
 
                         <div class="col d-grid gap-2 d-flex justify-content-end my-2">

@@ -1,4 +1,3 @@
-
 @extends('layouts.topic')
 @section('content')
 <div class="pb-2 align-self-center" id="breadcrump">
@@ -35,8 +34,8 @@
             <input type="checkbox" class="btn-check" name="check[]" id="btncheck4" autocomplete="off" value="moder" @if($model['sections']['moderation'] == 1 ) checked  disabled @endif>
             <label class="btn btn-outline-primary px-0" for="btncheck4"><i class="fa-regular fa-hourglass forum-desc me-2"></i><span class="d-sm-inline d-none">модерация</span></label>
         </div>
-        @if($model['sections']['hide'] == 1) <p class="small" style="color:#660000 !important">* возможно создавать только скрытые темы</p>@endif
-        @if($model['sections']['moderation'] == 1 ) <p class="small" style="color:#660000 !important">* премодерация тем на форуме</p>@endif
+        @if($model['sections']['hide'] == 1) <p class="small" style="color:#700000 !important">* возможно создавать только скрытые темы</p>@endif
+        @if($model['sections']['moderation'] == 1 ) <p class="small" style="color:#700000 !important">* премодерация тем на форуме</p>@endif
         <p class="forum_comment mb-0">Текст:</p>
         @include('inc.ckeditor')
         <div class="col d-grid gap-2 d-flex justify-content-end my-2">

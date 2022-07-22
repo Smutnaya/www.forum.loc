@@ -7,12 +7,13 @@ use App\View;
 use App\Forum;
 use App\Topic;
 use App\AppForum\Helpers\IpHelper;
+use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Managers\UserManager;
+use App\AppForum\Managers\ViewManager;
 use App\AppForum\Helpers\CheckedHelper;
 use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
-use App\AppForum\Managers\ViewManager;
 
 class TopicExecutor extends BaseExecutor
 {
@@ -34,7 +35,9 @@ class TopicExecutor extends BaseExecutor
             $post = PostManager::post($out['topic'], $out['text'], $out['check'], $user, $ip);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;
+            self::$result['title_slug'] = ForumHelper::slugify($out['topic']->title);
             self::$result['user'] = $user;
+
             $data = json_decode($out['topic']->DATA, false);
             $data->last_post->user_name = $post->user->name;
             $data->last_post->user_id = $post->user->id;
@@ -92,6 +95,7 @@ class TopicExecutor extends BaseExecutor
             TopicManager::edit($out['topic'], $out['title'], $out['check'], $user);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;
+            self::$result['title_slug'] = ForumHelper::slugify($out['topic']->title);
             self::$result['user'] = $user;
         }
 
@@ -125,6 +129,7 @@ class TopicExecutor extends BaseExecutor
             PostManager::move($out['topic']->id, $out['forum_id']);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;
+            self::$result['title_slug'] = ForumHelper::slugify($out['topic']->title);
             self::$result['user'] = $user;
             if ($out['forum_id_from'] != $out['forum_id_in']) {
                 self::DATAMove_valid($out['forum_id_from'], $out['forum_id_in'], $out);
@@ -171,7 +176,7 @@ class TopicExecutor extends BaseExecutor
 
         //dd($last_post_in);
 
-/*         $last_post_from = Post::join('topics', 'topic_id', '=', 'topics.id')
+        /*         $last_post_from = Post::join('topics', 'topic_id', '=', 'topics.id')
             ->join('forums', 'forum_id', '=', 'forums.id')->where('forums.id', $forum_from->id)->orderBy('posts.datetime', 'desc')->first();
         $last_post_in = Post::join('topics', 'topic_id', '=', 'topics.id')
             ->join('forums', 'forum_id', '=', 'forums.id')->where('forums.id', $forum_in->id)->orderBy('posts.datetime', 'desc')->first();
@@ -182,8 +187,6 @@ class TopicExecutor extends BaseExecutor
         $out['forum_in'] = $forum_in;
         $out['dafa_from'] = json_encode($forum_data_from);
         $out['dafa_in'] = json_encode($forum_data_in);
-
-
     }
     private static function DATAlastPost_valid($post, $last_post_data)
     {

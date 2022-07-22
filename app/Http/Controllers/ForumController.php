@@ -7,12 +7,12 @@ use App\AppForum\Viewers\ForumViewer;
 use App\AppForum\Executors\ForumExecutor;
 class ForumController extends Controller
 {
-    public function index($forumId)
+    public function index($forumId, $page = 1)
     {
-        //TODO: раздел?
-        // TODO: model?
+        $user = $this->user();
 
-        $model = ForumViewer::index($forumId);
+        $model = ForumViewer::index($forumId, $user, $page);
+        if(!is_null($model))
         return view('forum.index', compact('model', 'forumId'));
     }
 
@@ -20,6 +20,8 @@ class ForumController extends Controller
     {
         $user = $this->user();
         $result = ForumExecutor::forum($forumId, $user);
+
+        dd($result);
 
         if($result['success'])
         {
@@ -34,12 +36,12 @@ class ForumController extends Controller
     public function save($forumId)
     {
         if(!request()->isMethod('post')) return redirect('/');
-        $user = $this->user(); //null ili net $user->email, is_null($user)
+        $user = $this->user();
         $result = ForumExecutor::post($forumId, $user, request()->all());
 
         if($result['success'])
         {
-            return redirect('t/'.$result['topicId']);
+            return redirect('t/'.$result['topicId'].'-'.$result['title_slug']);
         }
 
         //dd($result);

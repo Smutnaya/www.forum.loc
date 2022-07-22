@@ -85,6 +85,8 @@ i.forum-desc {
     outline: 0;
 }
 
+//btn custom
+
 .btn-custom {
     background-color: #b59a6b;
     color: #FFF;
@@ -93,16 +95,13 @@ i.forum-desc {
     height: 28px !important;
     width: 85px !important;
 }
-
 .btn-custom:hover {
     background-color: #88734e;
     height: 28px !important;
     color: #FFF;
     text-decoration: none;
 }
-
 .new-tema {
-
     .btn-check:checked+.btn-outline-primary,
     .btn-outline-primary:hover,
     .btn-check:active+.btn-outline-primary,
@@ -120,7 +119,6 @@ i.forum-desc {
             color: #e3e3cb !important;
         }
     }
-
     .btn-outline-primary {
         color: #000000;
         border-color: #c9c1a2;
@@ -133,7 +131,6 @@ i.forum-desc {
             color: #888477 !important;
         }
     }
-
     .btn-check:checked+.btn-outline-primary:focus,
     .btn-check:active+.btn-outline-primary:focus,
     .btn-outline-primary:active:focus,
@@ -143,7 +140,6 @@ i.forum-desc {
     .btn-outline-primary:focus {
         box-shadow: 0 0 0 0;
     }
-
     .btn-group {
         width: 100% !important;
     }
@@ -177,50 +173,49 @@ i.forum-desc {
     align-self: start;
 }
 
+// avatars
 .min-avatar {
     width: 42px;
     padding: 0.1rem !important;
 }
-
 .min-logo {
     width: 47px;
     padding: 0.1rem !important;
 }
-
 .min-avatar-mob {
     width: 28px;
     padding: 0.1rem !important;
 }
-
 .min-avatar-post {
     width: 39px;
     padding: 0.1rem !important;
 }
-
 .logo {
     width: 80px;
     padding: 0.1rem !important;
 }
 
+// link
 .naw-link {
     padding: 0.5rem 1rem;
     text-decoration: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
-
 A {
     color: black;
     //display: block;
     text-decoration: none;
 }
-
 A:hover {
     text-decoration: underline;
     color: black;
 }
+.links {
+    color: black;
+}
 
 .post-a-color {
-    color: #660000;
+    color: #700000;
 }
 
 .tema {
@@ -305,10 +300,6 @@ A:hover {
     padding: 0;
 }
 
-.links {
-    color: black;
-}
-
 .text-end {
     text-align: right;
 }
@@ -317,6 +308,8 @@ A:hover {
     text-align: left;
 }
 
+
+//popover
 .popover {
     background: #e8e0bf;
     border: 1px #d6d1b2;
@@ -327,7 +320,6 @@ A:hover {
         text-align: center;
     }
 }
-
 .popover .popover-arrow::before, .popover .popover-arrow::after
 {
     border: none !important;
@@ -350,42 +342,65 @@ span[title]:hover::after {
     text-align: center;
 } */
 
+// scroll
 .scroll {
     ::-webkit-scrollbar {
         width: 3px;
     }
-
     ::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px #62605640;
         border-radius: 3px;
         display: none;
     }
-
     ::-webkit-scrollbar-thumb {
         background: #97856780;
         border-radius: 3px;
         display: none;
     }
-
     scroll-behavior: smooth;
 }
-
 .scroll:hover {
     ::-webkit-scrollbar {
         width: 3px;
     }
-
     ::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px #62605640;
         border-radius: 3px;
         display: inline;
     }
-
     ::-webkit-scrollbar-thumb {
         background: #97856780;
         border-radius: 3px;
         display: inline;
     }
-
     scroll-behavior: smooth;
+}
+
+// PAGINATION
+.pagination a {
+    background-color: #fbf6d1;
+    height: 28px !important;
+    }
+    .pagination a:hover {
+    background-color: #9a7e4dcc;
+    color: #EEE !important;
+    }
+    .pagination a:focus {
+    box-shadow: 0 0 0 0.2rem #9a7e4d5c;
+    }
+    .pagination .active {
+    background-color: #9a7e4d;
+    }
+    .page-item.active .page-link {
+    background-color: #9a7e4d;
+    border-color: 0;
+    }
+    .pagination .page-link {
+    border: 1px solid #d6d1b2 !important;
+    border-radius: 0 !important;
+    }
+    .pagination .page-item.active {
+    a {
+        color: #EEE !important;
+    }
 }

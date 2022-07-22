@@ -1,3 +1,6 @@
+@php
+use App\AppForum\Helpers\ForumHelper;
+@endphp
 @extends('layouts.forum')
 @section('content')
     <div class="container px-0">
@@ -71,7 +74,7 @@
                                                             <a class="text-dark" style="font-size: 10pt;"
                                                                 href="{{ url('#') }}">{{ $forum['DATA']->last_post->user_name }}</a>
                                                             <span style="font-size: 8pt;"
-                                                                class="text-muted">&bull;&nbsp;{{ date('d.m.Y в H:i', $forum['DATA']->last_post->date) }}</span>
+                                                                class="text-muted">&bull;&nbsp;{{  ForumHelper::timeFormat($forum['DATA']->last_post->date) }}</span>
                                                     </div>
                                                 </div>
                                             </div>

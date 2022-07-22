@@ -4,6 +4,7 @@ namespace App\AppForum\Executors;
 
 use App\Forum;
 use App\AppForum\Helpers\IpHelper;
+use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Managers\UserManager;
 use App\AppForum\Helpers\CheckedHelper;
@@ -30,6 +31,7 @@ class ForumExecutor extends BaseExecutor
         {
             $topic = TopicManager::post($out['forum'], $out['title'], $out['check'], $user);
             self::$result['topicId'] = $topic->id;
+            self::$result['title_slug'] = ForumHelper::slugify($topic->title);
             $out['check'] = CheckedHelper::checkPostTopic($input, $topic);
             $post = PostManager::post($topic, $out['text'], $out['check'], $user, $ip);
 

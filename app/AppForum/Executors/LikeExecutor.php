@@ -5,6 +5,7 @@ namespace App\AppForum\Executors;
 use App\Like;
 use App\Post;
 use App\User;
+use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Managers\LikeManager;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Managers\UserManager;
@@ -13,7 +14,7 @@ class LikeExecutor extends BaseExecutor
 {
     public static $result = ['success' => false, 'message' => null];
 
-    public static function like($postId, $user)
+    public static function like($postId, $user, $page)
     {
         $out = collect();
         $out['action'] = null;
@@ -46,12 +47,15 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $pages = $topicPage['pages'];
+            self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
 
         return self::$result;
     }
 
-    public static function likem($postId, $user)
+    public static function likem($postId, $user, $page)
     {
         $out = collect();
         $out['action'] = null;
@@ -75,12 +79,15 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $pages = $topicPage['pages'];
+            self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
 
         return self::$result;
     }
 
-    public static function dislike($postId, $user)
+    public static function dislike($postId, $user, $page)
     {
         $out = collect();
         $out['action'] = null;
@@ -112,12 +119,15 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $pages = $topicPage['pages'];
+            self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
 
         return self::$result;
     }
 
-    public static function dislikem($postId, $user)
+    public static function dislikem($postId, $user, $page)
     {
         $out = collect();
         $out['action'] = null;
@@ -142,6 +152,9 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $pages = $topicPage['pages'];
+            self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
 
         return self::$result;

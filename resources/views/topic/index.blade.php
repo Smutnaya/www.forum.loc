@@ -1,8 +1,7 @@
 @extends('layouts.topic')
 @section('content')
+
     <div class="conteiner">
-
-
         @if (is_null($model['topic']))
             <div class="my-3 mb-5 centre error" style="color:red">Тема не найдена</div>
         @else
@@ -22,31 +21,41 @@
 
                 </div>
             </div>
-
-            @include('topic.inc.topicMove', ['model' => $model])
-            @include('topic.inc.topicEdit', ['model' => $model])
             @if (is_null($model['topic']) || is_null($model['posts']) || $model['posts']->count() == 0)
-                <div>Постов не найдено</div>
+                <div class="my-3 mb-5 centre error">Постов не найдено</div>
             @else
+                @include('topic.inc.topicMove', ['model' => $model])
+                @include('topic.inc.topicEdit', ['model' => $model])
+                @include('topic.inc.pagination', ['model' => $model['pagination']])
                 @include('topic.inc.post', ['model' => $model])
+
             @endif
-            <div class="col d-grid gap-2 d-flex justify-content-end mb-2">
-                <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom ">Ответить</a>
+            <div class="d-flex justify-content-between">
+            <div class="col mb-2">
+                @include('topic.inc.pagination', ['model' => $model['pagination']])
             </div>
-            <div id="menu-post-field" style="display:none">
-                <div class="row">
-                    <form method='post' action='{{ url('t/' . $model['topic']['id'] . '/post') }}'>
-                        @csrf
-                        @include('inc.ckeditor')
-
-                        <div class="col d-grid gap-2 d-flex justify-content-end my-2">
-                            <a id="reset" class="btn btn-sm btn-dark btn-custom ">Очистить</a>
-                            <input class="btn btn-sm btn-dark btn-custom" type="submit" value="Добавить">
-                        </div>
-                    </form>
-
+            @if (!is_null($model['user']))
+                    <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+                        <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom ">Ответить</a>
+                    </div>
                 </div>
-            </div>
+                    <div id="menu-post-field" style="display:none">
+                        <div class="row">
+                            <form method='post' action='{{ url('t/' . $model['topic']['id'] . '/post') }}'>
+                                @csrf
+                                @include('inc.ckeditor')
+
+                                <div class="col d-grid gap-2 d-flex justify-content-end my-2">
+                                    <a id="reset" class="btn btn-sm btn-dark btn-custom ">Очистить</a>
+                                    <input class="btn btn-sm btn-dark btn-custom" type="submit" value="Добавить">
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                @else
+                    <span class="centre p-2 text-secondary">Войдите на сайт, чтобы оставить ответ в теме</span>
+                @endif
         @endif
     </div>
 
@@ -85,6 +94,8 @@
         $('#reset').click(function(e) {
             CKEDITOR.instances.text.setData("");
         });
-
+        $(document).ready(function() {
+            $('[data-bs-toggle="popover"]').popover();
+        });
     </script>
 @endsection

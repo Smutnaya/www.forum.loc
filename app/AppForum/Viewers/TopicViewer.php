@@ -6,6 +6,7 @@ use App\Like;
 use App\Post;
 use App\Topic;
 use App\Section;
+use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class TopicViewer
@@ -18,26 +19,49 @@ class TopicViewer
             'forum' => null,
             'section' => null,
             'topic' => null,
-            'posts' => collect()
+            'posts' => collect(),
+
+            'pagination' => collect([
+                'page' => null,
+                'pages' => null,
+                'topicId' => null,
+            ]),
         ]);
     }
 
-    public static function index($topicId, $user)
+    public static function index($topicId, $user, $page)
     {
         $model = self::init();
+
+        if (!is_null($user)) $model['user'] = $user;
 
         $topic = Topic::find(intval($topicId)); // eloquent
         if (is_null($topic)) return $model;
         self::setTopic($model, $topic);
 
-        $posts = Post::where('topic_id', intval($topicId))->get();
-        if ($posts->isEmpty()) return $model;
-        self::setPost($model, $posts, $user);
-
         $model['forum'] = $topic->forum;
         $section = Section::all();
         if (is_null($section)) return $model;
         $model['section'] = $section;
+        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
+
+        $topicPage = ForumHelper::topicPage($topicId);
+        $pages = $topicPage['pages'];
+        $take = $topicPage['take'];
+        $page = ForumHelper::parsePage($page, $pages);
+        $skip = ($page - 1) * $take;
+
+        $posts = self::getPost(intval($topicId), $skip, $take);
+        if ($posts->isEmpty()) return $model;
+        self::setPost($model, $posts, $user);
+
+        $model['pagination']['topicId'] = $topic->id;
+        $model['pagination']['page'] = $page;
+        $model['pagination']['pages'] = $pages;
+
+        //dd($model['pagination']);
+
+        return $model;
 
         /*
         $filelist = array();
@@ -49,13 +73,15 @@ class TopicViewer
         }
         dd($filelist);
 */
-        $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
-        if (is_null($user)) return $model;
+    }
 
+    public static function getPost($topicId, $skip = null, $take = null)
+    {
+        if (!is_null($skip)) {
+            return Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+        }
 
-        $model['user'] = $user;
-
-        return $model;
+        return Post::where('topic_id', $topicId)->get();
     }
 
     private static function setTopic($model, $topic)
@@ -67,7 +93,8 @@ class TopicViewer
             'pin' => $topic->pin,
             'moderation' => $topic->moderation,
             'id' => $topic->id,
-            'datetime' => $topic->datetime,
+            'datetime' => ForumHelper::timeFormat($topic->datetime),
+            'datetime_d' => $topic->datetime,
             'user_id' => $topic->user_id
         ];
     }
@@ -79,7 +106,8 @@ class TopicViewer
                 $model['posts']->push([
                     'text' => $post->text,
                     'ip' => $post->ip,
-                    'date' => $post->datetime,
+                    'date' => ForumHelper::timeFormat($post->datetime),
+                    'date_d' => $post->datetime,
                     'hide' => $post->hide,
                     'moderation' => $post->moderation,
                     'DATA' => json_decode($post->DATA, false), //$post->DATA,
@@ -93,7 +121,8 @@ class TopicViewer
                 $model['posts']->push([
                     'text' => $post->text,
                     'ip' => $post->ip,
-                    'date' => $post->datetime,
+                    'date' => ForumHelper::timeFormat($post->datetime),
+                    'date_d' => $post->datetime,
                     'hide' => $post->hide,
                     'moderation' => $post->moderation,
                     'DATA' => json_decode($post->DATA, false), //$post->DATA,

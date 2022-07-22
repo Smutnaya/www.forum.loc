@@ -3,6 +3,7 @@
 namespace App\AppForum\Viewers;
 
 use App\Post;
+use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class PostViewer
@@ -14,21 +15,24 @@ class PostViewer
             'topic' => null,
             'breadcrump' => null,
             'user' => null,
+            'DATA' => null,
+            'page' => null,
         ]);
     }
 
-    public static function index($postId, $user)
+    public static function index($postId, $user, $page)
     {
         $model = self::init();
+        if(!is_null($user)) $model['user'] = $user;
         $post = Post::find(intval($postId));
         if(is_null($post)) return $model;
         $model['post'] = $post;
+        $model['DATA'] = json_decode($post->DATA);
         $model['topic'] = $post->topic;
-
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic($post->topic_id);
-
-        if(is_null($user)) return $model;
-        $model['user'] = $user;
+        $topicPage = ForumHelper::topicPage($post->topic_id);
+        $pages = $topicPage['pages'];
+        $model['page'] = ForumHelper::parsePage($page, $pages);
 
         return $model;
     }

@@ -30,24 +30,26 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/main', 'MainController@index')->name('main');
 
-    Route::get('/t/{id}', 'TopicController@index');
+    Route::get('/t/{id}/{page?}', 'TopicController@index');
     Route::any('/t/{id}/post', 'TopicController@post');
     Route::any('/t/{id}/edit', 'TopicController@edit');
     Route::any('/t/{id}/move', 'TopicController@move');
 
-    Route::get('/p/{id}/edit', 'PostController@index');
-    Route::any('/p/{id}/save', 'PostController@edit');
-    Route::any('/p/{id}/premod', 'PostController@premod');
-    Route::any('/p/{id}/unhide', 'PostController@unhide');
+    Route::get('/p/{id}/edit/{page?}', 'PostController@index_edit');
+    Route::get('/p/{id}/moder/{page?}', 'PostController@index');
+    Route::any('/p/{id}/save/{page?}', 'PostController@edit');
+    Route::any('/p/{id}/save_moder/{page?}', 'PostController@moder');
+    Route::any('/p/{id}/premod/{page?}', 'PostController@premod');
+    Route::any('/p/{id}/unhide/{page?}', 'PostController@unhide');
 
-    Route::any('/p/{id}/like', 'LikeController@like');
-    Route::any('/p/{id}/likem', 'LikeController@likem');
-    Route::any('/p/{id}/dislike', 'LikeController@dislike');
-    Route::any('/p/{id}/dislikem', 'LikeController@dislikem');
+    Route::any('/p/{id}/like/{page?}', 'LikeController@like');
+    Route::any('/p/{id}/likem/{page?}', 'LikeController@likem');
+    Route::any('/p/{id}/dislike/{page?}', 'LikeController@dislike');
+    Route::any('/p/{id}/dislikem/{page?}', 'LikeController@dislikem');
 
     Route::get('/fs', 'AllForumController@index');
 
-    Route::get('/f/{id}', 'ForumController@index');
+    Route::get('/f/{id}/{page?}', 'ForumController@index');
     Route::get('/f/{id}/topic', 'ForumController@topic');
     Route::any('/f/{id}/t/save', 'ForumController@save');
 

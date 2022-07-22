@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Viewers\TopicViewer;
 use App\AppForum\Executors\TopicExecutor;
 
 class TopicController extends Controller
 {
-    public function index($topicId)
+    public function index($topicId, $page = 1)
     {
         $user = $this->user();
-        $model = TopicViewer::index($topicId, $user);
-        if(!is_null($model['topic'])) TopicExecutor::view($topicId, $user);
+        $model = TopicViewer::index(ForumHelper::getId($topicId), $user, $page);
+        if(!is_null($model['topic'])) TopicExecutor::view(ForumHelper::getId($topicId), $user);
 
         return view('topic.index', compact('model'));
     }
@@ -23,10 +24,10 @@ class TopicController extends Controller
 
         $user = $this->user();
 
-        $result = TopicExecutor::post($topicId, $user, request()->all());
+        $result = TopicExecutor::post(ForumHelper::getId($topicId), $user, request()->all());
         if($result['success'])
         {
-            return redirect('t/'.$result['topicId']);
+            return redirect('t/'.$result['topicId'].'-'.$result['title_slug'].'/end');
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
@@ -37,10 +38,10 @@ class TopicController extends Controller
         if(!request()->isMethod('post')) return redirect('/');
 
         $user = $this->user();
-        $result = TopicExecutor::edit($topicId, $user, request()->all());
+        $result = TopicExecutor::edit(ForumHelper::getId($topicId), $user, request()->all());
         if($result['success'])
         {
-            return redirect('t/'.$result['topicId']);
+            return redirect('t/'.$result['topicId'].'-'.$result['title_slug']);
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
@@ -52,14 +53,11 @@ class TopicController extends Controller
 
         $user = $this->user();
 
-        $result = TopicExecutor::move($topicId, $user, request()->all());
+        $result = TopicExecutor::move(ForumHelper::getId($topicId), $user, request()->all());
         if($result['success'])
         {
-            return redirect('t/'.$result['topicId']);
+            return redirect('t/'.$result['topicId'].'-'.$result['title_slug']);
         }
-
-        //TODO: разобраться с переполнением
-
         return redirect()->back()->withErrors(['message' => $result['message']]);
     }
 }

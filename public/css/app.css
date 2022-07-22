@@ -21758,8 +21758,12 @@ A:hover {
   color: black;
 }
 
+.links {
+  color: black;
+}
+
 .post-a-color {
-  color: #660000;
+  color: #700000;
 }
 
 .tema {
@@ -21838,10 +21842,6 @@ A:hover {
   padding: 0;
 }
 
-.links {
-  color: black;
-}
-
 .text-end {
   text-align: right;
 }
@@ -21853,7 +21853,6 @@ A:hover {
 .popover {
   background: #e8e0bf;
   border: 1px #d6d1b2;
-  margin: 5px;
 }
 .popover .popover-body {
   padding: 5px 10px !important;
@@ -21913,4 +21912,36 @@ span[title]:hover::after {
   background: rgba(151, 133, 103, 0.5019607843);
   border-radius: 3px;
   display: inline;
+}
+
+.pagination a {
+  background-color: #fbf6d1;
+  height: 28px !important;
+}
+
+.pagination a:hover {
+  background-color: rgba(154, 126, 77, 0.8);
+  color: #EEE !important;
+}
+
+.pagination a:focus {
+  box-shadow: 0 0 0 0.2rem rgba(154, 126, 77, 0.3607843137);
+}
+
+.pagination .active {
+  background-color: #9a7e4d;
+}
+
+.page-item.active .page-link {
+  background-color: #9a7e4d;
+  border-color: 0;
+}
+
+.pagination .page-link {
+  border: 1px solid #d6d1b2 !important;
+  border-radius: 0 !important;
+}
+
+.pagination .page-item.active a {
+  color: #EEE !important;
 }
