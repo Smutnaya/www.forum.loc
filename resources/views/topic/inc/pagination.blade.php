@@ -1,5 +1,4 @@
-
-<ul class="pagination pagination-sm">
+<ul class="pagination pagination-sm mb-2">
     <li class="page-item"><a class="page-link text-secondary"
             href="{{ url('t/' . $model['topicId'] . '/1') }}">Начало</a>
     </li>

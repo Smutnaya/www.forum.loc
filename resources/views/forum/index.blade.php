@@ -24,7 +24,7 @@ use App\AppForum\Helpers\ForumHelper;
                     @if (!is_null($model['user']))
                         <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
                             <a class="btn btn-sm btn-custom shadow"
-                                href="{{ url('/f/' . $model['forumId'] . '/topic') }}">Новая
+                                href="{{ url($model['forumId'].'/topic') }}">Новая
                                 тема</a>
                         </div>
                 </div>

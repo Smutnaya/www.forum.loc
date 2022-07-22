@@ -21,8 +21,6 @@ class ForumController extends Controller
         $user = $this->user();
         $result = ForumExecutor::forum($forumId, $user);
 
-        dd($result);
-
         if($result['success'])
         {
             $model = ForumViewer::topic($forumId);
@@ -30,7 +28,6 @@ class ForumController extends Controller
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
-
     }
 
     public function save($forumId)

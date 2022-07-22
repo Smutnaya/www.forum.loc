@@ -26,7 +26,7 @@ use App\AppForum\Helpers\ForumHelper;
         </div>
         <div class="col-md-9 col-xl-10 col-sm-12 text-break text"
             @if ($post['hide']) style="background-color: #f7f7e4;" @endif>
-            <div class="col-12 text-muted mt-1">
+            <div class="col-12 text-muted">
                 <div class="row pt-1" style="padding-left: 12px !important;">
                     <div class="col d-flex justify-content-start align-items-center text-center forum-desc">
                         @if ($post['moderation'])
@@ -96,11 +96,11 @@ use App\AppForum\Helpers\ForumHelper;
                     </div>
                 </div>
             </div>
-            <div class="col-12 my-3"><?php
+            <div class="col-12 my-1"><?php
             echo htmlspecialchars_decode($post['text']);
             ?>
             </div>
-            <div class="col-12 py-4" style="color:#700000 !important">
+            <div class="col-12 my-1" style="color:#700000 !important">
                 <i class="fa-solid fa-user-lock forum-desc" style="color:#700000 !important" title="Доступ закрыт"></i>
                 <br>
                 BETAJIb
@@ -166,9 +166,9 @@ use App\AppForum\Helpers\ForumHelper;
             </div>
             {{-- @dd($post['DATA']) --}}
             <div class="col-12 forum-desc fs-6 pb-3 text-break">
-                <hr class="mt-0">
-                Подпись ⋙ 👍
-                <div class="col-12 mt-4">
+                <hr class="my-1">
+                {{-- Подпись ⋙ 👍 --}}
+                <div class="col-12 mt-3">
                     <div class="row">
                         <div class="col d-flex justify-content-start align-items-center text-center ">
                             <i class="fa-regular fa-comment-dots me-1" style="color:rgb(0, 0, 116)"></i> <span

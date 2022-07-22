@@ -1,5 +1,3 @@
-{{-- @dd($model['pages']) --}}
-
 <ul class="pagination pagination-sm m-0">
     <li class="page-item"><a class="page-link text-secondary"
             href="{{ url('f/' . $model['forumId'] . '/1') }}">Начало</a>

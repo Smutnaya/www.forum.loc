@@ -17,6 +17,7 @@ class ForumViewer
             'user' => null,
             'topics' => collect(),
             'forumId' => null,
+            'sections' => collect(),
 
             'pagination' => collect([
                 'page' => null,
@@ -70,9 +71,8 @@ class ForumViewer
         $model = self::init();
 
         $forum = Forum::find(intval($forumId));
-
         if(is_null($forum)) return $model;
-        $model['forumTitle'] = Forum::find(intval($forumId))->title;
+        $model['forumTitle'] = $forum->title;
         $model['sections']['moderation'] = $forum->section->moderation;
         $model['sections']['hide'] = $forum->section->hide;
         $model['sections']['id'] = $forum->section->id;

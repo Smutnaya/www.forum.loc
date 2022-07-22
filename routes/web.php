@@ -50,7 +50,7 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::get('/fs', 'AllForumController@index');
 
     Route::get('/f/{id}/{page?}', 'ForumController@index');
-    Route::get('/f/{id}/topic', 'ForumController@topic');
+    Route::get('/{id}/topic', 'ForumController@topic');
     Route::any('/f/{id}/t/save', 'ForumController@save');
 
     Route::get('/s/{id}', 'SectionController@index');
