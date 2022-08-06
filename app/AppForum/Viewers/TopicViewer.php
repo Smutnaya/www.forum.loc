@@ -4,9 +4,13 @@ namespace App\AppForum\Viewers;
 
 use App\Like;
 use App\Post;
+use App\Role;
+use App\User;
 use App\Topic;
 use App\Section;
 use App\AppForum\Helpers\ForumHelper;
+use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Viewers\SectionViewer;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class TopicViewer
@@ -19,7 +23,13 @@ class TopicViewer
             'forum' => null,
             'section' => null,
             'topic' => null,
+            'topicEdit' => false,
+            'topicMove' => false,
             'posts' => collect(),
+            'postsModer' => collect(),
+            'sectionsAside' => collect(),
+            'visit_forum' => false,
+            'newPost' => null,
 
             'pagination' => collect([
                 'page' => null,
@@ -34,33 +44,53 @@ class TopicViewer
         $model = self::init();
 
         if (!is_null($user)) $model['user'] = $user;
+        $user_role = ModerHelper::user_role($user);
+
+        // section
+        if (is_null($user) || $user->role_id < 5) {
+            $sectionsAside = Section::where('private', false)->get();
+        } else {
+            $sectionsAside = Section::all();
+        }
+        MainViewer::setSectionAside($model, $sectionsAside);
 
         $topic = Topic::find(intval($topicId)); // eloquent
         if (is_null($topic)) return $model;
-        self::setTopic($model, $topic);
+
+        if (ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id) && self::visitTopic($topic, $user_role, $user))  $model['visit_forum'] = true;
+
+        self::setTopic($model, $topic, $user_role);
 
         $model['forum'] = $topic->forum;
-        $section = Section::all();
-        if (is_null($section)) return $model;
-        $model['section'] = $section;
+
+        if (!is_null($user)) {
+            $section = ModerHelper::getSection($user);
+        } else $section = null;
+
+        if (!is_null($section)) $model['section'] = $section;
+
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
 
-        $topicPage = ForumHelper::topicPage($topicId);
+        $topicPage = ForumHelper::topicPage($topicId, $user_role);
         $pages = $topicPage['pages'];
         $take = $topicPage['take'];
         $page = ForumHelper::parsePage($page, $pages);
         $skip = ($page - 1) * $take;
 
-        $posts = self::getPost(intval($topicId), $skip, $take);
+        $posts = self::getPost(intval($topicId), $skip, $take, $user_role, $topic->forum_id, $topic->forum->section_id, $user);
         if ($posts->isEmpty()) return $model;
-        self::setPost($model, $posts, $user);
+        self::setPost($model, $posts, $user, $user_role, $topic->forum_id, $topic->forum->section_id);
+
+        $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id);
 
         $model['pagination']['topicId'] = $topic->id;
         $model['pagination']['page'] = $page;
         $model['pagination']['pages'] = $pages;
 
-        //dd($model['pagination']);
-
+        if (!is_null($user)) {
+            $model['topicEdit'] = ModerHelper::moderTopicEdit($model['user']['role_id'], $model['user']['id'], $model['topic']['datetime_d'], $model['topic']['DATA'], $model['topic']['user_id'], $model['topic']['forum_id'], $model['topic']['section_id']);
+            $model['topicMove'] = ModerHelper::moderTopicMove($model['user']['role_id'], $model['topic']['forum_id'], $model['topic']['section_id']);
+        }
         return $model;
 
         /*
@@ -75,16 +105,72 @@ class TopicViewer
 */
     }
 
-    public static function getPost($topicId, $skip = null, $take = null)
+    public static function getPost($topicId, $skip = null, $take = null, $user_role, $forum_id, $section_id, $user)
     {
-        if (!is_null($skip)) {
-            return Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+        $posts = collect();
+
+        if ($user_role == 0 && !is_null($skip)) {
+            $posts = Post::where([['topic_id', $topicId], ['moderation', false], ['hide', false]])->skip($skip)->take($take)->get();
+        } elseif ($user_role == 0 && is_null($skip)) {
+            $posts = Post::where([['topic_id', $topicId], ['moderation', false], ['hide', false]])->get();
         }
 
-        return Post::where('topic_id', $topicId)->get();
+        if ($section_id == 3) {
+            if ($user_role > 0 && $user_role < 8 && !is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+            } elseif ($user_role > 0 && $user_role < 8 && is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+            }
+
+            if ($user_role > 7 && !is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+            } elseif ($user_role > 7 && is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->get();
+            }
+        } else {
+            if ($user_role == 1 && !is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+            } elseif ($user_role == 1 && is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+            }
+            if ($user_role > 1 && !is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+            } elseif ($user_role > 1 && is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->get();
+            }
+        }
+
+        if ($forum_id == 1 || $forum_id == 3) {
+            if ($user_role >= 1 && $user_role < 11 && !is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+            } elseif ($user_role >= 1 && $user_role < 11 && is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+            }
+            if ($user_role > 10 && !is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+            } elseif ($user_role > 10 && is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->get();
+            }
+        }
+        if ($forum_id == 2) {
+            if ($user_role >= 1 && $user_role < 9 && !is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+            } elseif ($user_role >= 1 && $user_role < 9 && is_null($skip)) {
+                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+            }
+
+            if ($user_role > 8 && !is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+            } elseif ($user_role > 8 && is_null($skip)) {
+                $posts = Post::where('topic_id', $topicId)->get();
+            }
+        }
+
+
+        return $posts;
     }
 
-    private static function setTopic($model, $topic)
+    private static function setTopic($model, $topic, $user_role)
     {
         $model['topic'] = [
             'title' => $topic->title,
@@ -95,28 +181,51 @@ class TopicViewer
             'id' => $topic->id,
             'datetime' => ForumHelper::timeFormat($topic->datetime),
             'datetime_d' => $topic->datetime,
-            'user_id' => $topic->user_id
+            'DATA' => json_decode($topic->DATA, false),
+            'user_id' => $topic->user_id,
+            'forum_id' => $topic->forum_id,
+            'section_id' => $topic->forum->section_id,
         ];
     }
 
-    private static function setPost($model, $posts, $user)
+    private static function setPost($model, $posts, $user, $user_role, $forum_id, $section_id)
     {
         foreach ($posts as $post) {
+            $user_post = User::find($post->user_id);
             if (!is_null($user)) {
-                $model['posts']->push([
-                    'text' => $post->text,
-                    'ip' => $post->ip,
-                    'date' => ForumHelper::timeFormat($post->datetime),
-                    'date_d' => $post->datetime,
-                    'hide' => $post->hide,
-                    'moderation' => $post->moderation,
-                    'DATA' => json_decode($post->DATA, false), //$post->DATA,
-                    'id' => $post->id,
-                    'user_id' => $post->user_id,
-                    'user_post' => $post->user,
-                    'user_DATA' => json_decode($post->user->DATA, false),
-                    'like' => Like::select('action')->where([['post_id', $post->id], ['user_id', $user->id]])->first()
-                ]);
+                if ($post->moderation) {
+                    if ($section_id == 3) {
+                        if ($user_role > 0 && $user_role < 8 && $post->user_id == $user->id) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        } elseif ($user_role > 7) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        }
+                    } else {
+                        if ($forum_id == 1 || $forum_id == 3) {
+                            if ($user_role > 0 && $user_role < 11 && $post->user_id == $user->id) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            } elseif ($user_role > 10) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            }
+                        } elseif ($forum_id == 2) {
+                            if ($user_role >= 1 && $user_role < 9 && $post->user_id == $user->id) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            } elseif ($user_role > 8) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            }
+                        } elseif ($forum_id == 52 || $forum_id == 53) {
+                            if ($user_role >= 1 && $user_role < 12 && $post->user_id == $user->id) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            } elseif ($user_role > 11) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            }
+                        } elseif ($user_role > 1) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                        }
+                    }
+                } else {
+                    self::visPost($post, $user_role, $user, $user_post, $model);
+                }
             } else {
                 $model['posts']->push([
                     'text' => $post->text,
@@ -129,10 +238,52 @@ class TopicViewer
                     'id' => $post->id,
                     'user_id' => $post->user_id,
                     'user_post' => $post->user,
+                    'user_role' => Role::find($user_post->role_id)->description,
+                    'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
                     'user_DATA' => json_decode($post->user->DATA, false),
-                    'like' => null
+                    'like' => null,
+                    'postEdit' => null,
+                    'postModer' => null,
                 ]);
             }
         }
+    }
+
+    private static function visitTopic($topic, $user_role, $user)
+    {
+        $visit = true;
+        $user_id = 0;
+        if (!is_null($user)) $user_id = $user->id;
+
+        if ($user_role < 2 && $topic->hide) $visit = false;
+        if ($topic->forum->section_id == 3 && $user_role >= 1 && $user_role < 8 && $topic->hide) $visit = false;
+        if ($topic->forum_id == 1 && $user_role >= 1 && $user_role < 11 && $topic->hide) $visit = false;
+        if ($topic->forum_id == 3 && $user_role >= 1 && $user_role < 11 && $topic->hide) $visit = false;
+        if ($topic->forum_id == 2 && $user_role >= 1 && $user_role < 9 && $topic->hide) $visit = false;
+        if ($topic->user_id == $user_id && $user_role >= 1 && $topic->moderation) $visit = true;
+
+        return $visit;
+    }
+
+    private static function visPost($post, $user_role, $user, $user_post, $model)
+    {
+        $model['posts']->push([
+            'text' => $post->text,
+            'ip' => $post->ip,
+            'date' => ForumHelper::timeFormat($post->datetime),
+            'date_d' => $post->datetime,
+            'hide' => $post->hide,
+            'moderation' => $post->moderation,
+            'DATA' => json_decode($post->DATA, false), //$post->DATA,
+            'id' => $post->id,
+            'user_id' => $post->user_id,
+            'user_post' => $post->user,
+            'user_role' => Role::find($user_post->role_id)->description,
+            'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
+            'user_DATA' => json_decode($post->user->DATA, false),
+            'like' => Like::select('action')->where([['post_id', $post->id], ['user_id', $user->id]])->first(),
+            'postEdit' => ModerHelper::moderPostEdit($user_role, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id),
+            'postModer' => ModerHelper::moderPost($user_role, $post->topic->forum_id, $post->topic->forum->section_id)
+        ]);
     }
 }

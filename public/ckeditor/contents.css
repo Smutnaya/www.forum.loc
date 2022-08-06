@@ -27,14 +27,18 @@ body
 	word-wrap: break-word;
 }
 
-blockquote
-{
-	font-style: italic;
-	font-family: "Open Sans", "Arial", Helvetica, serif !important;
-	padding: 2px 0;
-	border-style: solid;
-	border-color: #ccc;
-	border-width: 0;
+blockquote {
+    background: #f1e9c28f;
+    color: #4a4741;
+    margin: 0 0 1rem 1rem;
+    padding: 5px 13px !important;
+    font-size: 14px;
+    font-style: italic;
+    font-family: "Open Sans", "Arial", Helvetica, serif !important;
+    border-style: solid;
+    border-color: #afa4843d;
+    border-width: 0.005rem;
+    border-radius: 0px 15px;
 }
 
 .cke_contents_ltr blockquote

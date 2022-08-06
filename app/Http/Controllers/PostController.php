@@ -36,6 +36,7 @@ class PostController extends Controller
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
     }
+
     public function moder($postId, $page = 1)
     {
         if(!request()->isMethod('post')) return redirect('/');
@@ -53,6 +54,8 @@ class PostController extends Controller
 
     public function premod($postId, $page = 1)
     {
+        if(!request()->isMethod('post')) return redirect('/');
+
         $user = $this->user();
         $result = PostExecutor::premod($postId, $user, $page);
         if($result['success'])
@@ -63,6 +66,7 @@ class PostController extends Controller
     }
     public function unhide($postId, $page = 1)
     {
+        if(!request()->isMethod('post')) return redirect('/');
         $user = $this->user();
         $result = PostExecutor::unhide($postId, $user, $page);
         if($result['success'])

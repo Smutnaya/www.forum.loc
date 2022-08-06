@@ -5,6 +5,7 @@ namespace App\AppForum\Executors;
 use App\Forum;
 use App\AppForum\Helpers\IpHelper;
 use App\AppForum\Helpers\ForumHelper;
+use App\AppForum\Helpers\ModerHelper;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Managers\UserManager;
 use App\AppForum\Helpers\CheckedHelper;
@@ -21,11 +22,13 @@ class ForumExecutor extends BaseExecutor
     {
         $out = collect();
 
-        self::topic_valid(intval($forumId), $input, $out);
         if(!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
         else if(!is_null(BaseExecutor::tema_valid($input['title']))) self::$result = ['success' => false, 'message' => BaseExecutor::tema_valid($input['title'])];
         else if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result['success'] = true;  $out['text'] = $input['text']; $out['title'] = $input['title'];
+
+        if(self::$result['success']) self::topic_valid(intval($forumId), $input, $out, $user);
+
         $ip = IpHelper::getIp();
         if(self::$result['success'])
         {
@@ -65,11 +68,16 @@ class ForumExecutor extends BaseExecutor
         return self::$result;
     }
 
-    private static function topic_valid($forumId, $input, $out)
+    private static function topic_valid($forumId, $input, $out, $user)
     {
+        self::$result['success'] = false;
         $forum = Forum::find(intval($forumId));
-
         if(is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
+        $user_role = ModerHelper::user_role($user);
+        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+
+        if($forum->block && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+
         if(mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
         $out['forum'] = $forum;

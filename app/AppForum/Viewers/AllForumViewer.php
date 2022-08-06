@@ -5,6 +5,7 @@ namespace App\AppForum\Viewers;
 use App\Forum;
 use App\Topic;
 use App\Section;
+use App\AppForum\Helpers\ModerHelper;
 
 class AllForumViewer
 {
@@ -12,40 +13,33 @@ class AllForumViewer
     {
         return collect([
             'sections' => collect(),
-            'forums' => collect()
+            'forums' => collect(),
+            'sectionsAside' => collect(),
         ]);
     }
 
-    public static function index()
+    public static function index($user)
     {
         $model = self::init();
 
-        $sections = Section::all();
-        $forums = Forum::all();
+        // section
+        if(is_null($user) || $user->role_id < 5)
+        {
+            $sectionsAside = Section::where('private', false)->get();
+        } else {
+            $sectionsAside = Section::all();
+        }
+        MainViewer::setSectionAside($model, $sectionsAside);
+
+        $sections = $sectionsAside;
+        $user_role = 0;
+        if(!is_null($user)) $user_role = $user->role_id;
+        $forums = ModerHelper::getForumAll($user_role);
         if($sections->isEmpty()) return $model;
 
-        //$model['sections'] = Section::all();
-        //dd(Forum::find(1)->section);
-
         self::setSection($model, $sections);
-        self::setForum($model, $forums);
+        SectionViewer::setForum($model, $forums, $user_role);
         return $model;
-
-    }
-
-    private static function setForum($model, $forums)
-    {
-        foreach($forums as $forum)
-        {
-            $model['forums']->push([
-                'id' => $forum->id,
-                'title' => $forum->title,
-                'description' => $forum->description,
-                'section_id' => $forum->section_id,
-                'section_title' => $forum->section->title,
-                'DATA' => json_decode($forum->DATA, false)
-            ]);
-        }
     }
     private static function setSection($model, $sections)
     {

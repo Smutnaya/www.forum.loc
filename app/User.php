@@ -56,8 +56,31 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    public function bans()
+    {
+        return $this->hasMany(User::class);
+    }
+    public function bans_moder()
+    {
+        return $this->hasMany(User::class, 'user_moder_id');
+    }
+    public function bans_cancel()
+    {
+        return $this->hasMany(User::class, 'user_cancel_id');
+    }
+
+    public function other_roles()
+    {
+        return $this->hasOne(Other_role::class);
+    }
+
     public function online()
     {
         return $this->hasOne(Online::class, 'id');
+    }
+
+    public function role()
+    {
+        return $this->hasOne(Role::class);
     }
 }

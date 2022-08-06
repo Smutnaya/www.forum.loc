@@ -23,7 +23,7 @@ class ForumController extends Controller
 
         if($result['success'])
         {
-            $model = ForumViewer::topic($forumId);
+            $model = ForumViewer::topic($forumId, $user);
             return view('forum.topic', compact('model', 'forumId'));
         }
 

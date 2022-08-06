@@ -27,7 +27,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-sm-3">
-                    @include('inc.aside')
+                    @include('inc.aside', ['model' => $model])
                 </div>
                 <div class="col-lg-10 col-md-10 col-sm-9">
                     @yield('content')

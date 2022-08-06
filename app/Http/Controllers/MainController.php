@@ -9,7 +9,9 @@ class MainController extends Controller
 {
     public function index()
     {
-        $model = MainViewer::index();
+        $user = $this->user();
+
+        $model = MainViewer::index($user);
 
         return view('main.index', compact('model'));
     }

@@ -8,6 +8,7 @@ use App\Forum;
 use App\Topic;
 use App\AppForum\Helpers\IpHelper;
 use App\AppForum\Helpers\ForumHelper;
+use App\AppForum\Helpers\ModerHelper;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Managers\UserManager;
 use App\AppForum\Managers\ViewManager;
@@ -22,13 +23,14 @@ class TopicExecutor extends BaseExecutor
     public static function post($topicId, $user, $input)
     {
         $out = collect();
-        self::post_valid(intval($topicId), $input, $out);
 
         if (!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
         else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
-        else self::$result['success'] = true;
-        $out['text'] = $input['text'];
+        else self::$result = ['success' => true];
 
+        if(self::$result['success']) self::post_valid(intval($topicId), $input, $out, $user);
+
+        $out['text'] = $input['text'];
         $ip = IpHelper::getIp();
 
         if (self::$result['success']) {
@@ -61,38 +63,39 @@ class TopicExecutor extends BaseExecutor
             $data->last_post->post_id = $post->topic->id;
             $data->last_post->date = $post->datetime;
             $out['DATA'] = json_encode($data);
-
             ForumManager::dataedit($post->topic->forum, $out['DATA']);
         }
-
         return self::$result;
     }
 
-    private static function post_valid($topicId, $input, $out)
+    private static function post_valid($topicId, $input, $out, $user)
     {
+        self::$result = ['success' => false];
         $topic = Topic::find(intval($topicId));
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
-
+        $user_role = ModerHelper::user_role($user);
+        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+
+        if($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
 
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkPost($input, $topic);
-
         self::$result['success'] = true;
     }
 
     public static function edit($topicId, $user, $input)
     {
         $out = collect();
-        self::topicEdit_valid(intval($topicId), $input, $out);
 
         if (!is_null(BaseExecutor::tema_valid($input['title']))) self::$result = ['success' => false, 'message' => BaseExecutor::tema_valid($input['title'])];
         else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
-        else self::$result['success'] = true;
+        else self::topicEdit_valid(intval($topicId), $input, $out, $user);
+
         $out['title'] = $input['title'];
 
         if (self::$result['success']) {
-            TopicManager::edit($out['topic'], $out['title'], $out['check'], $user);
+            TopicManager::edit($out['topic'], $out['title'], $out['check'], $out['forum_data'], $user);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;
             self::$result['title_slug'] = ForumHelper::slugify($out['topic']->title);
@@ -102,13 +105,20 @@ class TopicExecutor extends BaseExecutor
         return self::$result;
     }
 
-    private static function topicEdit_valid($topicId, $input, $out)
+    private static function topicEdit_valid($topicId, $input, $out, $user)
     {
         $topic = Topic::find(intval($topicId));
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
         if (mb_strlen($input['title']) > 13000 && !is_null($input['title'])) $out['title'] = mb_strimwidth($input['title'], 0, 100, "...");
 
+        if (!(ModerHelper::moderTopicEdit($user->role_id, $user->id, $topic->datetime, json_decode($topic->DATA, false), $topic->user_id, $topic->forum_id, $topic->forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        $user_role = ModerHelper::user_role($user);
+        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id)) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+
+        $forum_data = json_decode($topic->DATA, false);
+        if ($user->id != $topic->user_id) $forum_data->moder = time();
+        $out['forum_data'] = json_encode($forum_data);
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkTopic($input, $topic->forum);
 
@@ -118,8 +128,7 @@ class TopicExecutor extends BaseExecutor
     public static function move($topicId, $user, $input)
     {
         $out = collect();
-        //dd($input['check']['0']);
-        self::topicMove_valid(intval($topicId), $input, $out);
+        self::topicMove_valid(intval($topicId), $input, $out, $user);
 
         if (self::$result['success']) {
             $forum_id = $out['topic']->forum_id;
@@ -139,7 +148,7 @@ class TopicExecutor extends BaseExecutor
         }
         return self::$result;
     }
-    private static function topicMove_valid($topicId, $input, $out)
+    private static function topicMove_valid($topicId, $input, $out, $user)
     {
         $topic = Topic::find(intval($topicId));
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
@@ -147,6 +156,14 @@ class TopicExecutor extends BaseExecutor
 
         $forum = Forum::find(intval($input['check']['0']));
         if (is_null($forum)) return self::$result['message'] = 'Путь для перемещения не найден';
+
+        //dd($forum);
+        if ($topic->forum->section_id == 7 && $forum->section_id != 7 && $user->role_id < 11) {
+            return self::$result['message'] = 'Информацию из служебного форума нельзя перемещать в Общий';
+        } else {
+            if (!(ModerHelper::moderTopicMove($user->role_id, $topic->forum_id, $topic->forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для перемещения темы';
+            if (!(ModerHelper::moderTopicMoveTo($user->role_id, $forum->id, $forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для перемещения темы';
+        }
 
         $out['topic'] = $topic;
         $out['forum_id'] = intval($input['check']['0']);
@@ -173,14 +190,6 @@ class TopicExecutor extends BaseExecutor
         $last_post_from = Post::where('forum_id', $forum_from->id)->orderBy('datetime', 'desc')->first();
         $last_post_in = Post::where('forum_id', $forum_in->id)->orderBy('datetime', 'desc')->first();
 
-
-        //dd($last_post_in);
-
-        /*         $last_post_from = Post::join('topics', 'topic_id', '=', 'topics.id')
-            ->join('forums', 'forum_id', '=', 'forums.id')->where('forums.id', $forum_from->id)->orderBy('posts.datetime', 'desc')->first();
-        $last_post_in = Post::join('topics', 'topic_id', '=', 'topics.id')
-            ->join('forums', 'forum_id', '=', 'forums.id')->where('forums.id', $forum_in->id)->orderBy('posts.datetime', 'desc')->first();
- */
         $forum_data_from->last_post = self::DATAlastPost_valid($last_post_from, $forum_data_from->last_post);
         $forum_data_in->last_post = self::DATAlastPost_valid($last_post_in, $forum_data_in->last_post);
         $out['forum_from'] = $forum_from;
@@ -236,11 +245,8 @@ class TopicExecutor extends BaseExecutor
         }
 
         $out['ip'] = IpHelper::getIp();
-
         $data = json_decode($topic->DATA, false);
-
         $view_datetime = View::select('datetime')->where([['ip', $out['ip']], ['topic_id', $out['topic_id']]])->orderBy('datetime', 'desc')->first();
-
 
         if (is_null($view_datetime)) {
             $data->inf->views++;

@@ -11,7 +11,9 @@ class AllForumController extends Controller
         //TODO: раздел?
         // TODO: model?
 
-        $model = AllForumViewer::index();
+        $user = $this->user();
+
+        $model = AllForumViewer::index($user);
        // dd($model);
 
         return view('allForum.index', compact('model'));

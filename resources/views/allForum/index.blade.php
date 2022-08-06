@@ -45,7 +45,7 @@ use App\AppForum\Helpers\ForumHelper;
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-3 col-lg-12" style="min-width: 250px;">
+                                    <div class="col-xl-3 col-lg-12 align-self-center" style="min-width: 250px;">
 
                                         <hr class="d-xl-none d-block my-1 hr-color">
                                         @if (!is_null($forum['DATA']->last_post->user_name) && !is_null($forum['DATA']->last_post->user_id) && !is_null($forum['DATA']->last_post->date) && !is_null($forum['DATA']->last_post->title) && !is_null($forum['DATA']->last_post->post_id))
@@ -62,19 +62,22 @@ use App\AppForum\Helpers\ForumHelper;
                                             </div>
                                             <div class="col-10 align-self-center">
                                                 <div class="row">
-                                                    <div class="col  ps-2 ">
+                                                    <div class="col">
                                                         <a class="post-a-color" style="font-size: 10pt !important;"
                                                             href="{{ url('/t/' . $forum['DATA']->last_post->post_id) }} ">
                                                             {{ $forum['DATA']->last_post->title }} </a>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col  ps-2"><span
+                                                    <div class="col"><span
                                                             class="forum-desc">
                                                             <a class="text-dark" style="font-size: 10pt;"
-                                                                href="{{ url('#') }}">{{ $forum['DATA']->last_post->user_name }}</a>
-                                                            <span style="font-size: 8pt;"
-                                                                class="text-muted">&bull;&nbsp;{{  ForumHelper::timeFormat($forum['DATA']->last_post->date) }}</span>
+                                                                href="{{  url('/user/'. $forum['DATA']->last_post->user_id) }}">{{ $forum['DATA']->last_post->user_name }}</a>
+                                                            <span style="font-size: 8pt;" class="text-muted"> &bull;&nbsp;
+                                                                <a href="{{ url('/t/' . $forum['DATA']->last_post->post_id.'/end') }} ">
+                                                                    {{  ForumHelper::timeFormat($forum['DATA']->last_post->date) }}
+                                                                </a>
+                                                            </span>
                                                     </div>
                                                 </div>
                                             </div>

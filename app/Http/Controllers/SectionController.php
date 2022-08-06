@@ -9,7 +9,8 @@ class SectionController extends Controller
 {
     public function index($sectionId)
     {
-        $model = SectionViewer::index($sectionId);
+        $user = $this->user();
+        $model = SectionViewer::index($sectionId, $user);
         //dd($model);
 
         return view('section.index', compact('model'));

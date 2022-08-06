@@ -23,6 +23,7 @@ class CreatePostsTable extends Migration
             $table->boolean('hide')->default(false);
             $table->integer('like')->default(0);
             $table->integer('dislike')->default(0);
+            $table->boolean('private')->default(false);
             $table->json('DATA')->default('{"user_name_edit":null,"date_edit":null,"first_edit":null,"user_name_moder":null,"date_moder":null,"first":null,"like":0,"like_name":null,"dislike":0,"dislike_name":null}');
             $table->unsignedBigInteger('topic_id');
             $table->unsignedBigInteger('forum_id');

@@ -19,6 +19,7 @@ class CreateSectionsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('moderation')->default(false);
             $table->boolean('hide')->default(false);
+            $table->boolean('private')->default(false);
             //$table->timestamps();
         });
     }

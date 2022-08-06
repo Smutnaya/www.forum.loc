@@ -8,9 +8,9 @@
         <div class="col fst-italic">
             @if (!is_null($model['onlines']))
             @foreach ($model['onlines'] as $online)
-                {{ $online['name'] }}
+                <span style="{{$online['style']}}">{{ $online['name'] }}</span>
                 @if (!$loop->last)
-                    ,
+                    <span style="margin-left: -4px !important;">,</span>
                 @endif
             @endforeach
         @endif

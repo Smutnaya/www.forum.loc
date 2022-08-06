@@ -24,6 +24,8 @@ class TopicController extends Controller
 
         $user = $this->user();
 
+        //TODO проверить закрыта ли тема для обычных юзеров
+
         $result = TopicExecutor::post(ForumHelper::getId($topicId), $user, request()->all());
         if($result['success'])
         {

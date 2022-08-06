@@ -23,14 +23,15 @@ class TopicManager
         return $topic;
     }
 
-    public static function edit($topic, $title, $check, $user)
+    public static function edit($topic, $title, $check, $forum_data, $user)
     {
         $topic->fill([
             'title' => $title,
             'hide' => $check['hide'],
             'moderation' => $check['moder'],
             'pin' => $check['pin'],
-            'block' => $check['block']
+            'block' => $check['block'],
+            'DATA' => $forum_data,
         ])->save();
     }
 

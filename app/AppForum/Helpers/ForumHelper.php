@@ -38,7 +38,7 @@ class ForumHelper
             return 'Вчера в ' . date('H:i', $time);
         }
 
-        return date('d-m-Y в H:i', $time);
+        return date('d-m-Y H:i', $time);
     }
 
     public static function getId($value)
@@ -102,15 +102,37 @@ class ForumHelper
         return $page < 1 || $page > $pages ? 1 : $page;
     }
 
-    public static function topicPage($topicId)
+    public static function topicPage($topicId, $user_role)
     {
         $topicPage = collect();
-        $post_num = Post::where('topic_id', intval($topicId))->count();
+        $post_num = 0;
+
+        if ($user_role < 2) {
+            $post_num = Post::where([['topic_id', intval($topicId)], ['hide', false]])->count();
+        } else {
+            $post_num = Post::where('topic_id', intval($topicId))->count();
+        }
+
         $take = 10;
         $pages = (int) ceil($post_num / $take);
         $topicPage['take'] = $take;
         $topicPage['pages'] = $pages;
 
         return $topicPage;
+    }
+
+    public static function roleStyle($user_role)
+    {
+        $style = null;
+
+        if($user_role == 2) $style = 'color: #006843 !important; font-weight: bold !important;';
+        if($user_role == 3) $style = 'color: #006843 !important; font-weight: bold !important;';
+        if($user_role == 4) $style = 'color: #006843 !important; font-weight: bold !important;';
+        if($user_role > 4 && $user_role < 9) $style = 'color: #00299d !important; font-weight: bold !important;';
+        if($user_role == 9) $style = 'color: #00299d !important; font-weight: bold !important;';
+        if($user_role == 10) $style = 'color: #00299d !important; font-weight: bold !important;';
+        if($user_role >= 11) $style = 'color: #c50000 !important; font-weight: bold !important;';
+
+        return $style;
     }
 }

@@ -21573,17 +21573,17 @@ p {
 }
 
 blockquote {
-  background: rgba(241, 233, 194, 0.5098039216);
+  background: rgba(241, 233, 194, 0.5607843137);
   color: #4a4741;
   margin: 0 0 1rem 1rem;
+  padding: 5px 13px !important;
   font-size: 14px;
   font-style: italic;
   font-family: "Open Sans", "Arial", Helvetica, serif !important;
-  padding: 10px;
   border-style: solid;
-  border-color: rgba(231, 227, 209, 0.631372549);
+  border-color: rgba(175, 164, 132, 0.2392156863);
   border-width: 0.005rem;
-  border-radius: 0px 15px;
+  border-radius: 0px 15px !important;
 }
 
 footer {
@@ -21615,6 +21615,23 @@ i.forum-desc {
   color: #8f8f8f !important;
 }
 
+.input-text-number:hover,
+.input-text-number:focus {
+  width: 50px;
+  background: rgba(255, 255, 224, 0.8509803922);
+  height: 25px;
+  border-color: #c9c1a2 !important;
+  outline: 0;
+}
+
+.input-text-number {
+  width: 50px;
+  height: 25px;
+  background: rgba(253, 253, 219, 0.7019607843);
+  border-color: #c9c1a2 !important;
+  outline: 0;
+}
+
 .input-text:hover,
 .input-text:focus {
   width: 100%;
@@ -21640,7 +21657,7 @@ i.forum-desc {
 }
 
 .btn-custom:hover {
-  background-color: #88734e;
+  background-color: #9a7e4d;
   height: 28px !important;
   color: #FFF;
   text-decoration: none;
@@ -21668,7 +21685,7 @@ i.forum-desc {
   color: #e3e3cb !important;
 }
 .new-tema .btn-outline-primary {
-  color: #000000;
+  color: #9a7e4d;
   border-color: #c9c1a2;
   background-color: rgba(253, 253, 219, 0.7019607843);
   padding-top: 3px;
@@ -21711,6 +21728,19 @@ i.forum-desc {
   box-shadow: 0 0 0 0.1rem rgba(206, 212, 218, 0.253);
 }
 
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=number],
+input[type=number]:hover,
+input[type=number]:focus {
+  -webkit-appearance: none;
+          appearance: none;
+  -moz-appearance: textfield;
+}
+
 .aside {
   padding: 0;
   align-items: start;
@@ -21719,6 +21749,11 @@ i.forum-desc {
 
 .min-avatar {
   width: 42px;
+  padding: 0.1rem !important;
+}
+
+.max-avatar {
+  width: 120px;
   padding: 0.1rem !important;
 }
 
@@ -21753,7 +21788,7 @@ A {
   text-decoration: none;
 }
 
-A:hover {
+A:hover, .dropdown-item.active, .dropdown-item:active {
   text-decoration: underline;
   color: black;
 }
@@ -21763,7 +21798,7 @@ A:hover {
 }
 
 .post-a-color {
-  color: #700000;
+  color: #6a0000;
 }
 
 .tema {
@@ -21885,6 +21920,7 @@ span[title]:hover::after {
 }
 .scroll ::-webkit-scrollbar {
   width: 3px;
+  height: 1px;
 }
 .scroll ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px rgba(98, 96, 86, 0.2509803922);

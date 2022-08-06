@@ -28,17 +28,17 @@ p {
 }
 
 blockquote {
-    background: #f1e9c282;
+    background: #f1e9c28f;
     color: #4a4741;
     margin: 0 0 1rem 1rem;
+    padding: 5px 13px !important;
     font-size: 14px;
     font-style: italic;
     font-family: "Open Sans", "Arial", Helvetica, serif !important;
-    padding: 10px;
     border-style: solid;
-    border-color: #e7e3d1a1;
+    border-color: #afa4843d;
     border-width: 0.005rem;
-    border-radius: 0px 15px;
+    border-radius: 0px 15px !important;
 }
 
 footer {
@@ -65,9 +65,24 @@ footer {
     padding: 0px;
     margin: 0px;
 }
-
 i.forum-desc {
     color: #8f8f8f !important;
+}
+
+.input-text-number:hover,
+.input-text-number:focus {
+    width: 50px;
+    background: #ffffe0d9;
+    height: 25px;
+    border-color: #c9c1a2 !important;
+    outline: 0;
+}
+.input-text-number {
+    width: 50px;
+    height: 25px;
+    background: #fdfddbb3;
+    border-color: #c9c1a2 !important;
+    outline: 0;
 }
 
 .input-text:hover,
@@ -77,7 +92,6 @@ i.forum-desc {
     border-color: #c9c1a2 !important;
     outline: 0;
 }
-
 .input-text {
     width: 100%;
     background: #fdfddbb3;
@@ -86,7 +100,6 @@ i.forum-desc {
 }
 
 //btn custom
-
 .btn-custom {
     background-color: #b59a6b;
     color: #FFF;
@@ -96,7 +109,7 @@ i.forum-desc {
     width: 85px !important;
 }
 .btn-custom:hover {
-    background-color: #88734e;
+    background-color: #9a7e4d;
     height: 28px !important;
     color: #FFF;
     text-decoration: none;
@@ -114,19 +127,17 @@ i.forum-desc {
         padding-top: 3px;
         border-radius: 0;
         width: 100% !important;
-
         i {
             color: #e3e3cb !important;
         }
     }
     .btn-outline-primary {
-        color: #000000;
+        color: #9a7e4d;
         border-color: #c9c1a2;
         background-color: #fdfddbb3;
         padding-top: 3px;
         border-radius: 0;
         width: 100% !important;
-
         i {
             color: #888477 !important;
         }
@@ -166,6 +177,18 @@ i.forum-desc {
     box-shadow: 0 0 0 0.1rem rgba(206, 212, 218, 0.253);
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; // Yeah, yeah everybody write about it
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
 .aside {
     //max-width: 190px;
     padding: 0;
@@ -176,6 +199,10 @@ i.forum-desc {
 // avatars
 .min-avatar {
     width: 42px;
+    padding: 0.1rem !important;
+}
+.max-avatar {
+    width: 120px;
     padding: 0.1rem !important;
 }
 .min-logo {
@@ -206,7 +233,7 @@ A {
     //display: block;
     text-decoration: none;
 }
-A:hover {
+A:hover, .dropdown-item.active, .dropdown-item:active {
     text-decoration: underline;
     color: black;
 }
@@ -215,7 +242,7 @@ A:hover {
 }
 
 .post-a-color {
-    color: #700000;
+    color: #6a0000;
 }
 
 .tema {
@@ -309,7 +336,7 @@ A:hover {
 }
 
 
-//popover
+// popover
 .popover {
     background: #e8e0bf;
     border: 1px #d6d1b2;
@@ -346,6 +373,7 @@ span[title]:hover::after {
 .scroll {
     ::-webkit-scrollbar {
         width: 3px;
+        height: 1px;
     }
     ::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px #62605640;
