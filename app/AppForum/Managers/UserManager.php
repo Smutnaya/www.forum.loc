@@ -12,4 +12,10 @@ class UserManager
             'DATA' => $DATA
         ])->save();
     }
+    public static function role($user, $inp)
+    {
+        $user->fill([
+            'role_id' => $inp['role']->id
+        ])->save();
+    }
 }

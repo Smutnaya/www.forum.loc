@@ -2,15 +2,15 @@
 
 namespace App\AppForum\Viewers;
 
+use App\Ban;
 use App\Post;
 use App\Role;
 use App\User;
-use App\Topic;
-use App\Online;
+use App\Forum;
 use App\Section;
+use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
-use App\Forum;
 
 class UserViewer
 {
@@ -20,9 +20,13 @@ class UserViewer
             'sectionsAside' => collect(), // id, title, description
             'user_inf' => null,
             'user' => null,
+            'roles' => false,
+            'rolesInstall' => collect(),
             'user_posts' => collect(),
             'forums_block' => collect(),
             'sections_block' => collect(),
+            'bans_activ' => collect(),
+            'bans_old' => collect(),
         ]);
     }
 
@@ -30,13 +34,9 @@ class UserViewer
     {
         $model = self::init();
 
-        // section
-        if (is_null($user) || $user->role_id < 5) {
-            $sectionsAside = Section::where('private', false)->get();
-        } else {
-            $sectionsAside = Section::all();
-        }
-        self::setSectionAside($model, $sectionsAside);
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
 
         $user_inf = User::find(intval($user_id));
         if (is_null($user_inf)) return $model;
@@ -54,10 +54,21 @@ class UserViewer
         self::setUserPost($model, $user_posts, $user_id,  $user_role);
         $forums = Forum::all();
         if (is_null($forums)) return $model;
-        self::setblockForum($model, $user_role, $forums);
+        self::setblockForum($model, $user_role, $forums, $user);
         $sections = Section::all();
         if (is_null($sections)) return $model;
         self::setblockSection($model, $user_role, $sections);
+
+        $bans = Ban::where('user_id', $user_inf->id)->orderByDesc('id')->limit(50)->get();
+        if (is_null($bans)) return $model;
+        self::setBan($model, $bans);
+
+        $model['roles'] = ModerHelper::roles($model['user'], $model['user_inf']);
+
+        $rolesInstall = Role::all();
+        if (is_null($rolesInstall)) return $rolesInstall;
+        self::setRolesInstall($model, $model['user'], $rolesInstall);
+
         return $model;
     }
 
@@ -84,6 +95,7 @@ class UserViewer
                 'role_id' => $user_inf->role_id,
                 'ip_online' => $user_inf->online->ip,
                 'role' => Role::find($user_inf->role_id)->description,
+                'roleModer' => Role::find($user_inf->role_id)->role,
                 'style' => ForumHelper::roleStyle($user_inf->role_id),
                 'DATA' => json_decode($user_inf->DATA, false),
                 'online' => ForumHelper::timeFormat($online)
@@ -96,6 +108,7 @@ class UserViewer
                 'role_id' => $user_inf->role_id,
                 'ip_online' => $user_inf->online->ip,
                 'role' => Role::find($user_inf->role_id)->description,
+                'roleModer' => Role::find($user_inf->role_id)->role,
                 'style' => ForumHelper::roleStyle($user_inf->role_id),
                 'DATA' => json_decode($user_inf->DATA, false),
                 'online' => 'online'
@@ -141,27 +154,44 @@ class UserViewer
         }
     }
 
-    private static function setSectionAside($model, $sections)
+    private static function setBan($model, $bans)
     {
-        foreach ($sections as $section) {
-            $model['sectionsAside']->push([
-                'id' => $section->id,
-                'title' => $section->title,
-                'description' => $section->description
-            ]);
+        foreach ($bans as $ban) {
+            if ($ban->datetime_end > time() && $ban->cancel == true) {
+                $model['bans_old']->push($ban);
+            }
+            if ($ban->datetime_end > time() && $ban->cancel == false) {
+                $model['bans_activ']->push($ban);
+            }
+            if ($ban->datetime_end < time()) {
+                $model['bans_old']->push($ban);
+            }
         }
     }
 
-    private static function setblockForum($model, $user_role, $forums)
+    private static function setblockForum($model, $user_role, $forums, $user)
     {
         foreach ($forums as $forum) {
-            if(ModerHelper::moderPost($user_role, $forum->id, $forum->section_id)) $model['forums_block']->push($forum);
+            if (ModerHelper::moderForum($user_role, $forum->id, $forum->section_id, $user)) $model['forums_block']->push($forum);
         }
     }
     private static function setblockSection($model, $user_role, $sections)
     {
         foreach ($sections as $section) {
-            if(ModerHelper::blockSection($user_role, $section)) $model['sections_block']->push($section);
+            if (ModerHelper::blockSection($user_role, $section->id)) $model['sections_block']->push($section);
+        }
+    }
+
+    private static function setRolesInstall($model, $user, $rolesInstall)
+    {
+        if (!is_null($user)) {
+            foreach ($rolesInstall as $role) {
+                if ($user->role_id == 12) $model['rolesInstall']->push($role);
+                if ($user->role_id == 4 && $role->id < 4) $model['rolesInstall']->push($role);
+                if ($user->role_id == 9 && $role->id != 4  && $role->id < 9) $model['rolesInstall']->push($role);
+                if ($user->role_id == 10 && $role->id != 4  && $role->id < 10) $model['rolesInstall']->push($role);
+                if ($user->role_id == 11 && $role->id < 11) $model['rolesInstall']->push($role);
+            }
         }
     }
 }

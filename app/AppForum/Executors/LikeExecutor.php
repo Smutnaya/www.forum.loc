@@ -47,7 +47,7 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
-            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id'], $out['user']['role_id']);
             $pages = $topicPage['pages'];
             self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
@@ -79,7 +79,7 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
-            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id'], $out['user']['role_id']);
             $pages = $topicPage['pages'];
             self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
@@ -119,7 +119,7 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
-            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id'], $out['user']['role_id']);
             $pages = $topicPage['pages'];
             self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }
@@ -152,7 +152,7 @@ class LikeExecutor extends BaseExecutor
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
-            $topicPage = ForumHelper::topicPage($out['post']['topic_id']);
+            $topicPage = ForumHelper::topicPage($out['post']['topic_id'], $out['user']['role_id']);
             $pages = $topicPage['pages'];
             self::$result['page'] = ForumHelper::parsePage($page, $pages);
         }

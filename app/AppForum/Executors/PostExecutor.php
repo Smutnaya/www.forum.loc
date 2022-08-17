@@ -44,7 +44,7 @@ class PostExecutor extends BaseExecutor
         if (is_null($post)) return self::$result['message'] = 'Пост не найден';
 
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для редактирования тем на данном форуме';
+        if (!ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для редактирования тем на данном форуме';
 
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
@@ -57,7 +57,7 @@ class PostExecutor extends BaseExecutor
         $data->first_edit = $post->text;
         $out['data'] = json_encode($data);
 
-        if (!(ModerHelper::moderPostEdit($user->role_id, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        if (!(ModerHelper::moderPostEdit($user->role_id, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
 
         self::$result['success'] = true;
     }
@@ -96,7 +96,7 @@ class PostExecutor extends BaseExecutor
         if (is_null($post)) return self::$result['message'] = 'Пост не найден';
 
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для модерации тем на данном форуме';
+        if (!ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для модерации тем на данном форуме';
 
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
@@ -174,7 +174,7 @@ class PostExecutor extends BaseExecutor
         $post = Post::find(intval($postId));
         self::$result['success'] = false;
         //$user_role_id, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id
-        if (!(ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для модерации темы';
+        if (!(ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для модерации темы';
 
         self::$result['success'] = true;
     }

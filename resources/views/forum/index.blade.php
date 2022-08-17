@@ -21,7 +21,12 @@ use App\AppForum\Helpers\ForumHelper;
                         @endif
                     </div>
                     @if (!is_null($model['user']))
-                        @if (!$model['forumBlock'] || $model['newPost'])
+                        @if (!$model['forumBlock'] && !$model['userBan'])
+                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                    тема</a>
+                            </div>
+                        @elseif ($model['newPost'])
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
                                 <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
@@ -55,7 +60,7 @@ use App\AppForum\Helpers\ForumHelper;
                                         </a>
                                     </span>
                                     <div class="forum-desc">
-                                        <a class="post-a-color" href="{{ url('/user/'. $topic['user_id']) }}">{{ $topic['user'] }}</a> &bull; {{ $topic['datetime'] }}
+                                        <a class="post-a-color" href="{{ url('/user/' . $topic['user_id']) }}">{{ $topic['user'] }}</a> &bull; {{ $topic['datetime'] }}
                                     </div>
                                 </div>
 
@@ -88,7 +93,7 @@ use App\AppForum\Helpers\ForumHelper;
                                             <div class="col-10 align-self-center" style="font-size: 10pt;">
                                                 <div class="row ps-3">
                                                     <div class="col">
-                                                        <a class="post-a-color" href="{{url('/user/'. $topic['DATA']->last_post->user_id)}}"> {{ $topic['DATA']->last_post->user_name }} </a>
+                                                        <a class="post-a-color" href="{{ url('/user/' . $topic['DATA']->last_post->user_id) }}"> {{ $topic['DATA']->last_post->user_name }} </a>
                                                     </div>
                                                 </div>
                                                 <div class="row ps-3">

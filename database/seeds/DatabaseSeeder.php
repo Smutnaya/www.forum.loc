@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Дополнительные форумы'],
             ['title' => 'Сенат', 'moderation' => true],
             ['title' => 'Кланы и альянсы - Политика'],
-            ['title' => 'Клановые форумы'],
+            ['title' => 'Форумы'],
             ['title' => 'Газеты и блоги'],
             ['title' => '[Сенат. Рабочий]', 'private' => true],
         ];

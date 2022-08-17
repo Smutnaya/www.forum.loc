@@ -20,6 +20,7 @@ class CreateBansTable extends Migration
             $table->longtext('text');
             $table->unsignedInteger('datetime');
             $table->unsignedInteger('datetime_end');
+            $table->longtext('datetime_str');
             $table->boolean('forum_out')->default(false);
             $table->unsignedBigInteger('section_id')->nullable();
             $table->unsignedBigInteger('forum_id')->nullable();

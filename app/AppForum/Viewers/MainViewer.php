@@ -6,6 +6,7 @@ use App\Post;
 use App\Topic;
 use App\Online;
 use App\Section;
+use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 
 class MainViewer
@@ -24,14 +25,9 @@ class MainViewer
     {
         $model = self::init();
 
-        // section
-        if(is_null($user) || $user->role_id < 5)
-        {
-            $sectionsAside = Section::where('private', false)->get();
-        } else {
-            $sectionsAside = Section::all();
-        }
-        self::setSectionAside($model, $sectionsAside);
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
 
         $onlines = Online::where('datetime','>=', strtotime('-15 minute'))->orderBy('datetime','desc')->get();
         //$onlines = Online::all();
@@ -42,18 +38,7 @@ class MainViewer
         return $model;
     }
 
-    static function setSectionAside($model, $sections)
-    {
-        foreach($sections as $section)
-        {
-            $model['sectionsAside']->push([
-                'id' => $section->id,
-                'title' => $section->title,
-                'description' => $section->description
-            ]);
-        }
-    }
-    static function setOnline($model, $onlines)
+    private static function setOnline($model, $onlines)
     {
         foreach($onlines as $online)
         {

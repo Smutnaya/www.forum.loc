@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\AppForum\Viewers\UserViewer;
 use Illuminate\Http\Request;
+use App\AppForum\Viewers\UserViewer;
+use App\AppForum\Executors\UserExecutor;
 
 class UserController extends Controller
 {
@@ -14,5 +15,18 @@ class UserController extends Controller
         $model = UserViewer::index($user_id, $user);
 
         return view('user.index', compact('model'));
+    }
+
+    public function role($user_id)
+    {
+        $user = $this->user();
+        $result = UserExecutor::role($user_id, $user,  request()->all());
+
+        if($result['success'])
+        {
+            return redirect('user/2')->with(['messageCancel' => $result['message']]);
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
     }
 }

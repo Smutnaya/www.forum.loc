@@ -2,13 +2,14 @@
 
 namespace App\AppForum\Viewers;
 
+use App\Post;
 use App\Forum;
 use App\Topic;
-use App\AppForum\Helpers\ForumHelper;
-use App\AppForum\Helpers\BreadcrumHtmlHelper;
-use App\AppForum\Helpers\ModerHelper;
-use App\Post;
 use App\Section;
+use App\AppForum\Helpers\AsideHelper;
+use App\AppForum\Helpers\ForumHelper;
+use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class ForumViewer
 {
@@ -18,6 +19,7 @@ class ForumViewer
             'breadcrump' => null,
             'forumTitle' => null,
             'user' => null,
+            'userBan' => false,
             'topics' => collect(),
             'posts' => collect(),
             'forumId' => null,
@@ -38,16 +40,16 @@ class ForumViewer
     {
         $model = self::init();
 
-        if (!is_null($user)) $model['user'] = $user;
-        $user_role = ModerHelper::user_role($user);
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
 
-        // section
-        if (is_null($user) || $user->role_id < 5) {
-            $sectionsAside = Section::where('private', false)->get();
+        if (is_null($user)) {
+            return $model;
         } else {
-            $sectionsAside = Section::all();
+            $model['user'] = $user;
         }
-        MainViewer::setSectionAside($model, $sectionsAside);
+        $user_role = ModerHelper::user_role($user);
 
         $forum = Forum::find(intval($forumId));
 
@@ -57,7 +59,10 @@ class ForumViewer
         $model['forumBlock'] = $forum->block;
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
 
-        $model['visForum'] = ModerHelper::visForum($user_role, $forum->id, $forum->section_id);
+        $model['visForum'] = ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user);
+        $model['userBan'] = ModerHelper::banForum($user, $forum);
+
+        //dd(ModerHelper::banForum($user, $forum));
 
         if ($user_role < 1) {
             $post_num = Topic::where([['forum_id', intval($forumId)], ['moderation', false], ['hide', false]])->count();
@@ -76,7 +81,7 @@ class ForumViewer
         if ($topics->isEmpty()) return $model;
 
         self::setTopic($model, $topics, $user);
-        $model['newPost'] = ModerHelper::moderPost($user_role, $forum->id, $forum->section_id);
+        $model['newPost'] = ModerHelper::moderForum($user_role, $forum->id, $forum->section_id, $user);
 
         $model['pagination']['forumId'] = $forum->id;
         $model['pagination']['page'] = $page;
@@ -383,13 +388,9 @@ class ForumViewer
     {
         $model = self::init();
 
-        // section
-        if (is_null($user) || $user->role_id < 5) {
-            $sectionsAside = Section::where('private', false)->get();
-        } else {
-            $sectionsAside = Section::all();
-        }
-        MainViewer::setSectionAside($model, $sectionsAside);
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
 
         if (!is_null($user)) $model['user'] = $user;
 
@@ -407,7 +408,6 @@ class ForumViewer
 
     private static function setTopic($model, $topics, $user)
     {
-
         foreach ($topics as $topic) {
             //if (!is_null($user)) { //$topic->moderation && $topic->$user_id == $user_id && $user_role == 1 ||
             $model['topics']->push([

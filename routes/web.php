@@ -33,10 +33,12 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::get('/main', 'MainController@index')->name('main');
 
     Route::get('/user/{id}', 'UserController@index');
-    Route::any('/u/{id}/forum_block', 'UserController@forum_block');
-    Route::any('/u/{id}/section_block', 'UserController@section_block');
-    Route::any('/u/{id}/topic_block', 'UserController@topic_block');
-    Route::any('/u/{id}/forum_out', 'UserController@forum_out');
+    Route::any('/u/{id}/forum_ban', 'BanController@forum_ban');
+    Route::any('/u/{id}/section_ban', 'BanController@section_ban');
+    Route::any('/u/{id}/topic_ban', 'BanController@topic_ban');
+    Route::any('/u/{id}/forum_out', 'BanController@forum_out');
+    Route::any('/u/b/{id}/cancel', 'BanController@cancel');
+    Route::any('/u/{id}/role', 'UserController@role');
 
     Route::get('/t/{id}/{page?}', 'TopicController@index');
     Route::any('/t/{id}/post', 'TopicController@post');

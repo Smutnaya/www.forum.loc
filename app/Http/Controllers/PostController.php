@@ -54,8 +54,6 @@ class PostController extends Controller
 
     public function premod($postId, $page = 1)
     {
-        if(!request()->isMethod('post')) return redirect('/');
-
         $user = $this->user();
         $result = PostExecutor::premod($postId, $user, $page);
         if($result['success'])
@@ -66,7 +64,6 @@ class PostController extends Controller
     }
     public function unhide($postId, $page = 1)
     {
-        if(!request()->isMethod('post')) return redirect('/');
         $user = $this->user();
         $result = PostExecutor::unhide($postId, $user, $page);
         if($result['success'])

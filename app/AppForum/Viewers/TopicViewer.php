@@ -8,6 +8,7 @@ use App\Role;
 use App\User;
 use App\Topic;
 use App\Section;
+use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
 use App\AppForum\Viewers\SectionViewer;
@@ -20,6 +21,7 @@ class TopicViewer
         return collect([
             'breadcrump' => null,
             'user' => null,
+            'userBan' => false,
             'forum' => null,
             'section' => null,
             'topic' => null,
@@ -43,21 +45,17 @@ class TopicViewer
     {
         $model = self::init();
 
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
+
         if (!is_null($user)) $model['user'] = $user;
         $user_role = ModerHelper::user_role($user);
-
-        // section
-        if (is_null($user) || $user->role_id < 5) {
-            $sectionsAside = Section::where('private', false)->get();
-        } else {
-            $sectionsAside = Section::all();
-        }
-        MainViewer::setSectionAside($model, $sectionsAside);
 
         $topic = Topic::find(intval($topicId)); // eloquent
         if (is_null($topic)) return $model;
 
-        if (ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id) && self::visitTopic($topic, $user_role, $user))  $model['visit_forum'] = true;
+        if (ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user) && self::visitTopic($topic, $user_role, $user))  $model['visit_forum'] = true;
 
         self::setTopic($model, $topic, $user_role);
 
@@ -81,15 +79,16 @@ class TopicViewer
         if ($posts->isEmpty()) return $model;
         self::setPost($model, $posts, $user, $user_role, $topic->forum_id, $topic->forum->section_id);
 
-        $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id);
+        $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id);
+        $model['userBan'] = ModerHelper::banTopic($user, $topic);
 
         $model['pagination']['topicId'] = $topic->id;
         $model['pagination']['page'] = $page;
         $model['pagination']['pages'] = $pages;
 
         if (!is_null($user)) {
-            $model['topicEdit'] = ModerHelper::moderTopicEdit($model['user']['role_id'], $model['user']['id'], $model['topic']['datetime_d'], $model['topic']['DATA'], $model['topic']['user_id'], $model['topic']['forum_id'], $model['topic']['section_id']);
-            $model['topicMove'] = ModerHelper::moderTopicMove($model['user']['role_id'], $model['topic']['forum_id'], $model['topic']['section_id']);
+            $model['topicEdit'] = ModerHelper::moderTopicEdit($model['user']['role_id'], $model['user']['id'], $model['topic']['datetime_d'], $model['topic']['DATA'], $model['topic']['user_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $model['topic']['id']);
+            $model['topicMove'] = ModerHelper::moderTopicMove($model['user']['role_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $user, $model['topic']['id']);
         }
         return $model;
 
@@ -220,7 +219,7 @@ class TopicViewer
                                 self::visPost($post, $user_role, $user, $user_post, $model);
                             }
                         } elseif ($user_role > 1) {
-                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            self::visPost($post, $user_role, $user, $user_post, $model);
                         }
                     }
                 } else {
@@ -282,8 +281,8 @@ class TopicViewer
             'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
             'user_DATA' => json_decode($post->user->DATA, false),
             'like' => Like::select('action')->where([['post_id', $post->id], ['user_id', $user->id]])->first(),
-            'postEdit' => ModerHelper::moderPostEdit($user_role, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id),
-            'postModer' => ModerHelper::moderPost($user_role, $post->topic->forum_id, $post->topic->forum->section_id)
+            'postEdit' => ModerHelper::moderPostEdit($user_role, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id),
+            'postModer' => ModerHelper::moderPost($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id)
         ]);
     }
 }

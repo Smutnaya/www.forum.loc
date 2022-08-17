@@ -21,4 +21,16 @@ class Ban extends Model
     {
         return $this->belongsTo(User::class, 'user_cancel_id');
     }
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
+    }
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class);
+    }
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
 }

@@ -73,11 +73,14 @@ class TopicExecutor extends BaseExecutor
         self::$result = ['success' => false];
         $topic = Topic::find(intval($topicId));
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
+
+        if (ModerHelper::banTopic($user, $topic)) return self::$result['message'] = 'Пользователь заблокирован в теме';
+
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
-        if($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
+        if($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
 
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkPost($input, $topic);
@@ -112,9 +115,9 @@ class TopicExecutor extends BaseExecutor
 
         if (mb_strlen($input['title']) > 13000 && !is_null($input['title'])) $out['title'] = mb_strimwidth($input['title'], 0, 100, "...");
 
-        if (!(ModerHelper::moderTopicEdit($user->role_id, $user->id, $topic->datetime, json_decode($topic->DATA, false), $topic->user_id, $topic->forum_id, $topic->forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        if (!(ModerHelper::moderTopicEdit($user->role_id, $user->id, $topic->datetime, json_decode($topic->DATA, false), $topic->user_id, $topic->forum_id, $topic->forum->section_id, $topic->id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id)) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
 
         $forum_data = json_decode($topic->DATA, false);
         if ($user->id != $topic->user_id) $forum_data->moder = time();
@@ -161,8 +164,8 @@ class TopicExecutor extends BaseExecutor
         if ($topic->forum->section_id == 7 && $forum->section_id != 7 && $user->role_id < 11) {
             return self::$result['message'] = 'Информацию из служебного форума нельзя перемещать в Общий';
         } else {
-            if (!(ModerHelper::moderTopicMove($user->role_id, $topic->forum_id, $topic->forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для перемещения темы';
-            if (!(ModerHelper::moderTopicMoveTo($user->role_id, $forum->id, $forum->section_id))) return self::$result['message'] = 'Отсутсвуют права для перемещения темы';
+            if (!(ModerHelper::moderTopicMove($user->role_id, $topic->forum_id, $topic->forum->section_id, $user, $topic->id))) return self::$result['message'] = 'Отсутсвуют права для перемещения темы';
+            if (!(ModerHelper::moderTopicMoveTo($user->role_id, $forum->id, $forum->section_id, $user, $topic->id))) return self::$result['message'] = 'Отсутсвуют права для перемещения темы';
         }
 
         $out['topic'] = $topic;

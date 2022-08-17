@@ -14,4 +14,8 @@ class Section extends Model
         return $this->hasMany(Forum::class);
     }
 
+    public function bans()
+    {
+        return $this->hasMany(Ban::class);
+    }
 }

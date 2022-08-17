@@ -73,10 +73,13 @@ class ForumExecutor extends BaseExecutor
         self::$result['success'] = false;
         $forum = Forum::find(intval($forumId));
         if(is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
-        $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
-        if($forum->block && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if (ModerHelper::banForum($user, $forum)) return self::$result['message'] = 'Пользователь заблокирован на данном форуме';
+
+        $user_role = ModerHelper::user_role($user);
+        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+
+        if($forum->block && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
         if(mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
@@ -87,18 +90,24 @@ class ForumExecutor extends BaseExecutor
 
     public static function forum ($forumId, $user)
     {
-        self::forum_valid($forumId);
+        self::$result['success'] = false;
+
         if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result['success'] = true;
+
+        if(self::$result['success']) self::forum_valid($forumId, $user);
 
         if(self::$result['success']) self::$result['message'] = 'OK';
         return self::$result;
     }
 
-    private static function forum_valid($forumId)
+    private static function forum_valid($forumId, $user)
     {
         $forum = Forum::find(intval($forumId));
         if(is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
+
+        if (ModerHelper::banForum($user, $forum)) return self::$result['message'] = 'Пользователь заблокирован на данном форуме';
+
         self::$result['success'] = true;
     }
 

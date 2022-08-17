@@ -18,4 +18,9 @@ class Forum extends Model
     {
         return $this->belongsTo(Section::class);
     }
+
+    public function bans()
+    {
+        return $this->hasMany(Ban::class);
+    }
 }

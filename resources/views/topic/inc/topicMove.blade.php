@@ -9,7 +9,7 @@
                         @foreach ($model['section'] as $section)
                             <div class="col-xl-3 col-lg-4 col-md-12  scroll">
                                 <h6 class="fw-bold my-1">{{ $section['title'] }}</h6>
-                                <div class="overflow-auto" style="max-height: 125px;" id="myDiv">
+                                <div class="overflow-auto border-bottom" style="max-height: 125px; border-color: #e3dbb7 !important;" id="myDiv">
                                     @if ($model['user']['role_id'] == 8)
                                         @foreach ($section->forums as $forum)
                                             @if ($forum['id'] != 16 && $forum['id'] != 17 && $forum['id'] != 69)

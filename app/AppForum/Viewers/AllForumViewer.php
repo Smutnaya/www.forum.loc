@@ -2,7 +2,9 @@
 
 namespace App\AppForum\Viewers;
 
+use App\AppForum\Helpers\AsideHelper;
 use App\Forum;
+use App\Other_role;
 use App\Topic;
 use App\Section;
 use App\AppForum\Helpers\ModerHelper;
@@ -15,6 +17,7 @@ class AllForumViewer
             'sections' => collect(),
             'forums' => collect(),
             'sectionsAside' => collect(),
+            'other_roles' => collect(),
         ]);
     }
 
@@ -22,23 +25,24 @@ class AllForumViewer
     {
         $model = self::init();
 
-        // section
-        if(is_null($user) || $user->role_id < 5)
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
+
+        if (!is_null($user))
         {
-            $sectionsAside = Section::where('private', false)->get();
-        } else {
-            $sectionsAside = Section::all();
+            $other_roles = Other_role::where('user_id', $user->id)->get();
+            if (!is_null($other_roles)) $model['other_roles'] = $other_roles;
         }
-        MainViewer::setSectionAside($model, $sectionsAside);
 
         $sections = $sectionsAside;
-        $user_role = 0;
-        if(!is_null($user)) $user_role = $user->role_id;
-        $forums = ModerHelper::getForumAll($user_role);
+        $user_role = ModerHelper::user_role($user);
+
+        $forums = ModerHelper::getForumAll($user_role, $user);
         if($sections->isEmpty()) return $model;
 
         self::setSection($model, $sections);
-        SectionViewer::setForum($model, $forums, $user_role);
+        SectionViewer::setForum($model, $forums, $user_role, $user);
         return $model;
     }
     private static function setSection($model, $sections)

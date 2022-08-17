@@ -12,7 +12,11 @@
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
             <div class="row">
                 <div class="col text-break d-flex justify-content-start align-items-center py-1 mb-2" id="title">
-                    <h4 class="m-0 "><span class="title-shadow"><span class="text-secondary" title="ID темы"> @if ($model['topicEdit']) [{{ $model['topic']['id'] }}] @endif </span>{{ $model['topic']['title'] }} </span></h4>
+                    <h4 class="m-0 "><span class="title-shadow"><span class="text-secondary" title="ID темы">
+                                @if ($model['topicEdit'])
+                                    [{{ $model['topic']['id'] }}]
+                                @endif
+                            </span>{{ $model['topic']['title'] }} </span></h4>
                     @if ($model['topicEdit'])
                         <i type="button" id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;" title="Редактировать тему"></i>
                     @endif
@@ -41,7 +45,11 @@
                     @endif
                 </div>
                 @if (!is_null($model['user']))
-                    @if (!$model['topic']['block'] || $model['newPost'])
+                    @if (!$model['topic']['block'] && !$model['userBan'])
+                        <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+                            <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
+                        </div>
+                    @elseif ($model['newPost'])
                         <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                             <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
                         </div>
@@ -60,6 +68,8 @@
 
                 </div>
             </div>
+            @elseif ($model['userBan'])
+            <span class="centre p-2" style="color: #6a0000">Пользователь заблокирован в теме!</span>
         @else
             <span class="centre p-2 text-secondary">Тема закрыта для новых публикаций</span>
         @endif

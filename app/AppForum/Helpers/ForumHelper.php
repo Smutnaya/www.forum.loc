@@ -38,7 +38,19 @@ class ForumHelper
             return 'Вчера в ' . date('H:i', $time);
         }
 
-        return date('d-m-Y H:i', $time);
+        return date('d.m.Y H:i', $time);
+    }
+
+    public static function dHiToInt($d, $H, $i)
+    {
+        $int = 0;
+        if (!is_null($d) || $d > 0) $int += $d * 86400;
+        if (!is_null($H) || $H > 0) $int += $H * 3600;
+        if (!is_null($i) || $i > 0) $int += $i * 60;
+
+        if ($int > 20 * 31556926) $int = 20 * 31556926;
+
+        return $int;
     }
 
     public static function getId($value)
@@ -125,14 +137,74 @@ class ForumHelper
     {
         $style = null;
 
-        if($user_role == 2) $style = 'color: #006843 !important; font-weight: bold !important;';
-        if($user_role == 3) $style = 'color: #006843 !important; font-weight: bold !important;';
-        if($user_role == 4) $style = 'color: #006843 !important; font-weight: bold !important;';
-        if($user_role > 4 && $user_role < 9) $style = 'color: #00299d !important; font-weight: bold !important;';
-        if($user_role == 9) $style = 'color: #00299d !important; font-weight: bold !important;';
-        if($user_role == 10) $style = 'color: #00299d !important; font-weight: bold !important;';
-        if($user_role >= 11) $style = 'color: #c50000 !important; font-weight: bold !important;';
+        if ($user_role == 1) $style = 'color: #000000 !important; font-weight: bold !important;';
+        if ($user_role == 2) $style = 'color: #006843 !important; font-weight: bold !important;';
+        if ($user_role == 3) $style = 'color: #006843 !important; font-weight: bold !important;';
+        if ($user_role == 4) $style = 'color: #006843 !important; font-weight: bold !important;';
+        if ($user_role > 4 && $user_role < 9) $style = 'color: #00299d !important; font-weight: bold !important;';
+        if ($user_role == 9) $style = 'color: #00299d !important; font-weight: bold !important;';
+        if ($user_role == 10) $style = 'color: #00299d !important; font-weight: bold !important;';
+        if ($user_role >= 11) $style = 'color: #c50000 !important; font-weight: bold !important;';
 
         return $style;
+    }
+
+    public static function timeStr($time)
+    {
+        $str = null;
+        $min = 60;
+        $hour = 3600;
+        $day = 86400;
+        $month = 2629743; //2592000
+        $year = 31556926;
+
+        if ($time >= $year) {
+            $y = floor($time / $year);
+            $time -= $y * $year;
+            if ($y == 1)  $str .= $y . ' год ';
+            if ($y >= 2 && $y <= 4)  $str .= $y . ' года ';
+            if ($y >= 5) $str .= $y . ' лет ';
+        }
+        if ($time >= $month) {
+            $y = floor($time / $month);
+            $time -= $y * $month;
+            if ($y == 1)  $str .= $y . ' месяц ';
+            if ($y >= 2 && $y <= 4)  $str .= $y . ' месяца ';
+            if ($y >= 5) $str .= $y . ' месяцев ';
+        }
+        if ($time >= $day) {
+            $y = floor($time / $day);
+            $time -= $y * $day;
+            if ($y == 1 || $y == 21 || $y == 31)  $str .= $y . ' день ';
+            if ($y >= 2 && $y <= 4)  $str .= $y . ' дня ';
+            if ($y >= 5 && $y <= 20)  $str .= $y . ' дней ';
+            if ($y >= 22 && $y <= 24)  $str .= $y . ' дня ';
+            if ($y >= 25 && $y <= 30)  $str .= $y . ' дней ';
+        }
+        if ($time >= $hour) {
+            $y = floor($time / $hour);
+            $time -= $y * $hour;
+            if ($y == 1 || $y == 21)  $str .= $y . ' час ';
+            if ($y >= 2 && $y <= 4)  $str .= $y . ' часа ';
+            if ($y >= 5 && $y <= 20)  $str .= $y . ' часов ';
+            if ($y >= 22 && $y <= 24)  $str .= $y . ' часа ';
+        }
+        if ($time >= $min) {
+            $y = floor($time / $min);
+            $time -= $y * $min;
+            if ($y == 1 || $y == 21 || $y == 31 || $y == 41 || $y == 41)  $str .= $y . ' минуту ';
+            if ($y >= 2 && $y <= 4)  $str .= $y . ' минуты ';
+            if ($y >= 5 && $y <= 20)  $str .= $y . ' минут ';
+            if ($y >= 22 && $y <= 24)  $str .= $y . ' минуты ';
+            if ($y >= 25 && $y <= 30)  $str .= $y . ' минут ';
+            if ($y >= 32 && $y <= 34)  $str .= $y . ' минуты ';
+            if ($y >= 35 && $y <= 40)  $str .= $y . ' минут ';
+            if ($y >= 42 && $y <= 44)  $str .= $y . ' минуты ';
+            if ($y >= 45 && $y <= 50)  $str .= $y . ' минут ';
+            if ($y >= 52 && $y <= 54)  $str .= $y . ' минуты ';
+            if ($y >= 55 && $y <= 60)  $str .= $y . ' минут ';
+        }
+
+        return $str;
     }
 }

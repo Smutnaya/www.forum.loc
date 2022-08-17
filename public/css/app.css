@@ -21647,6 +21647,22 @@ i.forum-desc {
   outline: 0;
 }
 
+.btn-custom-modal {
+  background-color: #bca476;
+  color: #FFF;
+  border: 0 !important;
+  border-radius: 0;
+  height: 28px !important;
+  width: 85px !important;
+}
+
+.btn-custom-modal:hover {
+  background-color: #ad9468;
+  height: 28px !important;
+  color: #FFF;
+  text-decoration: none;
+}
+
 .btn-custom {
   background-color: #b59a6b;
   color: #FFF;

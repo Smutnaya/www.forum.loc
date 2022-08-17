@@ -18,7 +18,7 @@ class CreateOtherRolesTable extends Migration
             //$table->timestamps();
             $table->unsignedBigInteger('user_id');
             $table->unsignedInteger('datetime');
-            $table->unsignedInteger('datetime_end');
+            //$table->unsignedInteger('datetime_end');
             $table->boolean('moderation')->default(false);
             $table->unsignedBigInteger('section_id')->nullable();
             $table->unsignedBigInteger('forum_id')->nullable();
