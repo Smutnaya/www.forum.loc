@@ -19,7 +19,6 @@ class LikeExecutor extends BaseExecutor
         $out = collect();
         $out['action'] = null;
         self::likes_valid(intval($postId), $user, $out);
-        //dd($out['user']['id']);
 
         if (self::$result['success']) {
             $out['action_new'] = 'like';

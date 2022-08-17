@@ -40,8 +40,6 @@ class BreadcrumHtmlHelper
 
         $html =  self::breadcrumpHtml($breadcrumpForum);
 
-        //dd($html);
-
         return $html;
     }
 

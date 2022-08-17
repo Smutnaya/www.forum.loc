@@ -28,7 +28,7 @@ class TopicExecutor extends BaseExecutor
         else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result = ['success' => true];
 
-        if(self::$result['success']) self::post_valid(intval($topicId), $input, $out, $user);
+        if (self::$result['success']) self::post_valid(intval($topicId), $input, $out, $user);
 
         $out['text'] = $input['text'];
         $ip = IpHelper::getIp();
@@ -74,13 +74,14 @@ class TopicExecutor extends BaseExecutor
         $topic = Topic::find(intval($topicId));
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
-        if (ModerHelper::banTopic($user, $topic)) return self::$result['message'] = 'Пользователь заблокирован в теме';
-
         $user_role = ModerHelper::user_role($user);
         if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+
+        if (ModerHelper::banTopic($user, $topic)) return self::$result['message'] = 'Пользователь заблокирован в теме';
+
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
-        if($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
+        if ($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
 
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkPost($input, $topic);
@@ -160,7 +161,6 @@ class TopicExecutor extends BaseExecutor
         $forum = Forum::find(intval($input['check']['0']));
         if (is_null($forum)) return self::$result['message'] = 'Путь для перемещения не найден';
 
-        //dd($forum);
         if ($topic->forum->section_id == 7 && $forum->section_id != 7 && $user->role_id < 11) {
             return self::$result['message'] = 'Информацию из служебного форума нельзя перемещать в Общий';
         } else {

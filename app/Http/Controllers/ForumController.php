@@ -41,8 +41,6 @@ class ForumController extends Controller
             return redirect('t/'.$result['topicId'].'-'.$result['title_slug']);
         }
 
-        //dd($result);
-
         return redirect()->back()->withErrors(['message' => $result['message']]);
     }
 }

@@ -86,7 +86,6 @@ class UserViewer
         ];
 
         $online = $user_inf->online->datetime;
-        //dd($user_inf->online->datetime);
         if ($online < strtotime('-15 minute')) {
             $model['user_inf'] = [
                 'id' => $user_inf->id,

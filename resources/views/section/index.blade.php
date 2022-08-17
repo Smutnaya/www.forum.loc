@@ -4,7 +4,6 @@ use App\AppForum\Helpers\ForumHelper;
 @extends('layouts.forum')
 @section('content')
     <div class="container px-0">
-        {{-- @dd($model) --}}
         @if ($model['forums']->count() == 0)
             <div class="my-3 mb-5 centre error" style="color:red">Раздел с форумами не найден</div>
         @else

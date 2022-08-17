@@ -18,7 +18,6 @@ use App\AppForum\Helpers\ForumHelper;
             <h4 class="title-shadow">{{ $section['title'] }}</h4> <i class="bi bi-eye-slash"></i>
 
             <div class="border border-ligh shadow-sm">
-
                 @foreach ($section['forums'] as $forum_s)
                     @foreach ($model['forums'] as $forum)
                         @if ($forum['id'] == $forum_s['id'])

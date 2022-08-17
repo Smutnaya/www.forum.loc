@@ -36,6 +36,7 @@
                     @include('topic.inc.topicMove', ['model' => $model])
                 @endif
                 @include('topic.inc.pagination', ['model' => $model['pagination']])
+
                 @include('topic.inc.post', ['model' => $model])
             @endif
             <div class="d-flex justify-content-between">
@@ -44,12 +45,10 @@
                         @include('topic.inc.pagination', ['model' => $model['pagination']])
                     @endif
                 </div>
+                {{-- @dd($model['newPost']) --}}
+
                 @if (!is_null($model['user']))
-                    @if (!$model['topic']['block'] && !$model['userBan'])
-                        <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
-                            <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
-                        </div>
-                    @elseif ($model['newPost'])
+                    @if ((!$model['topic']['block'] && !$model['userBan']) || $model['newPost'])
                         <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                             <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
                         </div>
@@ -59,16 +58,14 @@
                     <form method='post' action='{{ url('t/' . $model['topic']['id'] . '/post') }}'>
                         @csrf
                         @include('inc.ckeditor')
-
                         <div class="col d-grid gap-2 d-flex justify-content-end my-2">
                             <a id="reset" class="btn btn-sm btn-dark btn-custom shadow-sm">Очистить</a>
                             <input class="btn btn-sm btn-dark btn-custom shadow-sm" type="submit" value="Добавить">
                         </div>
                     </form>
-
                 </div>
             </div>
-            @elseif ($model['userBan'])
+        @elseif ($model['userBan'])
             <span class="centre p-2" style="color: #6a0000">Пользователь заблокирован в теме!</span>
         @else
             <span class="centre p-2 text-secondary">Тема закрыта для новых публикаций</span>
@@ -109,7 +106,6 @@
                 $('#topic-move-field').hide();
             });
         });
-
         $('#reset').click(function(e) {
             CKEDITOR.instances.text.setData("");
         });
@@ -126,7 +122,6 @@
                 // CKEDITOR.instances.text.setData('<blockquote style="background: #f1e9c28f; color: #4a4741; margin: 0 0 1rem 1rem; padding: 5px 13px !important; font-size: 14px; font-style: italic; font-family: "Open Sans", "Arial", Helvetica, serif !important; border-style: solid; border-color: #afa4843d; border-width: 0.005rem; border-radius: 0px 15px !important;">'+$(this).data('text')+'<div style="text-align: right; font-size: 9pt;">'+$(this).data('inf')+'</div></blockquote>');
             });
         });
-
         $(document).ready(function() {
             $('[data-bs-toggle="popover"]').popover();
         });

@@ -40,7 +40,7 @@ class AsideHelper
                     }
                     if ($other_role->topic_id != null) {
                         $topic = Topic::find($other_role->topic_id);
-                        if(!is_null($topic) && $topic->forum->section_id == $section->id && $section->id == 7) $sectionsAside->push($section);
+                        if(!is_null($topic) && $topic->forum->section_id == $section->id && $section->id == 7) return $sectionsAside->push($section);
                     }
                 }
             }

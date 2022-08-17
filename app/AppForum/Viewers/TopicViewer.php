@@ -100,7 +100,6 @@ class TopicViewer
             }
             closedir($handle);
         }
-        dd($filelist);
 */
     }
 
@@ -281,7 +280,7 @@ class TopicViewer
             'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
             'user_DATA' => json_decode($post->user->DATA, false),
             'like' => Like::select('action')->where([['post_id', $post->id], ['user_id', $user->id]])->first(),
-            'postEdit' => ModerHelper::moderPostEdit($user_role, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id),
+            'postEdit' => ModerHelper::moderPostEdit($user_role, $user, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id),
             'postModer' => ModerHelper::moderPost($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id)
         ]);
     }

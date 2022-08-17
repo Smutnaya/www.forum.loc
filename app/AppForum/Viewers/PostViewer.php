@@ -47,7 +47,8 @@ class PostViewer
         $pages = $topicPage['pages'];
         $model['page'] = ForumHelper::parsePage($page, $pages);
 
-        $model['postEdit'] = ModerHelper::moderPostEdit($user->role_id, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id);
+        if(is_null($user)) return $model;
+        $model['postEdit'] = ModerHelper::moderPostEdit($user->role_id, $user, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id);
         $model['postModer'] = ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id);
 
         return $model;

@@ -30,8 +30,7 @@ class MainViewer
         $model['sectionsAside'] = $sectionsAside;
 
         $onlines = Online::where('datetime','>=', strtotime('-15 minute'))->orderBy('datetime','desc')->get();
-        //$onlines = Online::all();
-        //dd($onlines);
+
         if(is_null($onlines)) return $model;
         self::setOnline($model, $onlines);
 

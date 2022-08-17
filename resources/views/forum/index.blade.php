@@ -3,9 +3,11 @@ use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
 @section('content')
+
     <div class="container px-0">
         @if (!is_null($model['breadcrump']) && $model['visForum'])
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
+
 
             @if ($errors->has('message'))
                 <div class="error" style="color:red">{{ $errors->first('message') }}</div>

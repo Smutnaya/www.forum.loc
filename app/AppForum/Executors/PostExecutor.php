@@ -57,7 +57,8 @@ class PostExecutor extends BaseExecutor
         $data->first_edit = $post->text;
         $out['data'] = json_encode($data);
 
-        if (!(ModerHelper::moderPostEdit($user->role_id, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+
+        if (!(ModerHelper::moderPostEdit($user->role_id, $user, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
 
         self::$result['success'] = true;
     }

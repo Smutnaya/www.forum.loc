@@ -8,7 +8,6 @@ class TopicManager
 {
     public static function post($forum, $title, $check, $user)
     {
-        //dd($check);
         $topic = Topic::create([
             'title' => $title,
             'datetime' => time(),

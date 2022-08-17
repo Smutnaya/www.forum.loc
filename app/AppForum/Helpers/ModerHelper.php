@@ -143,10 +143,6 @@ class ModerHelper
     {
         $vis = true;
 
-        if (!is_null($user)) {
-            $other_roles = Other_role::where('user_id', $user->id)->get();
-        }
-
         if ($section_id == 6) {
             $vis = true;
         } elseif ($user_role == 4 && $forum_id == 16) {
@@ -168,18 +164,20 @@ class ModerHelper
             if ($user_role >= 9 &&  $user_role < 12 && $section_id == 5) $vis = false;
         }
 
-        if (!is_null($other_roles)) {
-            foreach ($other_roles as $other_role) {
-                if ($other_role->section_id != null && $other_role->section_id == $section_id) $vis = true;
-                if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) $vis = true;
-                if ($other_role->topic_id != null) {
-                    $topic = Topic::find($other_role->topic_id);
-                    if ($topic->forum_id == $forum_id) $vis = true;
+        if (!is_null($user)) {
+            $other_roles = Other_role::where('user_id', $user->id)->get();
+
+            if (!is_null($other_roles)) {
+                foreach ($other_roles as $other_role) {
+                    if ($other_role->section_id != null && $other_role->section_id == $section_id) $vis = true;
+                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) $vis = true;
+                    if ($other_role->topic_id != null) {
+                        $topic = Topic::find($other_role->topic_id);
+                        if ($topic->forum_id == $forum_id) $vis = true;
+                    }
                 }
             }
         }
-
-
 
         return $vis;
     }
@@ -241,20 +239,6 @@ class ModerHelper
     {
         self::$result = false;
 
-        if (!is_null($user)) {
-            $other_roles = Other_role::where('user_id', $user->id)->get();
-        }
-        if (!is_null($other_roles)) {
-            foreach ($other_roles as $other_role) {
-                if ($other_role->section_id != null && $other_role->section_id == $section_id) return self::$result = true;
-                if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) return self::$result = true;
-                if ($other_role->topic_id != null) {
-                    $topic = Topic::find($other_role->topic_id);
-                    if ($topic->id == $topic_id) return self::$result = true;
-                }
-            }
-        }
-
         if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10 || $user_role_id == 11 && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
         if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
@@ -268,20 +252,6 @@ class ModerHelper
     {
         self::$result = false;
 
-        if (!is_null($user)) {
-            $other_roles = Other_role::where('user_id', $user->id)->get();
-        }
-        if (!is_null($other_roles)) {
-            foreach ($other_roles as $other_role) {
-                if ($other_role->section_id != null && $other_role->section_id == $section_id) return self::$result = true;
-                if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) return self::$result = true;
-                if ($other_role->topic_id != null) {
-                    $topic = Topic::find($other_role->topic_id);
-                    if ($topic->id == $topic_id) return self::$result = true;
-                }
-            }
-        }
-
         if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
         if ($user_role_id > 11) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10 || $user_role_id == 11 && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
@@ -294,26 +264,27 @@ class ModerHelper
 
     //post
 
-    public static function moderPostEdit($user_role_id, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id, $topic_id)
+    public static function moderPostEdit($user_role_id, $user, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id, $topic_id)
     {
         self::$result = false;
         if ($user_role_id == 1 && $post_user_id == $user_id && time() <= $post_datetime + 1800 && is_null($post_DATA->date_moder)) return self::$result = true;
+        if ($user_role_id > 1 && $user_role_id < 9 && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
+        if ($user_role_id > 8) return self::$result = true;
 
-        $user = User::find($user_id);
-        $other_roles = Other_role::where('user_id', $user->id)->get();
-        if (!is_null($other_roles)) {
-            foreach ($other_roles as $other_role) {
-                if ($other_role->section_id != null && $other_role->section_id == $section_id) return self::$result = true;
-                if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) return self::$result = true;
-                if ($other_role->topic_id != null) {
-                    $topic = Topic::find($other_role->topic_id);
-                    if ($topic->id == $topic_id) return self::$result = true;
+        if (!is_null($user)) {
+            $other_roles = Other_role::where('user_id', $user->id)->get();
+
+            if (!is_null($other_roles)) {
+                foreach ($other_roles as $other_role) {
+                    if ($other_role->section_id != null && $other_role->section_id == $section_id) return self::$result = true;
+                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) return self::$result = true;
+                    if ($other_role->topic_id != null) {
+                        $topic = Topic::find($other_role->topic_id);
+                        if ($topic->id == $topic_id) return self::$result = true;
+                    }
                 }
             }
         }
-
-        if ($user_role_id > 1 && $user_role_id < 9 && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
-        if ($user_role_id > 8) return self::$result = true;
 
         return self::$result;
     }
@@ -324,14 +295,15 @@ class ModerHelper
 
         if (!is_null($user)) {
             $other_roles = Other_role::where('user_id', $user->id)->get();
-        }
-        if (!is_null($other_roles)) {
-            foreach ($other_roles as $other_role) {
-                if ($other_role->section_id != null && $other_role->section_id == $section_id) return self::$result = true;
-                if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) return self::$result = true;
-                if ($other_role->topic_id != null) {
-                    $topic = Topic::find($other_role->topic_id);
-                    if ($topic->id == $topic_id) return self::$result = true;
+
+            if (!is_null($other_roles)) {
+                foreach ($other_roles as $other_role) {
+                    if ($other_role->section_id != null && $other_role->section_id == $section_id) return self::$result = true;
+                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) return self::$result = true;
+                    if ($other_role->topic_id != null) {
+                        $topic = Topic::find($other_role->topic_id);
+                        if ($topic->id == $topic_id) return self::$result = true;
+                    }
                 }
             }
         }
