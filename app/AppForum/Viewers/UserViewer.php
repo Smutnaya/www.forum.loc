@@ -8,6 +8,7 @@ use App\Role;
 use App\User;
 use App\Forum;
 use App\Section;
+use App\Other_role;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
@@ -27,6 +28,11 @@ class UserViewer
             'sections_block' => collect(),
             'bans_activ' => collect(),
             'bans_old' => collect(),
+            'user_other_role' => collect(),
+            'other_role' => false,
+            'other_role_bf' => false,
+            'other_role_inf' => false,
+            'other_role_bf_inf' => false,
         ]);
     }
 
@@ -65,9 +71,28 @@ class UserViewer
 
         $model['roles'] = ModerHelper::roles($model['user'], $model['user_inf']);
 
+
         $rolesInstall = Role::all();
         if (is_null($rolesInstall)) return $rolesInstall;
         self::setRolesInstall($model, $model['user'], $rolesInstall);
+
+        if (!is_null($user)) {
+            $other_roles = Other_role::where('user_id', $user_id)->get();
+            if ($other_roles->count() > 0) $model['other_role'] = true;
+            $other_roles_bf = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
+            if ($other_roles_bf->count() > 0) $model['other_role_bf'] = true;
+        }
+        if (!is_null($user_inf)) {
+            $other_roles_inf = Other_role::where('user_id', $user_inf->id)->get();
+            if ($other_roles_inf->count() > 0) {
+                $model['other_role_inf'] = true;
+                //$model['user_other_role'] = $other_role_inf;
+                self::setUserOtherRole($model, $other_roles_inf);
+                //dd($other_role_inf);
+            }
+            $other_role_bf_inf = Other_role::where([['user_id', $user_inf->id], ['moderation', true]])->get();
+            if ($other_role_bf_inf->count() > 0) $model['other_role_bf_inf'] = true;
+        }
 
         return $model;
     }
@@ -190,6 +215,48 @@ class UserViewer
                 if ($user->role_id == 9 && $role->id != 4  && $role->id < 9) $model['rolesInstall']->push($role);
                 if ($user->role_id == 10 && $role->id != 4  && $role->id < 10) $model['rolesInstall']->push($role);
                 if ($user->role_id == 11 && $role->id < 11) $model['rolesInstall']->push($role);
+            }
+        }
+    }
+
+    private static function setUserOtherRole($model, $other_roles_inf)
+    {
+        foreach ($other_roles_inf as $other_role) {
+            if(!is_null($other_role->topic_id))
+            {
+                $model['user_other_role']->push([
+                    'id' => $other_role->id,
+                    'user_id' => $other_role->user_id,
+                    'moderation' => $other_role->moderation,
+                    'title' => $other_role->topic->title,
+                    'topic_id' => $other_role->topic_id,
+                    'forum_id' => $other_role->forum_id,
+                    'section_id' => $other_role->section_id,
+                ]);
+            }
+            if(!is_null($other_role->forum_id))
+            {
+                $model['user_other_role']->push([
+                    'id' => $other_role->id,
+                    'user_id' => $other_role->user_id,
+                    'moderation' => $other_role->moderation,
+                    'title' => $other_role->forum->title,
+                    'topic_id' => $other_role->topic_id,
+                    'forum_id' => $other_role->forum_id,
+                    'section_id' => $other_role->section_id,
+                ]);
+            }
+            if(!is_null($other_role->section_id))
+            {
+                $model['user_other_role']->push([
+                    'id' => $other_role->id,
+                    'user_id' => $other_role->user_id,
+                    'moderation' => $other_role->moderation,
+                    'title' => $other_role->section->title,
+                    'topic_id' => $other_role->topic_id,
+                    'forum_id' => $other_role->forum_id,
+                    'section_id' => $other_role->section_id,
+                ]);
             }
         }
     }

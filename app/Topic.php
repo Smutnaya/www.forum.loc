@@ -14,6 +14,11 @@ class Topic extends Model
         return $this->hasMany(Post::class);
     }
 
+    public function other_roles()
+    {
+        return $this->hasMany(Other_role::class);
+    }
+
     public function forum()
     {
         return $this->belongsTo(Forum::class);

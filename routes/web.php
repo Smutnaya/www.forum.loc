@@ -39,6 +39,12 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/u/{id}/forum_out', 'BanController@forum_out');
     Route::any('/u/b/{id}/cancel', 'BanController@cancel');
     Route::any('/u/{id}/role', 'UserController@role');
+    Route::any('/u/r/{id}/moder_true', 'OtherRoleController@moder_true');
+    Route::any('/u/r/{id}/moder_false', 'OtherRoleController@moder_false');
+    Route::any('/u/r/{id}/del', 'OtherRoleController@del');
+    Route::any('/u/{id}/role_topic', 'OtherRoleController@role_topic');
+    Route::any('/u/{id}/role_forum', 'OtherRoleController@role_forum');
+    Route::any('/u/{id}/role_section', 'OtherRoleController@role_section');
 
     Route::get('/t/{id}/{page?}', 'TopicController@index');
     Route::any('/t/{id}/post', 'TopicController@post');

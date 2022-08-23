@@ -38,9 +38,9 @@ use App\AppForum\Helpers\ForumHelper;
                         @if (!is_null($model['user']))
                             @if ($model['user']['role_id'] > 1)
                                 <div class="text-center">
-                                    <span class="forum-desc">{{ $model['user_inf']['ip'] }}</span>
+                                    <span class="forum-desc" title="вход">{{ $model['user_inf']['ip'] }}</span>
                                     @if (!is_null($model['user_inf']['ip_online']))
-                                        &middot; <span class="forum-desc">{{ $model['user_inf']['ip_online'] }}</span>
+                                        &middot; <span class="forum-desc" title="последняя активность">{{ $model['user_inf']['ip_online'] }}</span>
                                     @endif
                                 </div>
                             @endif
@@ -57,7 +57,14 @@ use App\AppForum\Helpers\ForumHelper;
                                 </div>
                                 @if (!is_null($model['user']))
                                     @if ($model['user']['role_id'] > 1 && $model['user_inf']['role_id'] > 1)
-                                        <div class="col-12 fw-bold text-black text-break text-center" style="font-size: 8pt;">{{ $model['user_inf']['roleModer'] }}</div>
+                                        <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;">{{ $model['user_inf']['roleModer'] }}</div>
+                                    @elseif ($model['user']['role_id'] > 1)
+                                        @if ($model['other_role_inf'] && !$model['other_role_bf_inf'])
+                                            <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;" onclick="toggleRoles()" type="button">индивидуальный доступ</div>
+                                        @endif
+                                        @if ($model['other_role_bf_inf'])
+                                            <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;" onclick="toggleRoles()" type="button">индивидуальный доступ (модерация)</div>
+                                        @endif
                                     @endif
                                 @endif
                             </div>
@@ -66,18 +73,18 @@ use App\AppForum\Helpers\ForumHelper;
                     <div class="col-lg-9 col-12 d-lg-block d-none" style="color:#4e5256 !important;">
                         <div class="col-12 text-end">
                             @if (!is_null($model['user']))
-                                @if ($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id'])
-                                    <i onclick="toggleBan()" type="button" id="btn-user_ban" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан"></i>
+                                @if ($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id'] || $model['other_role_bf'] && $model['user']['role_id'] != $model['user_inf']['role_id'])
+                                    <i onclick="toggleBan()" type="button" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан"></i>
                                 @endif
-                                @if ($model['user']['role_id'] > 1)
+                                @if ($model['user']['role_id'] > 1 || $model['other_role_bf'])
                                     <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                 @endif
                                 @if ($model['user']['role_id'] != $model['user_inf']['role_id'])
-                                    @if ($model['user']['role_id'] == 4 || $model['user']['role_id'] > 8)
+                                    {{-- @if ($model['user']['role_id'] == 4 || $model['user']['role_id'] > 8)
                                         <i class="fa-regular fa-circle-user me-2 ms-1 text-end" title="доступы"></i>
-                                    @endif
-                                    @if ($model['user']['role_id'] > 10)
-                                        <i class="fa-brands fa-earlybirds me-2 ms-1 text-end" style="color: #6a0000;" title="доп.доступы"></i>
+                                    @endif --}}
+                                    @if ($model['user']['role_id'] > 10 && $model['user_inf']['role_id'] <= $model['user']['role_id'])
+                                        <i onclick="toggleRoles()" type="button" class="fa-brands fa-earlybirds me-2 ms-1 text-end" style="color: #6a0000;" title="доп.доступы"></i>
                                     @endif
                                 @endif
                             @endif
@@ -104,11 +111,11 @@ use App\AppForum\Helpers\ForumHelper;
                                         <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                     @endif
                                     @if ($model['user']['role_id'] != $model['user_inf']['role_id'])
-                                        @if ($model['user']['role_id'] == 4 || $model['user']['role_id'] > 8)
+                                        {{-- @if ($model['user']['role_id'] == 4 || $model['user']['role_id'] > 8)
                                             <i class="fa-regular fa-circle-user me-2 ms-1 text-end" title="доступы"></i>
-                                        @endif
+                                        @endif --}}
                                         @if ($model['user']['role_id'] > 10)
-                                            <i class="fa-brands fa-earlybirds me-2 ms-1 text-end" style="color: #6a0000;" title="доп.доступы"></i>
+                                            <i onclick="toggleRoles()" type="button" class="fa-brands fa-earlybirds me-2 ms-1 text-end" style="color: #6a0000;" title="доп.доступы"></i>
                                         @endif
                                     @endif
                                 @endif
@@ -138,6 +145,7 @@ use App\AppForum\Helpers\ForumHelper;
             </div>
         </div>
     </div>
+    @include('user.inc.roles', ['model' => $model])
     @include('user.inc.ban', ['model' => $model])
     @include('user.inc.ban_inf', ['model' => $model])
     @include('user.inc.posts', ['model' => $model])
@@ -153,6 +161,7 @@ use App\AppForum\Helpers\ForumHelper;
             if (el.style.display == "none") {
                 el.style.display = "";
                 el1.style.display = "none";
+                roles.style.display = "none";
             } else {
                 el.style.display = "none";
             }
@@ -162,18 +171,29 @@ use App\AppForum\Helpers\ForumHelper;
             if (el1.style.display == "none") {
                 el1.style.display = "";
                 el.style.display = "none";
+                roles.style.display = "none";
             } else {
                 el1.style.display = "none";
             }
         }
 
         var ban_cancel = document.getElementById('ban_cancel');
-
         function toggleBanCancel() {
             if (ban_cancel.style.display == "none") {
                 ban_cancel.style.display = "";
             } else {
                 ban_cancel.style.display = "none";
+            }
+        }
+
+        var roles = document.getElementById('roles');
+        function toggleRoles() {
+            if (roles.style.display == "none") {
+                roles.style.display = "";
+                el1.style.display = "none";
+                el.style.display = "none";
+            } else {
+                roles.style.display = "none";
             }
         }
 

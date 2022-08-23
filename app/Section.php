@@ -18,4 +18,9 @@ class Section extends Model
     {
         return $this->hasMany(Ban::class);
     }
+
+    public function other_roles()
+    {
+        return $this->hasMany(Other_role::class);
+    }
 }

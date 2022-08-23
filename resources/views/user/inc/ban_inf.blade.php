@@ -3,12 +3,12 @@ use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
 @endphp
 @if (!is_null($model['user']))
-    <div class="col-12 mt-3 mb-3 pb-3 text-break scroll border-bottom border-secondary" style="display:none; border-color: #e2d5ac !important;" id="user_ban_inf">
-        @if (!is_null($model['user']) && $model['user']['role_id'] > 2)
+    <div class="col-12 mt-3 mb-3 pb-3 text-break scroll border-2 border-bottom border-secondary" style="display:none; border-color: #e2d5ac !important;" id="user_ban_inf">
+        @if (!is_null($model['user']) && $model['user']['role_id'] > 2  || $model['other_role_bf'])
             <h5>История блокировок пользователя</h5>
             @if (!is_null($model['bans_activ']) || $model['bans_activ']->count() > 0 || !is_null($model['bans_old']) || $model['bans_old']->count() > 0)
                 <div class="overflow-auto " style="background-color: #f1e9c2;  max-height: 400px;">
-                    @if (!is_null($model['bans_activ']) || $model['bans_activ']->count() > 0)
+                    @if ($model['bans_activ']->count() > 0)
                         <h6 class="fw-bolder">Действующие</h6>
                         @foreach ($model['bans_activ'] as $ban)
                             <div class="d-flex flex-row bd-highlight">
@@ -162,10 +162,10 @@ use App\AppForum\Helpers\ModerHelper;
                                 </div>
                             </div>
                         @endforeach
+                        <hr class="my-2 mx-1" style="background: #b59a6b9e;">
                     @endif
 
-                    @if (!is_null($model['bans_old']) || $model['bans_old']->count() > 0)
-                        <hr class="my-2 mx-1" style="background: #b59a6b9e;">
+                    @if ($model['bans_old']->count() > 0)
                         <h6 class="fw-bolder mt-2 mb-1">Архив</h6>
                         <div class=" overflow-auto " style="max-height: 300px;">
                             @foreach ($model['bans_old'] as $ban)

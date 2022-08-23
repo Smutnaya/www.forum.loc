@@ -13,4 +13,16 @@ class Other_role extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class);
+    }
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
+    }
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
 }

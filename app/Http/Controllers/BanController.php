@@ -68,7 +68,7 @@ class BanController extends Controller
 
         if($result['success'])
         {
-            return redirect('user/')->with(['messageCancel' => $result['message']]);
+            return redirect('user/'.$result['user_id'])->with(['messageCancel' => $result['message']]);
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);

@@ -28,22 +28,37 @@ class AsideHelper
 
     private static function setSectionAside($sectionsAside, $sections, $user_role, $other_roles, $user)
     {
+        $id_section = collect();
         foreach ($sections as $section) {
-            if ($section->private == true && $user_role > 4) $sectionsAside->push($section);
-            if ($section->private == false) $sectionsAside->push($section);
+            if ($section->private == true && $user_role > 4) {
+                ModerHelper::collectionContains($id_section, $section, $sectionsAside);
+            }
+            if ($section->private == false) {
+                if (!$id_section->contains($section->id)) {
+                    $sectionsAside->push($section);
+                    $id_section->push($section->id);
+                }
+            }
             if (!is_null($other_roles)) {
                 foreach ($other_roles as $other_role) {
-                    if ($other_role->section_id != null && $other_role->section_id == $section->id) $sectionsAside->push($section);
+                    if ($other_role->section_id != null && $other_role->section_id == $section->id) {
+                        ModerHelper::collectionContains($id_section, $section, $sectionsAside);
+                    }
                     if ($other_role->forum_id != null) {
                         $forum = Forum::find($other_role->forum_id);
-                        if(!is_null($forum) && $forum->section_id == $section->id && $section->id == 7) $sectionsAside->push($section);
+                        if (!is_null($forum) && $forum->section_id == $section->id && $section->id == 7) {
+                            ModerHelper::collectionContains($id_section, $section, $sectionsAside);
+                        }
                     }
                     if ($other_role->topic_id != null) {
                         $topic = Topic::find($other_role->topic_id);
-                        if(!is_null($topic) && $topic->forum->section_id == $section->id && $section->id == 7) return $sectionsAside->push($section);
+                        if (!is_null($topic) && $topic->forum->section_id == $section->id && $section->id == 7) {
+                            ModerHelper::collectionContains($id_section, $section, $sectionsAside);
+                        }
                     }
                 }
             }
         }
+        return $sectionsAside;
     }
 }

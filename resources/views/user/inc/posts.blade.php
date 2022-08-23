@@ -1,4 +1,4 @@
-<div class="mt-1 mb-2 title-shadow fw-bold">Последние ответы:</div>
+<div class="my-2 mt-3 title-shadow fw-bold">Последние ответы:</div>
 
 @foreach ($model['user_posts'] as $post)
     <div class="my-1">

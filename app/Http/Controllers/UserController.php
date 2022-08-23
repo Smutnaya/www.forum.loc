@@ -24,7 +24,7 @@ class UserController extends Controller
 
         if($result['success'])
         {
-            return redirect('user/2')->with(['messageCancel' => $result['message']]);
+            return redirect('user/'.$result['user_id'])->with(['messageCancel' => $result['message']]);
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);

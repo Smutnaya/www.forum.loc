@@ -21647,9 +21647,43 @@ i.forum-desc {
   outline: 0;
 }
 
+.form-check-input:checked {
+  background-color: #b59a6b !important;
+  border-color: #e2d5ac;
+}
+
+.form-check-input:focus {
+  border-color: #e2d5ac;
+  outline: 0;
+  box-shadow: 0 0 0 0 rgba(226, 213, 172, 0.5607843137);
+}
+
+.form-check-input[type=checkbox] {
+  border-radius: 0.25em;
+  background-color: #f9f6d3;
+}
+
+.roles-button {
+  background-image: var(--bs-gradient);
+  background-color: #cebb90;
+  border-color: #c4b48d !important;
+}
+
+.roles-button:hover {
+  background-image: var(--bs-gradient);
+  background-color: #b59a6b;
+  border-color: #c4b48d !important;
+}
+
+.btn-close:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(226, 213, 172, 0.65);
+  opacity: 1;
+}
+
 .btn-custom-modal {
   background-color: #bca476;
-  color: #FFF;
+  color: #fff;
   border: 0 !important;
   border-radius: 0;
   height: 28px !important;
@@ -21659,13 +21693,13 @@ i.forum-desc {
 .btn-custom-modal:hover {
   background-color: #ad9468;
   height: 28px !important;
-  color: #FFF;
+  color: #fff;
   text-decoration: none;
 }
 
 .btn-custom {
   background-color: #b59a6b;
-  color: #FFF;
+  color: #fff;
   border: 0 !important;
   border-radius: 0;
   height: 28px !important;
@@ -21675,7 +21709,7 @@ i.forum-desc {
 .btn-custom:hover {
   background-color: #9a7e4d;
   height: 28px !important;
-  color: #FFF;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -21804,7 +21838,9 @@ A {
   text-decoration: none;
 }
 
-A:hover, .dropdown-item.active, .dropdown-item:active {
+A:hover,
+.dropdown-item.active,
+.dropdown-item:active {
   text-decoration: underline;
   color: black;
 }
@@ -21911,7 +21947,8 @@ A:hover, .dropdown-item.active, .dropdown-item:active {
   text-align: center;
 }
 
-.popover .popover-arrow::before, .popover .popover-arrow::after {
+.popover .popover-arrow::before,
+.popover .popover-arrow::after {
   border: none !important;
 }
 
@@ -21973,7 +22010,7 @@ span[title]:hover::after {
 
 .pagination a:hover {
   background-color: rgba(154, 126, 77, 0.8);
-  color: #EEE !important;
+  color: #eee !important;
 }
 
 .pagination a:focus {
@@ -21995,5 +22032,5 @@ span[title]:hover::after {
 }
 
 .pagination .page-item.active a {
-  color: #EEE !important;
+  color: #eee !important;
 }
