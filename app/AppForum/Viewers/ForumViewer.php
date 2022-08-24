@@ -106,7 +106,7 @@ class ForumViewer
 
             if (!is_null($other_roles)) {
                 foreach ($other_roles as $other_role) {
-                    if ($other_role->section_id != null && $other_role->section_id == $section_id) {
+                    if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation) {
                         $section = Section::find($other_role->section_id);
                         if ($section->id == $forum->section_id) {
                             if (!is_null($skip)) {
@@ -116,14 +116,14 @@ class ForumViewer
                             }
                         }
                     }
-                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id) {
+                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id && $other_role->moderation) {
                         if (!is_null($skip)) {
                             return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                         } elseif (is_null($skip)) {
                             return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->get();
                         }
                     }
-                    if ($other_role->topic_id != null) {
+                    if ($other_role->topic_id != null && $other_role->moderation) {
                         $topic = Topic::find($other_role->topic_id);
                         if ($topic->forum_id == $forum_id) $topics->push(Topic::find($topic->id));
                     }

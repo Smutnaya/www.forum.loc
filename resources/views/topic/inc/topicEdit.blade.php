@@ -15,7 +15,7 @@
                         <div class="my-3">
                             <p class="forum_comment mb-0">Название темы:</p>
                             <input type="text" name="title" id="title" maxlength="100" title="*не более 100 символов" class="border border-1 input-text mb-2" onkeypress="if(event.keyCode == 13) return false;" value="{{ $model['topic']['title'] }}" style="height: 25px !important; ">
-                            @if ($model['user']['role_id'] > 1)
+                            @if ($model['user']['role_id'] > 1 || $model['moder'])
                                 <p class="forum_comment mb-0">Настройки:</p>
                                 <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 25px !important">
                                     <input type="checkbox" class="btn-check" name="check[]" id="btncheck1" autocomplete="off" value="pin" @if ($model['topic']['pin'] == 1) checked @endif>

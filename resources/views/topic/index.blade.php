@@ -3,7 +3,7 @@
     <div class="conteiner">
         @if (is_null($model['topic']))
             <div class="my-3 mb-5 centre error" style="color:red">Тема не найдена</div>
-        @elseif (!$model['visit_forum'])
+        @elseif ($model['visit_forum'] == false)
             <div class="my-3 mb-5 centre error" style="color:red">Отсутствуют права для просмотра темы</div>
         @else
             @if ($errors->has('message'))
@@ -18,10 +18,10 @@
                                 @endif
                             </span>{{ $model['topic']['title'] }} </span></h4>
                     @if ($model['topicEdit'])
-                        <i type="button" id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;" title="Редактировать тему"></i>
+                        <i onclick="toggleEdit()" type="button" id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;" title="Редактировать тему"></i>
                     @endif
                     @if ($model['topicMove'])
-                        <i type="button" id="topic-move" class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                        <i onclick="toggleMove()" type="button" id="topic-move" class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
                     @endif
                 </div>
             </div>
@@ -85,21 +85,21 @@
                 $('#btn-post-field').hide();
                 $('.cke_wysiwyg_frame').contents().find('.cke_editable').focus();
             });
-            $('#topic-edit').click(function(e) {
-                e.preventDefault();
-                // TODO: scroll down
-                $('#topic-edit-field').show();
-            });
+            // $('#topic-edit').click(function(e) {
+            //     e.preventDefault();
+            //     // TODO: scroll down
+            //     $('#topic-edit-field').show();
+            // });
             $('#topic-edit-hide').click(function(e) {
                 e.preventDefault();
                 // TODO: scroll down
                 $('#topic-edit-field').hide();
             });
-            $('#topic-move').click(function(e) {
-                e.preventDefault();
-                // TODO: scroll down
-                $('#topic-move-field').show();
-            });
+            // $('#topic-move').click(function(e) {
+            //     e.preventDefault();
+            //     // TODO: scroll down
+            //     $('#topic-move-field').show();
+            // });
             $('#topic-move-hide').click(function(e) {
                 e.preventDefault();
                 // TODO: scroll down
@@ -125,5 +125,26 @@
         $(document).ready(function() {
             $('[data-bs-toggle="popover"]').popover();
         });
+
+        var edit = document.getElementById('topic-edit-field');
+        var move = document.getElementById('topic-move-field');
+
+        function toggleEdit() {
+            if (edit.style.display == "none") {
+                edit.style.display = "";
+                move.style.display = "none";
+            } else {
+                edit.style.display = "none";
+            }
+        }
+
+        function toggleMove() {
+            if (move.style.display == "none") {
+                move.style.display = "";
+                edit.style.display = "none";
+            } else {
+                move.style.display = "none";
+            }
+        }
     </script>
 @endsection
