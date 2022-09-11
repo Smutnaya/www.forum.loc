@@ -20,6 +20,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('ip');
+            $table->string('avatar')->nullable();
+            $table->unsignedInteger('id_clan')->nullable();
+            $table->unsignedInteger('id_alians')->nullable();
+            $table->unsignedInteger('level')->nullable();
             $table->rememberToken();
             $table->json('DATA')->default('{"post_count":0,"like":0}');
             $table->unsignedBigInteger('role_id')->default('1');

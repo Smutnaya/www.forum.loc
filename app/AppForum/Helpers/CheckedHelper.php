@@ -62,6 +62,9 @@ class CheckedHelper
             'moder' => 0
         ];
 
+        //if($topic->forum->section->moderation || $topic->forum->moderation || $topic->moderation) $out['moder'] = 1;
+        //if($topic->forum->section->hide || $topic->forum->hide || $topic->moderation) $out['hide'] = 1;
+
         if(!isset($input['check'])) return $out;
 
         $out = self::setCheck($input, $out);

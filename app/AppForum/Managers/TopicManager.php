@@ -41,6 +41,13 @@ class TopicManager
         ])->save();
     }
 
+    public static function lastPostEdit($topic, $last_post)
+    {
+        $topic->fill([
+            'time_post' => $last_post
+        ])->save();
+    }
+
     public static function move($topic, $forum_id)
     {
         $topic->fill([

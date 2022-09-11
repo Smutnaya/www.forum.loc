@@ -34,6 +34,7 @@ class TopicViewer
             'visit_forum' => false,
             'newPost' => null,
             'moder' => false,
+            'first_post' => null,
 
             'pagination' => collect([
                 'page' => null,
@@ -57,7 +58,8 @@ class TopicViewer
         $topic = Topic::find(intval($topicId)); // eloquent
         if (is_null($topic)) return $model;
 
-
+        $first_post = Post::where('topic_id', $topic->id)->first();
+        $model['first_post'] = $first_post->id;
 
         self::setTopic($model, $topic, $user_role);
 
@@ -94,7 +96,7 @@ class TopicViewer
 
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
 
-            if (!is_null($other_roles)) {
+            if ($other_roles->count() > 0) {
                 foreach ($other_roles as $other_role) {
                     if ($other_role->section_id != null && $other_role->section_id == $topic->forum->section_id && $other_role->moderation == true) $model['moder'] = true;
                     if ($other_role->forum_id != null && $other_role->forum_id == $topic->forum_id && $other_role->moderation == true) $model['moder'] = true;
@@ -210,6 +212,7 @@ class TopicViewer
             'datetime_d' => $topic->datetime,
             'DATA' => json_decode($topic->DATA, false),
             'user_id' => $topic->user_id,
+            'avatar' => $topic->user->avatar,
             'forum_id' => $topic->forum_id,
             'section_id' => $topic->forum->section_id,
         ];
@@ -279,6 +282,7 @@ class TopicViewer
                     'id' => $post->id,
                     'user_id' => $post->user_id,
                     'user_post' => $post->user,
+                    'avatar' => $post->user->avatar,
                     'user_role' => Role::find($user_post->role_id)->description,
                     'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
                     'user_DATA' => json_decode($post->user->DATA, false),
@@ -319,6 +323,7 @@ class TopicViewer
             'id' => $post->id,
             'user_id' => $post->user_id,
             'user_post' => $post->user,
+            'avatar' => $post->user->avatar,
             'user_role' => Role::find($user_post->role_id)->description,
             'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
             'user_DATA' => json_decode($post->user->DATA, false),

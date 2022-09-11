@@ -31,7 +31,7 @@ class PostManager
 
         //$data = ['user_name' => $user->name, 'date' => time()];
 
-        $post->fill([
+        return $post->fill([
             'text' => $text,
             'hide' => $check['hide'],
             'moderation' => $check['moder'],
@@ -62,5 +62,10 @@ class PostManager
         $post->fill([
             'DATA' => $data
         ])->save();
+    }
+
+    public static function del($post)
+    {
+        $post->delete();
     }
 }

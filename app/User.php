@@ -83,4 +83,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Role::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(Images::class);
+    }
 }

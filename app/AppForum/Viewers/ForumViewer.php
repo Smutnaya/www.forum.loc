@@ -7,6 +7,7 @@ use App\Forum;
 use App\Topic;
 use App\Section;
 use App\Other_role;
+use App\AppForum\Viewers\MainViewer;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
@@ -25,9 +26,11 @@ class ForumViewer
             'posts' => collect(),
             'forumId' => null,
             'visForum' => null,
-            'newPost' => null,
+            'moder' => false,
             'sections' => collect(),
             'sectionsAside' => collect(),
+            'last_posts' => collect(),
+            'new_topics' => collect(),
 
             'pagination' => collect([
                 'page' => null,
@@ -47,7 +50,6 @@ class ForumViewer
 
 
         $user_role = ModerHelper::user_role($user);
-
         $forum = Forum::find(intval($forumId));
 
         if (is_null($forum)) return $model;
@@ -58,7 +60,7 @@ class ForumViewer
 
         $model['visForum'] = ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user);
 
-        if ($user_role < 1) {
+        if ($user_role == 0) {
             $post_num = Topic::where([['forum_id', intval($forumId)], ['moderation', false], ['hide', false]])->count();
         } elseif ($user_role == 1) {
             $post_num = Topic::where([['forum_id', intval($forumId)], ['moderation', false]])->count();
@@ -71,21 +73,27 @@ class ForumViewer
         $page = ForumHelper::parsePage($page, $pages);
         $skip = ($page - 1) * $take;
 
-        $topics = self::getTopic(intval($forumId), $skip, $take, $user_role, $forum->section_id, $user);
-        if ($topics->isEmpty()) return $model;
-        self::setTopic($model, $topics);
-
-        if (is_null($user)) {
-            return $model;
-        } else {
-            $model['user'] = $user;
-        }
         $model['userBan'] = ModerHelper::banForum($user, $forum);
-        $model['newPost'] = ModerHelper::moderForum($user_role, $forum->id, $forum->section_id, $user);
+        $model['moder'] = ModerHelper::moderForum($user_role, $forum->id, $forum->section_id, $user);
 
         $model['pagination']['forumId'] = $forum->id;
         $model['pagination']['page'] = $page;
         $model['pagination']['pages'] = $pages;
+
+        if (!is_null($user)) {
+            $model['user'] = $user;
+        }
+
+        // последние ответы
+        $last_posts = Topic::where('time_post', '!=', 'null')->orderBy('time_post', 'desc')->distinct()->limit(20)->get();
+        if ($last_posts->count() > 0) MainViewer::setLastPost($model, $last_posts);
+        // новые темы
+        $new_topics = Topic::orderBy('datetime', 'desc')->limit(20)->get();
+        if ($new_topics->count() > 0) MainViewer::setNewTopic($model, $new_topics);
+
+        $topics = self::getTopic(intval($forumId), $skip, $take, $user_role, $forum->section_id, $user);
+        if ($topics->isEmpty()) return $model;
+        self::setTopic($model, $topics);
 
         return $model;
     }
@@ -104,7 +112,7 @@ class ForumViewer
             $other_roles = Other_role::where('user_id', $user->id)->get();
             $forum = Forum::find($forum_id);
 
-            if (!is_null($other_roles)) {
+            if ($other_roles->count() > 0) {
                 foreach ($other_roles as $other_role) {
                     if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation) {
                         $section = Section::find($other_role->section_id);
@@ -156,14 +164,21 @@ class ForumViewer
                     }
                 }
                 if ($forum_id == 16) {
-                    if ($user_role > 10) {
+                    if ($user_role > 8) {
                         return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     }
                 }
                 if ($forum_id == 17) {
-                    if ($user_role > 10) {
+                    if ($user_role > 8) {
+                        return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
+                    } else {
+                        return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
+                    }
+                }
+                if ($forum_id == 72) {
+                    if ($user_role > 8) {
                         return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
@@ -176,7 +191,7 @@ class ForumViewer
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     }
                 }
-                if (!$forum_id == 1 && !$forum_id == 3 && !$forum_id == 16 && !$forum_id == 17 && !$forum_id == 15 && $user_role > 1) {
+                if (!$forum_id == 1 && !$forum_id == 3 && !$forum_id == 16 && !$forum_id == 17 && !$forum_id == 72 && !$forum_id == 15 && $user_role > 1) {
                     return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                 } else {
                     return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
@@ -189,20 +204,26 @@ class ForumViewer
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     }
-                    if ($forum_id == 39) {
-                        if ($user_role > 1) {
-                            return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
-                        } else {
-                            return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
-                        }
-                    }
-                    if (!$forum_id == 40 && $user_role > 1) {
+                }
+                if ($forum_id == 39) {
+                    if ($user_role > 1) {
                         return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
                     }
                 }
+                if (!$forum_id == 40 && $user_role > 1) {
+                    return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
+                } else {
+                    return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
+                }
+                if (!$forum_id == 40 && !$forum_id == 39 && $user_role > 1) {
+                    return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
+                } else {
+                    return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->skip($skip)->take($take)->get();
+                }
             }
+
 
             if ($section_id == 3) {
                 if ($forum_id == 41 || $forum_id == 42 || $forum_id == 43 || $forum_id == 44 || $forum_id == 45 || $forum_id == 46 || $forum_id == 47 || $forum_id == 51) {
@@ -297,14 +318,21 @@ class ForumViewer
                     }
                 }
                 if ($forum_id == 16) {
-                    if ($user_role > 10) {
+                    if ($user_role > 8) {
                         return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->get();
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();
                     }
                 }
                 if ($forum_id == 17) {
-                    if ($user_role > 10) {
+                    if ($user_role > 8) {
+                        return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->get();
+                    } else {
+                        return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();
+                    }
+                }
+                if ($forum_id == 72) {
+                    if ($user_role > 8) {
                         return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->get();
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();
@@ -317,7 +345,7 @@ class ForumViewer
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();
                     }
                 }
-                if (!$forum_id == 1 && !$forum_id == 3 && !$forum_id == 16 && !$forum_id == 17 && !$forum_id == 15 && $user_role > 1) {
+                if (!$forum_id == 1 && !$forum_id == 3 && !$forum_id == 16 && !$forum_id == 17 && !$forum_id == 72 && !$forum_id == 15 && $user_role > 1) {
                     return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->get();
                 } else {
                     return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();
@@ -337,7 +365,7 @@ class ForumViewer
                             return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();
                         }
                     }
-                    if (!$forum_id == 40 && $user_role > 1) {
+                    if (!$forum_id == 40 && !$forum_id == 39 && $user_role > 1) {
                         return $topics = Topic::where('forum_id', $forum_id)->orderByDesc('pin')->orderByDesc('id')->get();
                     } else {
                         return $topics = Topic::where([['forum_id', $forum_id], ['hide', false]])->orderByDesc('pin')->orderByDesc('id')->get();

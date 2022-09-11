@@ -45,6 +45,7 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/u/{id}/role_topic', 'OtherRoleController@role_topic');
     Route::any('/u/{id}/role_forum', 'OtherRoleController@role_forum');
     Route::any('/u/{id}/role_section', 'OtherRoleController@role_section');
+    Route::any('/u/{id}/image', 'UserController@image');
 
     Route::get('/t/{id}/{page?}', 'TopicController@index');
     Route::any('/t/{id}/post', 'TopicController@post');
@@ -57,6 +58,7 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/p/{id}/save_moder/{page?}', 'PostController@moder');
     Route::any('/p/{id}/premod/{page?}', 'PostController@premod');
     Route::any('/p/{id}/unhide/{page?}', 'PostController@unhide');
+    Route::any('/p/{id}/del/{page?}', 'PostController@del');
 
     Route::any('/p/{id}/like/{page?}', 'LikeController@like');
     Route::any('/p/{id}/likem/{page?}', 'LikeController@likem');

@@ -22,12 +22,32 @@ use App\AppForum\Helpers\ForumHelper;
                     <div class="col-lg-3 col-12 my-1 text-break ">
                         <div class="col">
                             @if (!is_null($model['user']))
-                                @if ($model['user_inf']['id'] == $model['user']['id'] || $model['user']['role_id'] > 7)
-                                    <i class="fa-regular fa-image pt-1 d-inline" style="color:#4e5256 !important;"></i>
+                                @if ($model['user_inf']['id'] == $model['user']['id'] || $model['user']['role_id'] > 8 || $model['user']['role_id'] == 4)
+                                    <div class="btn-group p-0 pe-1">
+                                        <button class="btn btn-lg m-0 p-0" style="border: 0em !important; box-shadow: 0 0 0 0rem !important;" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="">
+                                            <i class="fa-regular fa-image p-0 d-inline" style="color:#4e5256 !important;" title="Аватар"></i>
+                                        </button>
+                                        <ul class="dropdown-menu p-2 m-0" style="background: #f9f5dc">
+                                            @if ($model['user_inf']['id'] == $model['user']['id'] || $model['user']['role_id'] > 11)
+                                                <li>
+                                                    <a onclick="toggleImage()" href="#">
+                                                        <i class="fa-regular fa-image pt-1 d-inline" style="color:#4e5256 !important;"></i> Загрузить аватар
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            <li class="mt-1">
+                                                <a href="#">
+                                                    <i class="fa-regular fa-trash-can" style="width: 15px !important"></i> Удалить аватар
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 @endif
                             @endif
                             <a class="fw-bold text-break d-inline" href="{{ url('/user/' . $model['user_inf']['id']) }}">{{ $model['user_inf']['name'] }}</a>
+                            @include('user.inc.image', ['model' => $model])
                         </div>
+
                         <div>
                             @if ($model['user_inf']['online'] == 'online')
                                 <span class="fw-bolder pt-1" style="color: #006843 !important; font-size: 11pt;">online</span>
@@ -35,11 +55,13 @@ use App\AppForum\Helpers\ForumHelper;
                                 <span class="pt-1" style="color:#4e5256 !important; font-size: 11pt;">{{ $model['user_inf']['online'] }}</span>
                             @endif
                         </div>
+
+
                         @if (!is_null($model['user']))
                             @if ($model['user']['role_id'] > 1)
                                 <div class="text-center">
-                                    <span class="forum-desc" title="вход">{{ $model['user_inf']['ip'] }}</span>
-                                    @if (!is_null($model['user_inf']['ip_online']))
+                                    <span class="forum-desc" title="вход">{{ $model['user']['ip'] }}</span>
+                                    @if (!is_null($model['user']['ip_online']))
                                         &middot; <span class="forum-desc" title="последняя активность">{{ $model['user_inf']['ip_online'] }}</span>
                                     @endif
                                 </div>
@@ -48,7 +70,13 @@ use App\AppForum\Helpers\ForumHelper;
                         <div class="text-center d-flex justify-content-center pt-1">
                             <div class="col-lg-3 col-md-4" style="max-width: 185px; min-width: 140px">
                                 <div class="row">
-                                    <div class="col-12 d-flex justify-content-center"><img style="border-color: #ced4da;" class="max-avatar border bg-white rounded" alt="Cinque Terre" src="https://avatarko.ru/img/avatar/25/igra_Dota_2_Natures_Prophet_24356.jpg"></div>
+                                    <div class="col-12 d-flex justify-content-center"><img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="max-avatar rounded" alt="Cinque Terre"
+                                        @if (!is_null($model['user']) && !is_null($model['user']['avatar']))
+                                        src="/storage{{ $model['user']['avatar'] }}"
+                                        @else
+                                        src="/images/av.png"
+                                        @endif
+                                        ></div>
                                     @if ($model['roles'])
                                         <div type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" class="col-12 fw-bold text-black mt-2 text-break text-center" style="font-size: 11pt; {{ $model['user_inf']['style'] }}" title="Нажмите, чтобы изменить статус пользователя">{{ $model['user_inf']['role'] }}</div>
                                     @else
@@ -73,7 +101,7 @@ use App\AppForum\Helpers\ForumHelper;
                     <div class="col-lg-9 col-12 d-lg-block d-none" style="color:#4e5256 !important;">
                         <div class="col-12 text-end">
                             @if (!is_null($model['user']))
-                                @if ($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id'] || $model['other_role_bf'] && $model['user']['role_id'] != $model['user_inf']['role_id'])
+                                @if (($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id']) || ($model['other_role_bf'] && $model['user']['role_id'] != $model['user_inf']['role_id']))
                                     <i onclick="toggleBan()" type="button" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан"></i>
                                 @endif
                                 @if ($model['user']['role_id'] > 1 || $model['other_role_bf'])
@@ -89,10 +117,11 @@ use App\AppForum\Helpers\ForumHelper;
                                 @endif
                             @endif
                         </div>
+
                         <div class="col-12">
                             <div class="row" style="min-height: 215px">
                                 <div class="col-4 d-flex justify-content-center align-items-center" style="color:#4e5256">ответов: <span style="color:rgb(0, 0, 116)" class="fw-bolder">&nbsp;{{ $model['user_inf']['DATA']->post_count }}</span></div>
-                                <div class="col-4 d-flex justify-content-center align-items-center" style="color:#4e5256">рейтинг: <span style="color:#0e583d" class="fw-bolder">&nbsp;{{ $model['user_inf']['DATA']->like }}</span></div>
+                                <div class="col-4 d-flex justify-content-center align-items-center" style="color:#4e5256">рейтинг: <span style="color: @if ($model['user_inf']['DATA']->like < 0) #6a0000 @else #0e583d @endif " class="fw-bolder">&nbsp;{{ $model['user_inf']['DATA']->like }}</span></div>
                                 <div class="col-4 d-flex justify-content-center align-items-center"><span style="color:#4e5256">написать</span>&nbsp;&nbsp;<i class="fa-regular fa-envelope" style="color:black"></i></div>
                             </div>
                         </div>
@@ -100,7 +129,11 @@ use App\AppForum\Helpers\ForumHelper;
                     <div class="col-12 d-lg-none d-sm-block" style="color:#4e5256 !important;">
                         <div class="col-12 text-center">
                             <span class="text-muted"><i class="fa-regular fa-message me-1" style="color:rgb(0, 0, 116)" title="Ответы"></i> <span style="color:rgb(0, 0, 116)">{{ $model['user_inf']['DATA']->post_count }}</span></span>
-                            <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d" title="Рейтинг"></i> <span style="color:#0e583d">{{ $model['user_inf']['DATA']->like }}</span></span>
+                            @if ($model['user_inf']['DATA']->like < 0)
+                                <span class="text-muted"><i class="fa-regular fa-thumbs-down me-1 ms-2" style="color: #6a0000" title="Рейтинг"></i> <span style="color:#6a0000">{{ $model['user_inf']['DATA']->like }}</span></span>
+                            @else
+                                <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d" title="Рейтинг"></i> <span style="color:#0e583d">{{ $model['user_inf']['DATA']->like }}</span></span>
+                            @endif
                             <span class="text-muted"><i class="fa-regular fa-envelope ms-3 me-1" style="color:black"></i></span>
                             <div class="col-12">
                                 @if (!is_null($model['user']))
@@ -124,6 +157,7 @@ use App\AppForum\Helpers\ForumHelper;
                     </div>
                 </div>
         </div>
+
         <div class="modal fade scroll" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered p-2" style="max-width: 380px">
                 <div class="modal-content py-3 px-4" style="background: #f1e9c2;">
@@ -145,6 +179,7 @@ use App\AppForum\Helpers\ForumHelper;
             </div>
         </div>
     </div>
+
     @include('user.inc.roles', ['model' => $model])
     @include('user.inc.ban', ['model' => $model])
     @include('user.inc.ban_inf', ['model' => $model])
@@ -178,6 +213,7 @@ use App\AppForum\Helpers\ForumHelper;
         }
 
         var ban_cancel = document.getElementById('ban_cancel');
+
         function toggleBanCancel() {
             if (ban_cancel.style.display == "none") {
                 ban_cancel.style.display = "";
@@ -186,7 +222,12 @@ use App\AppForum\Helpers\ForumHelper;
             }
         }
 
+        function userBanHide() {
+            el.style.display = "none";
+        }
+
         var roles = document.getElementById('roles');
+
         function toggleRoles() {
             if (roles.style.display == "none") {
                 roles.style.display = "";
@@ -195,6 +236,16 @@ use App\AppForum\Helpers\ForumHelper;
             } else {
                 roles.style.display = "none";
             }
+        }
+
+        var image = document.getElementById('image');
+
+        function toggleImage() {
+            image.style.display = "";
+        }
+
+        function toggleImageHide() {
+            image.style.display = "none";
         }
 
         $(document).ready(function() {

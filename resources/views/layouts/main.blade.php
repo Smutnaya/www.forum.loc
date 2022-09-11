@@ -23,18 +23,16 @@
 
 <body class="p-2 fs-6">
     <main>
-        @include('inc.header')
+        @include('inc.header', ['model' => $model])
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-3">
+                <div class="col-lg-2 col-md-3">
                     @include('inc.aside', ['model' => $model])
                 </div>
-                <div class="col-lg-10 col-md-10 col-sm-9">
-                    @yield('content')
+                <div class="col-lg-10 col-md-9 col-sm-12">
+                    @yield("content")
                 </div>
-
             </div>
-
         </div>
 
     </main>

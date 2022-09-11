@@ -3,15 +3,15 @@ use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
 @section('content')
-    <div class="container px-0">
+    <div class="container-fluid px-0">
         @if ($model['forums']->count() == 0)
             <div class="my-3 mb-5 centre error" style="color:red">Раздел с форумами не найден</div>
         @else
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
 
             @include('section.inc.accordion')
-
             <hr class="hr-color d-md-none d-sm-block ">
+
             <div class="pb-1" id="title">
                 <h4 class="title-shadow">{{ $model['sectionTitle'] }}</h4>
             </div>
@@ -46,21 +46,26 @@ use App\AppForum\Helpers\ForumHelper;
                                 @if (!is_null($forum['DATA']->last_post->user_name) && !is_null($forum['DATA']->last_post->user_id) && !is_null($forum['DATA']->last_post->date) && !is_null($forum['DATA']->last_post->title) && !is_null($forum['DATA']->last_post->post_id))
                                     <div class="row">
                                         <div class="col-2 d-none d-xl-block p-1 align-self-center">
-                                            <img style="border-color: #ced4da;" class="min-avatar border bg-white rounded" alt="Cinque Terre" src="https://avatarko.ru/img/avatar/12/zhivotnye_ptica_sova_11535.jpg">
+                                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar) && @fopen('http://forum.loc/storage/'.$forum['DATA']->last_post->avatar, 'r')) src="/storage{{ $forum['DATA']->last_post->avatar }}"
+                                            @else
+                                            src="/images/av.png" @endif>
                                         </div>
                                         <div class="col-2 d-xl-none d-block align-self-center">
-                                            <img style="border-color: #ced4da;" class="min-avatar-post border bg-white rounded " alt="Cinque Terre" src="https://avatarko.ru/img/avatar/12/zhivotnye_ptica_sova_11535.jpg">
+                                            <img sstyle="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar-post rounded " alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar) && @fopen('http://forum.loc/storage/'.$forum['DATA']->last_post->avatar, 'r')) src="/storage{{ $forum['DATA']->last_post->avatar }}"
+                                            @else
+                                            src="/images/av.png" @endif>
                                         </div>
-                                        <div class="col-10 align-self-center">
-                                            <div class="row">
-                                                <div class="col">
+                                        <div class="col-10 align-self-center p-0  ps-2 pe-0">
+                                            <div class="row m-0">
+                                                <div class="col p-0">
                                                     <a class="post-a-color" style="font-size: 10pt !important;" href="{{ url('/t/' . $forum['DATA']->last_post->post_id) }} ">
                                                         {{ $forum['DATA']->last_post->title }} </a>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col"><span class="forum-desc">
-                                                        <a class="text-dark" style="font-size: 10pt;" href="{{  url('/user/'. $forum['DATA']->last_post->user_id) }}">{{ $forum['DATA']->last_post->user_name }}</a>
+                                            <div class="row m-0">
+                                                <div class="col p-0">
+                                                    <span class="forum-desc">
+                                                        <a class="text-dark" style="font-size: 10pt;" href="{{ url('/user/' . $forum['DATA']->last_post->user_id) }}">{{ $forum['DATA']->last_post->user_name }}</a>
                                                         <span style="font-size: 8pt;" class="text-muted"> &bull;&nbsp;
                                                             <a href="{{ url('/t/' . $forum['DATA']->last_post->post_id . '/end') }} ">{{ ForumHelper::timeFormat($forum['DATA']->last_post->date) }}
                                                             </a>

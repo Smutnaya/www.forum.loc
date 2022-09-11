@@ -3,10 +3,15 @@
 namespace App\AppForum\Executors;
 
 use App\Post;
+use App\Topic;
+use App\Images;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
 use App\AppForum\Managers\PostManager;
 use App\AppForum\Helpers\CheckedHelper;
+use App\AppForum\Managers\TopicManager;
+use Illuminate\Support\Facades\Storage;
+use App\AppForum\Managers\ImagesManager;
 
 class PostExecutor extends BaseExecutor
 {
@@ -26,7 +31,35 @@ class PostExecutor extends BaseExecutor
 
         if (self::$result['success']) {
             PostManager::edit($out['post'], $out['text'], $out['check'], $out['data'], $user);
+            $out['last_post'] = self::last_post($out['post']['topic_id']);
+            $out['topic'] = Topic::find($out['post']['topic_id']);
 
+            self::images_valid($out, $user, $out['post']['id'], $out['post']['user_id']);
+
+            if (!is_null($out['images'])) {
+                foreach ($out['images'] as $image) {
+                    if (!is_null(stristr($out['text'], $image->url))) {
+                        ImagesManager::post_id($image, $out['post']['id']);
+                    }
+                }
+            }
+            if (!is_null($out['images2'])) {
+                foreach ($out['images2'] as $images2) {
+                    if (!is_null(stristr($out['text'], $images2->url))) {
+                        ImagesManager::post_id($images2, $out['post']['id']);
+                    }
+                }
+            }
+            if (!is_null($out['images_del'])) {
+                foreach ($out['images_del'] as $images_del) {
+                    $url = explode("c/", $images_del->url);
+                    if (!stristr($out['text'], $url[1])) {
+                        ImagesManager::del($images_del);
+                    }
+                }
+            }
+
+            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
@@ -63,6 +96,21 @@ class PostExecutor extends BaseExecutor
         self::$result['success'] = true;
     }
 
+    private static function images_valid($out, $user, $post_id, $user_id)
+    {
+        $out['images'] = null;
+        $out['images2'] = null;
+        $out['images_del'] = null;
+
+        $images = Images::where([['user_id', $user->id], ['datetime', '>=', strtotime('-12 hours')], ['post_id', null]])->get();
+        if ($images->count() > 0) $out['images'] = $images;
+        $images2 = Images::where([['user_id', $user_id], ['datetime', '>=', strtotime('-12 hours')], ['post_id', null]])->get();
+        if ($images2->count() > 0) $out['images2'] = $images2;
+
+        $images_del = Images::where('post_id', $post_id)->get();
+        if ($images_del->count() > 0) $out['images_del'] = $images_del;
+    }
+
     public static function save_moder($postId, $user, $input, $page)
     {
         $out = collect();
@@ -78,7 +126,23 @@ class PostExecutor extends BaseExecutor
         $user_role = ModerHelper::user_role($user);
 
         if (self::$result['success']) {
+
             PostManager::edit($out['post'], $out['text'], $out['check'], $out['data'], $user);
+
+            self::images_valid($out, $user, $out['post']['id'], $out['post']['user_id']);
+
+            if (!is_null($out['images_del'])) {
+                foreach ($out['images_del'] as $images_del) {
+                    $url = explode("c/", $images_del->url);
+                    if (!stristr($out['text'], $url[1])) {
+                        ImagesManager::del($images_del);
+                    }
+                }
+            }
+
+            $out['last_post'] = self::last_post($out['post']['topic_id']);
+            $out['topic'] = Topic::find($out['post']['topic_id']);
+            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
 
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
@@ -126,7 +190,9 @@ class PostExecutor extends BaseExecutor
 
         if (self::$result['success']) {
             PostManager::premod($out['post'], $out['user']);
-
+            $out['last_post'] = self::last_post($out['post']['topic_id']);
+            $out['topic'] = Topic::find($out['post']['topic_id']);
+            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $out['user'];
@@ -158,7 +224,9 @@ class PostExecutor extends BaseExecutor
 
         if (self::$result['success']) {
             PostManager::unhide($out['post'], $out['user']);
-
+            $out['last_post'] = self::last_post($out['post']['topic_id']);
+            $out['topic'] = Topic::find($out['post']['topic_id']);
+            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $out['user'];
@@ -178,5 +246,72 @@ class PostExecutor extends BaseExecutor
         if (!(ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для модерации темы';
 
         self::$result['success'] = true;
+    }
+
+    public static function del($postId, $user, $page)
+    {
+        $out = collect();
+
+        $user_role = ModerHelper::user_role($user);
+        if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result = ['success' => true];
+
+        if (self::$result['success']) self::del_valid(intval($postId), $out, $user,  $user_role);
+        $out['user'] = $user;
+
+        if (self::$result['success']) {
+            $topic_id = $out['post']['topic_id'];
+            PostManager::del($out['post']);
+
+            if (!is_null($out['images_del'])) {
+                foreach ($out['images_del'] as $images_del) {
+                    ImagesManager::del($images_del);
+                }
+            }
+
+            $out['last_post'] = self::last_post($topic_id);
+            $out['topic'] = Topic::find($topic_id);
+            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            self::$result['message'] = 'OK';
+            self::$result['topicId'] = $out['post']['topic_id'];
+            self::$result['user'] = $out['user'];
+            $topicPage = ForumHelper::topicPage($out['post']->topic_id, $user_role);
+            $pages = $topicPage['pages'];
+            self::$result['page'] = ForumHelper::parsePage($page, $pages);
+        }
+
+        return self::$result;
+    }
+
+    public static function del_valid($postId, $out, $user,  $user_role)
+    {
+        self::$result = ['success' => false];
+        $out['images_del'] = null;
+
+        $post = Post::find(intval($postId));
+        if (is_null($post)) return self::$result['message'] = 'Пост не найден';
+        $out['post'] = $post;
+
+        $first_post = Post::where('topic_id', $post->topic_id)->first();
+        if ($post->id == $first_post->id) return self::$result['message'] = 'Невозможно удалить первый ответ в теме';
+
+        if (is_null($user_role)) return self::$result['message'] = 'Отсутсвуют права для удаления ответа';
+        if ($user_role < 11) return self::$result['message'] = 'Отсутсвуют права для удаления ответа';
+
+        $images_del = Images::where('post_id', $postId)->get();
+        if ($images_del->count() > 0) $out['images_del'] = $images_del;
+
+        self::$result['success'] = true;
+    }
+
+    public static function last_post($topic_id)
+    {
+        $last_post_collect = Post::where([['topic_id', $topic_id], ['moderation', false], ['hide', false]])->orderBy('datetime', 'desc')->limit(2)->get();
+        if ($last_post_collect->count() < 2) return null;
+        if ($last_post_collect->count() == 2) {
+            $last_post = $last_post_collect['0']->datetime;
+        }
+
+        return $last_post;
     }
 }

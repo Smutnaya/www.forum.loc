@@ -48,7 +48,7 @@
                 {{-- @dd($model['newPost']) --}}
 
                 @if (!is_null($model['user']))
-                    @if ((!$model['topic']['block'] && !$model['userBan']) || $model['newPost'])
+                    @if ((!$model['topic']['block'] && !$model['userBan'] && $model['topic']['forum_id'] != 38 && $model['topic']['forum_id'] != 39) || $model['newPost'])
                         <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                             <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
                         </div>

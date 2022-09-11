@@ -53,13 +53,13 @@ class ModerHelper
         $id_forums = collect();
         foreach ($forums as $forum) {
             if ($user_role >= 2 && $user_role <= 3 && $forum->section_id != 7) {
-                if ($forum->id != 16 && $forum->id != 17) self::collectionContains($id_forums, $forum, $forums_vis);
+                if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role == 1 && $forum->private == false && $forum->section_id != 7) {
                 self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role == 4 && $forum->section_id != 7) {
-                if ($forum->id != 16 && $forum->id != 17) self::collectionContains($id_forums, $forum, $forums_vis);
+                if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role >= 5 && $user_role <= 8 && $forum->section_id != 7) {
-                if ($forum->id != 16 && $forum->id != 17) self::collectionContains($id_forums, $forum, $forums_vis);
+                if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role >= 9) {
                 self::collectionContains($id_forums, $forum, $forums_vis);
             }
@@ -102,17 +102,17 @@ class ModerHelper
 
         foreach ($forums as $forum) {
             if ($user_role >= 2 && $user_role <= 3 && $forum->section_id != 7) {
-                if ($forum->id != 16 && $forum->id != 17) {
+                if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) {
                     self::collectionContains($id_forums, $forum, $forums_vis);
                 }
             } elseif ($user_role == 1 && $forum->private == false && $forum->section_id != 7) {
                 self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role == 4 && $forum->section_id != 7) {
-                if ($forum->id != 16 && $forum->id != 17) {
+                if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) {
                     self::collectionContains($id_forums, $forum, $forums_vis);
                 }
             } elseif ($user_role >= 5 && $user_role <= 8 && $forum->section_id != 7) {
-                if ($forum->id != 16 && $forum->id != 17) {
+                if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) {
                     self::collectionContains($id_forums, $forum, $forums_vis);
                 }
             } elseif ($user_role >= 9) {
@@ -159,12 +159,14 @@ class ModerHelper
             $vis = false;
         } elseif ($user_role == 4 && $forum_id == 17) {
             $vis = false;
+        }elseif ($user_role == 4 && $forum_id == 72) {
+            $vis = false;
         } elseif ($user_role > 11) {
             $vis = true;
         } elseif ($forum_id == 52 || $forum_id == 53) {
             $vis = true;
         } else {
-            if ($user_role < 9 && ($forum_id == 16 || $forum_id == 17 || $forum_id == 70 || $section_id == 5)) $vis = false;
+            if ($user_role < 9 && ($forum_id == 16 || $forum_id == 17 || $forum_id == 72 || $forum_id == 70 || $section_id == 5)) $vis = false;
             if ($user_role < 8 && ($forum_id == 56 || $forum_id == 58 || $forum_id == 67 || $forum_id == 68 || $forum_id == 69 || $section_id == 5)) $vis = false;
             if ($user_role < 7 && ($forum_id == 62 || $forum_id == 63 || $forum_id == 64 || $section_id == 5)) $vis = false;
             if ($user_role < 6 && ($forum_id == 54 || $forum_id == 55 || $forum_id == 57 || $forum_id == 59 || $forum_id == 60 || $forum_id == 61 || $forum_id == 66 || $section_id == 5)) $vis = false;
@@ -214,11 +216,11 @@ class ModerHelper
             }
         }
 
-        if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 69 && $forum_id != 70) return self::$result = true;
+        if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 69 && $forum_id != 70) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10 || $user_role_id == 11 && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
-        if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
-        if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $section_id < 5) return self::$result = true;
-        if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17  && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id < 5) return self::$result = true;
+        if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 27 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 4 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 7) return self::$result = true;
         if ($user_role_id == 11 && $section_id == 5 && $forum_id != 52) return self::$result = false;
         if ($user_role_id > 10) return self::$result = true;
@@ -229,11 +231,11 @@ class ModerHelper
     {
         self::$result = false;
 
-        if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
+        if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10  && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
-        if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
-        if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $section_id < 5) return self::$result = true;
-        if ($user_role_id < 8 && $user_role_id >= 5 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id < 5) return self::$result = true;
+        if ($user_role_id < 8 && $user_role_id >= 5 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 4 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 7) return self::$result = true;
         if ($user_role_id == 11 && $section_id == 5 && $forum_id != 52) return self::$result = false;
         if ($user_role_id > 10) return self::$result = true;
@@ -243,13 +245,13 @@ class ModerHelper
     {
         self::$result = false;
 
-        if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
+        if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
         if ($user_role_id == 11 && $section_id == 5 && $forum_id != 52) return self::$result = false;
         if ($user_role_id > 10) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10 && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
-        if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
-        if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $section_id < 5) return self::$result = true;
-        if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id < 5) return self::$result = true;
+        if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 4 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 7) return self::$result = true;
         return self::$result;
     }
@@ -303,10 +305,11 @@ class ModerHelper
         if ($forum_id == 3 && $user_role_id > 10) return self::$result = true;
         if ($forum_id == 1 && $user_role_id > 10) return self::$result = true;
         if ($forum_id == 2 && $user_role_id > 8) return self::$result = true;
-        if ($forum_id == 16 && $user_role_id > 10) return self::$result = true;
-        if ($forum_id == 17 && $user_role_id > 10) return self::$result = true;
+        if ($forum_id == 16 && $user_role_id > 8) return self::$result = true;
+        if ($forum_id == 17 && $user_role_id > 8) return self::$result = true;
+        if ($forum_id == 72 && $user_role_id > 8) return self::$result = true;
         if ($forum_id == 15 && $user_role_id == 4) return self::$result = true;
-        if ($forum_id == 15 && $user_role_id > 17) return self::$result = true;
+        if ($forum_id == 15 && $user_role_id > 7) return self::$result = true;
         if ($forum_id >= 4 && $forum_id < 15 && $user_role_id > 1) return self::$result = true;
         if ($forum_id >= 18 && $forum_id < 39 && $user_role_id > 1) return self::$result = true;
 
@@ -371,10 +374,11 @@ class ModerHelper
         if ($forum_id == 3 && $user_role_id > 10) return self::$result = true;
         if ($forum_id == 1 && $user_role_id > 10) return self::$result = true;
         if ($forum_id == 2 && $user_role_id > 8) return self::$result = true;
-        if ($forum_id == 16 && $user_role_id > 10) return self::$result = true;
-        if ($forum_id == 17 && $user_role_id > 10) return self::$result = true;
+        if ($forum_id == 16 && $user_role_id > 8) return self::$result = true;
+        if ($forum_id == 17 && $user_role_id > 8) return self::$result = true;
+        if ($forum_id == 72 && $user_role_id > 8) return self::$result = true;
         if ($forum_id == 15 && $user_role_id == 4) return self::$result = true;
-        if ($forum_id == 15 && $user_role_id > 17) return self::$result = true;
+        if ($forum_id == 15 && $user_role_id > 7) return self::$result = true;
         if ($forum_id >= 4 && $forum_id < 15 && $user_role_id > 1) return self::$result = true;
         if ($forum_id >= 18 && $forum_id < 39 && $user_role_id > 1) return self::$result = true;
 

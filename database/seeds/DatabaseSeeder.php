@@ -57,8 +57,8 @@ class DatabaseSeeder extends Seeder
             ['title'=> 'Справочная система', 'description' => 'Ветка форума для обсуждения "Справки по игре"', 'section_id' => 1],
             ['title'=> 'Форум - Идеи и предложения', 'description' => 'Обсуждение функциональности форума', 'section_id' => 1],
             ['title'=> 'Жалобы на модерацию форума', 'description' => 'Прием жалоб на действия модераторов форума', 'section_id' => 1, 'moderation' => true],
-            ['title'=> '[Дайджест ВС - ПУБЛИКАЦИЯ]', 'description' => 'Лента новостей игры и форума. ПУБЛИКАЦИЯ','section_id' => 1, 'private' => true],
-            ['title'=> '[Дайджест ВС - Рабочий]', 'description' => 'Лента новостей игры и форума. Рабочая', 'section_id' => 1, 'private' => true],
+            ['title'=> '[Дайджест ФОРУМ - ПУБЛИКАЦИЯ]', 'description' => 'Лента новостей форума. ПУБЛИКАЦИЯ','section_id' => 1, 'private' => true, 'moderation' => true],
+            ['title'=> '[Дайджест - Рабочий]', 'description' => 'Лента новостей игры и форума. Рабочая', 'section_id' => 1, 'private' => true],
 
             // ПОлитика
             ['title'=> 'Политика - Официальные заявления', 'description' => 'Официальные заявления, обращения, объявления и прочи дипломатические документоы, касающиеся политической жизни ВС (полная премодерация тем)', 'section_id' => 4, 'moderation' => true],
@@ -83,8 +83,8 @@ class DatabaseSeeder extends Seeder
             ['title'=> 'Депресс-клуб', 'description' => 'Ветка для выражения плохого настроения или отношения к вопросам ВС и реала', 'section_id' => 2],
             ['title'=> 'Странное Место', 'description' => 'Обсуждения философских тем, вопросов бытия человека, его социальной и внутренней составляющей. Дискуссии на научные, околонаучные и совсем ненаучные темы', 'section_id' => 2],
             ['title'=> 'Ветка дважды Укупника Бори', 'description' => 'Ветка для СВшных троллей и их поклонников - ихтиандров, ведомых голубой луной. Осторожно 18+', 'section_id' => 2],
-            ['title'=> 'АрхивТопка', 'description' => 'Место где желтеют старые темы', 'section_id' => 2],
-            ['title'=> '[Архив]', 'description' => 'Cкрытая ветка для всякого ненужного хлама и топиков с системным нарушением правил', 'section_id' => 2, 'private' => true],
+            ['title'=> 'Топка', 'description' => 'Место где желтеют старые темы', 'section_id' => 2],
+            ['title'=> '[Архив]', 'description' => 'Cкрытая ветка для всякого ненужного хлама и топиков с системным нарушением правил', 'section_id' => 2, 'private' => true, 'block' => true],
             ['title'=> '[Форум. Рабочий]', 'description' => 'Скрытый раздел модераторов форума', 'section_id' => 2, 'private' => true],
 
             // Сенат
@@ -129,6 +129,10 @@ class DatabaseSeeder extends Seeder
             ['title'=> 'Внутренняя безопасность', 'description' => 'Жалобы на сотрудников, злоупотребление инструментом', 'section_id' =>7, 'private' => true],
             ['title'=> 'Флуд', 'description' => 'Работа работой, а флуд никто не отменял :)', 'section_id' => 7, 'private' => true],
 
+            // лента новостей игры
+            ['title'=> '[Дайджест ВС - ПУБЛИКАЦИЯ]', 'description' => 'Лента новостей игры. ПУБЛИКАЦИЯ','section_id' => 1, 'private' => true, 'moderation' => true],
+
+
             //['title'=> '', 'description' => '', 'section_id' => 1],
         ];
         foreach($forums as $forum) Forum::insert($forum);
@@ -151,10 +155,10 @@ class DatabaseSeeder extends Seeder
 /*         Topic::insert([
             ['title' => 'aaa', 'datetime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
         ]);
-
-        Post::insert([
-            ['text' => 'textttt4', 'datetime' => strtotime('+10 minutes'), 'user_id' => 1, 'topic_id' => 1],
-            ['text' => 'textttt5', 'datetime' => strtotime('+15 minutes'), 'user_id' => 1, 'topic_id' => 1]
-        ]); */
+*/
+        User::insert([
+            ['name' => 'смутная леди', 'email' => '12@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 12],
+            ['name' => 'Никудышный Шаромыжник', 'email' => '123@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 1],
+        ]);
     }
 }

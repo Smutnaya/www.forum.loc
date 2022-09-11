@@ -72,4 +72,15 @@ class PostController extends Controller
         }
         return redirect()->back()->withErrors(['message' => $result['message']]);
     }
+
+    public function del($postId, $page = 1)
+    {
+        $user = $this->user();
+        $result = PostExecutor::del($postId, $user, $page);
+        if($result['success'])
+        {
+            return redirect('t/'.$result['topicId'].'/'.$result['page']);
+        }
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+    }
 }

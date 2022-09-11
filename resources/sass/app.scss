@@ -107,7 +107,7 @@ i.forum-desc {
     outline: 0;
     box-shadow: 0 0 0 0 #e2d5ac8f;
 }
-.form-check-input[type=checkbox] {
+.form-check-input[type="checkbox"] {
     border-radius: 0.25em;
     background-color: #f9f6d3;
 }
@@ -241,23 +241,28 @@ input[type="number"]:focus {
 
 // avatars
 .min-avatar {
-    width: 42px;
+    width: 42px !important;
+    height: 42px !important;
     padding: 0.1rem !important;
 }
 .max-avatar {
-    width: 120px;
+    width: 120px !important;
     padding: 0.1rem !important;
+    height: 120px !important;;
 }
 .min-logo {
-    width: 47px;
+    width: 47px!important;
+    height: 47px !important;
     padding: 0.1rem !important;
 }
 .min-avatar-mob {
-    width: 28px;
+    width: 28!important;
+    height: 28 !important;
     padding: 0.1rem !important;
 }
 .min-avatar-post {
-    width: 39px;
+    width: 39!important;
+    height: 39 !important;
     padding: 0.1rem !important;
 }
 .logo {
@@ -265,6 +270,21 @@ input[type="number"]:focus {
     padding: 0.1rem !important;
 }
 
+.icon-news {
+    width: 15px !important;
+    height: 15px !important;
+    padding-bottom: 3px !important;
+}
+.news {
+    A {
+        color: #6a0000 !important;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    A:hover {
+        text-decoration: underline;
+    }
+}
 
 // link
 .naw-link {
@@ -330,7 +350,8 @@ A:hover,
     }
 
     .logo {
-        width: 100px;
+        width: 100px !important;
+        height: 100px !important;
     }
 
     .inf {
@@ -420,9 +441,10 @@ span[title]:hover::after {
     ::-webkit-scrollbar {
         width: 3px;
         height: 1px;
+        background: #f4efcd;
     }
     ::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px #62605640;
+        box-shadow: inset 0 0 5px #f4efcd;
         border-radius: 3px;
         display: none;
     }
@@ -438,7 +460,7 @@ span[title]:hover::after {
         width: 3px;
     }
     ::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px #62605640;
+        box-shadow: inset 0 0 5px #f4efcd;
         border-radius: 3px;
         display: inline;
     }

@@ -15,6 +15,7 @@ class SectionViewer
         return collect([
             'breadcrump' => null,
             'sectionTitle' => null,
+            'user' => null,
             'forums' => collect(),
             'sectionsAside' => collect(),
         ]);
@@ -27,6 +28,9 @@ class SectionViewer
         // aside
         $sectionsAside = AsideHelper::sectionAside($user);
         $model['sectionsAside'] = $sectionsAside;
+        if (!is_null($user)) {
+            $model['user'] = $user;
+        }
 
         $forums = ModerHelper::getForum($user, intval($sectionId));
         if ($forums->isEmpty()) return $model;

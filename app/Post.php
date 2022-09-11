@@ -28,4 +28,9 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    // public function images()
+    // {
+    //     return $this->hasMany(Images::class);
+    // }
 }

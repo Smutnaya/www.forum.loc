@@ -26,7 +26,7 @@
 
 <body class="p-2 fs-6">
     <main>
-        @include('inc.header')
+        @include('inc.header', ['model' => $model])
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-2 col-md-3">

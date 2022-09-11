@@ -6,15 +6,23 @@ use App\AppForum\Helpers\ForumHelper;
     <div class="row post border border-ligh shadow-sm m-0 text-centre mb-2 overflow-hidden @if ($post['moderation']) border border-danger @endif">
         <div class="col-md-3 col-xl-2 col-sm-12 inf text-centre my-1">
             <div class="col-12 my-1">
-                <a class="fw-bold text-break" href="{{ url('/user/'. $post['user_post']['id']) }}">{{ $post['user_post']['name'] }}</a>
+                <a class="fw-bold text-break" href="{{ url('/user/' . $post['user_post']['id']) }}">{{ $post['user_post']['name'] }}</a>
             </div>
             <div class="col-12">
-                <img style="border-color: #ced4da;" class="logo border bg-white rounded" alt="Cinque Terre" src="https://avatarko.ru/img/avatar/25/igra_Dota_2_Natures_Prophet_24356.jpg">
+                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="logo rounded" alt="Cinque Terre" @if (!is_null($post['avatar']))
+                src="/storage{{ $post['avatar'] }}"
+                @else
+                src="/images/av.png"
+                @endif>
             </div>
             <div class="col-12 my-1">
                 <span class="fw-bold text-black my-2 text-break" style="font-size: 10pt; {{ $post['user_role_style'] }}">{{ $post['user_role'] }}</span><br>
                 <span class="text-muted"><i class="fa-regular fa-message me-1" style="color:rgb(0, 0, 116)" title="Ответы"></i> <span style="color:rgb(0, 0, 116)">{{ $post['user_DATA']->post_count }}</span></span>
-                <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d" title="Рейтинг"></i> <span style="color:#0e583d">{{ $post['user_DATA']->like }}</span></span>
+                @if ($post['user_DATA']->like < 0)
+                    <span class="text-muted"><i class="fa-regular fa-thumbs-down me-1 ms-2" style="color: #6a0000" title="Рейтинг"></i> <span style="color:#6a0000">{{ $post['user_DATA']->like }}</span></span>
+                @else
+                    <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d" title="Рейтинг"></i> <span style="color:#0e583d">{{ $post['user_DATA']->like }}</span></span>
+                @endif
                 <br>
                 <span class="text-muted"><i class="fa-regular fa-envelope me-1" style="color:#2f4f4fe8"></i> <span style="color:#2f4f4fe8">написать</span></span>
             </div>
@@ -23,7 +31,6 @@ use App\AppForum\Helpers\ForumHelper;
             <div class="col-12 text-muted">
                 <div class="row pt-1" style="padding-left: 12px !important;">
                     <div class="col d-flex justify-content-start align-items-center text-center forum-desc">
-
                         @if ($post['moderation'])
                             <a @if ($post['postModer']) href="{{ url('/p/' . $post['id'] . '/premod/' . $model['pagination']['page']) }}" @endif><i class="fa-regular fa-hourglass me-2" style="color: #b80000" title="Ожидание публикации"></i></a>
                         @endif
@@ -78,11 +85,25 @@ use App\AppForum\Helpers\ForumHelper;
                                             </div>
                                         </a></li>
                                 @endif
+                                @if (!is_null($model['user']) && $model['user']['role_id'] >= 11 && $model['first_post'] != $post['id'])
+                                    <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/del/' . $model['pagination']['page']) }}">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-circle-minus forum-desc ms-1"></i>
+                                                </div>
+                                                <div class="col">
+                                                    Удалить ответ
+                                                </div>
+                                            </div>
+                                        </a></li>
+                                @endif
+
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-12 my-1"><?php
             echo htmlspecialchars_decode($post['text']);
             ?>

@@ -16,6 +16,10 @@ class MainViewer
         return collect([
             'sectionsAside' => collect(), // id, title, description
             'onlines' => collect(),
+            'user' => null,
+            'news' => collect(),
+            'last_posts' => collect(),
+            'new_topics' => collect(),
             // 'posts' => collect(),
             // 'topics' => collect(),
         ]);
@@ -29,24 +33,95 @@ class MainViewer
         $sectionsAside = AsideHelper::sectionAside($user);
         $model['sectionsAside'] = $sectionsAside;
 
-        $onlines = Online::where('datetime','>=', strtotime('-15 minute'))->orderBy('datetime','desc')->get();
+        $news = Topic::where('forum_id', '16')->orderBy('datetime', 'desc')->limit(30)->get();
+        if ($news->count() > 0) self::setNews($model, $news);
+        if (!is_null($user)) {
+            $model['user'] = $user;
+        }
 
-        if(is_null($onlines)) return $model;
+        // последние ответы
+        $last_posts = Topic::where('time_post', '!=', 'null')->orderBy('time_post', 'desc')->distinct()->limit(20)->get();
+        if ($last_posts->count() > 0) self::setLastPost($model, $last_posts);
+        // новые темы
+        $new_topics = Topic::orderBy('datetime', 'desc')->limit(20)->get();
+        if ($new_topics->count() > 0) self::setNewTopic($model, $new_topics);
+
+        $onlines = Online::where('datetime', '>=', strtotime('-15 minute'))->orderBy('datetime', 'desc')->get();
+
+        if ($onlines->count() == 0) return $model;
         self::setOnline($model, $onlines);
 
         return $model;
     }
 
-    private static function setOnline($model, $onlines)
+    public static function setLastPost($model, $topics)
     {
-        foreach($onlines as $online)
-        {
-            $model['onlines']->push([
-                'id' => $online->id,
-                'name' => $online->name,
-                'style' => ForumHelper::roleStyle($online->user->role_id)
-            ]);
+        $int = 1;
+
+        foreach ($topics as $topic) {
+            if (($topic->forum->section_id < 5 || $topic->forum->section_id == 6) && $int < 11 && $topic->forum_id != 16 && $topic->forum_id != 17 && $topic->forum_id != 72 && $topic->forum_id != 39 && $topic->forum_id != 40) {
+                $model['last_posts']->push([
+                    'id' => $topic->id,
+                    'title' => $topic->title,
+                    'title_slug' => ForumHelper::slugify($topic->title),
+                    'datetime' => ForumHelper::timeFormat($topic->time_post),
+                    'DATA' => json_decode($topic->DATA, false),
+                ]);
+                $int++;
+            }
         }
     }
 
+    public static function setNewTopic($model, $topics)
+    {
+        $int = 1;
+
+        foreach ($topics as $topic) {
+            if (($topic->forum->section_id < 5 || $topic->forum->section_id == 6) && $int < 11 && $topic->forum_id != 16 && $topic->forum_id != 17 && $topic->forum_id != 72 && $topic->forum_id != 39 && $topic->forum_id != 40) {
+                $model['new_topics']->push([
+                    'id' => $topic->id,
+                    'user_id' => $topic->user_id,
+                    'user_name' => $topic->user->name,
+                    'avatar' => $topic->user->avatar,
+                    'title' => $topic->title,
+                    'title_slug' => ForumHelper::slugify($topic->title),
+                    'datetime' => ForumHelper::timeFormat($topic->datetime),
+                ]);
+                $int++;
+            }
+        }
+    }
+
+    private static function setNews($model, $news)
+    {
+        $news_collection = collect();
+
+        foreach ($news as $news_post) {
+            foreach ($news_post->posts as $post) {
+                if (!$post->hide && !$post->moderation && !$post->topic->hide) {
+                    $news_collection->push([
+                        'id' => $post->id,
+                        'date' => date('d.m.Y H:i', $post->datetime),
+                        'datetime' => $post->datetime,
+                        'title' => $post->topic->title,
+                        'text' => $post->text
+                    ]);
+                }
+            }
+        }
+        $model['news'] = $news_collection->sortByDesc('datetime')->take(20);
+    }
+
+    private static function setOnline($model, $onlines)
+    {
+        foreach ($onlines as $online) {
+            $model['onlines']->push([
+                'id' => $online->id,
+                'user_id' => $online->user->id,
+                'name' => $online->name,
+                'style' => ForumHelper::roleStyle($online->user->role_id),
+                'role_id' => $online->user->role_id
+            ]);
+        }
+    }
 }

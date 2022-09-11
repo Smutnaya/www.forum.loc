@@ -48,33 +48,29 @@ class UserViewer
         if (is_null($user_inf)) return $model;
         self::setUser($model, $user_inf);
 
-        $user_posts = Post::where('user_id', intval($user_id))->orderByDesc('id')->distinct()->limit(50)->get();
-        if (is_null($user_posts)) return $model;
         $user_id = 0;
         $user_role = 0;
+
         if (!is_null($user)) {
             $model['user'] = $user;
             $user_id = $user->id;
             $user_role = $user->role_id;
         }
-        self::setUserPost($model, $user_posts, $user_id,  $user_role);
+
+        $user_posts = Post::where('user_id', intval($user_id))->orderByDesc('id')->distinct()->limit(50)->get();
+        if ($user_posts->count() > 0) self::setUserPost($model, $user_posts, $user_id,  $user_role);
         $forums = Forum::all();
-        if (is_null($forums)) return $model;
-        self::setblockForum($model, $user_role, $forums, $user);
+        if (!is_null($forums)) self::setblockForum($model, $user_role, $forums, $user);
         $sections = Section::all();
-        if (is_null($sections)) return $model;
-        self::setblockSection($model, $user_role, $sections);
+        if (!is_null($sections)) self::setblockSection($model, $user_role, $sections);
 
         $bans = Ban::where('user_id', $user_inf->id)->orderByDesc('id')->limit(50)->get();
-        if (is_null($bans)) return $model;
-        self::setBan($model, $bans);
+        if ($bans->count() > 0) self::setBan($model, $bans);
 
         $model['roles'] = ModerHelper::roles($model['user'], $model['user_inf']);
 
-
         $rolesInstall = Role::all();
-        if (is_null($rolesInstall)) return $rolesInstall;
-        self::setRolesInstall($model, $model['user'], $rolesInstall);
+        if ($rolesInstall->count() > 0) self::setRolesInstall($model, $model['user'], $rolesInstall);
 
         if (!is_null($user)) {
             $other_roles = Other_role::where('user_id', $user_id)->get();
@@ -104,39 +100,48 @@ class UserViewer
             'name' => $user_inf->name,
             'ip' => $user_inf->ip,
             'role_id' => $user_inf->role_id,
-            'ip_online' => $user_inf->online->ip,
+            'ip_online' => null,
+            'avatar' => $user_inf->avatar,
             'role' => Role::find($user_inf->role_id)->description,
             'style' => ForumHelper::roleStyle($user_inf->role_id),
             'DATA' => json_decode($user_inf->DATA, false),
+            'online' => null
         ];
 
-        $online = $user_inf->online->datetime;
-        if ($online < strtotime('-15 minute')) {
-            $model['user_inf'] = [
-                'id' => $user_inf->id,
-                'name' => $user_inf->name,
-                'ip' => $user_inf->ip,
-                'role_id' => $user_inf->role_id,
-                'ip_online' => $user_inf->online->ip,
-                'role' => Role::find($user_inf->role_id)->description,
-                'roleModer' => Role::find($user_inf->role_id)->role,
-                'style' => ForumHelper::roleStyle($user_inf->role_id),
-                'DATA' => json_decode($user_inf->DATA, false),
-                'online' => ForumHelper::timeFormat($online)
-            ];
-        } else {
-            $model['user_inf'] = [
-                'id' => $user_inf->id,
-                'name' => $user_inf->name,
-                'ip' => $user_inf->ip,
-                'role_id' => $user_inf->role_id,
-                'ip_online' => $user_inf->online->ip,
-                'role' => Role::find($user_inf->role_id)->description,
-                'roleModer' => Role::find($user_inf->role_id)->role,
-                'style' => ForumHelper::roleStyle($user_inf->role_id),
-                'DATA' => json_decode($user_inf->DATA, false),
-                'online' => 'online'
-            ];
+        if (!is_null($user_inf->online)) {
+            $model['user_inf'] = ['ip_online' => $user_inf->online->ip];
+
+
+            $online = $user_inf->online->datetime;
+            if ($online < strtotime('-15 minute')) {
+                $model['user_inf'] = [
+                    'id' => $user_inf->id,
+                    'name' => $user_inf->name,
+                    'ip' => $user_inf->ip,
+                    'role_id' => $user_inf->role_id,
+                    'ip_online' => $user_inf->online->ip,
+                    'avatar' => $user_inf->avatar,
+                    'role' => Role::find($user_inf->role_id)->description,
+                    'roleModer' => Role::find($user_inf->role_id)->role,
+                    'style' => ForumHelper::roleStyle($user_inf->role_id),
+                    'DATA' => json_decode($user_inf->DATA, false),
+                    'online' => ForumHelper::timeFormat($online)
+                ];
+            } else {
+                $model['user_inf'] = [
+                    'id' => $user_inf->id,
+                    'name' => $user_inf->name,
+                    'ip' => $user_inf->ip,
+                    'role_id' => $user_inf->role_id,
+                    'ip_online' => $user_inf->online->ip,
+                    'avatar' => $user_inf->avatar,
+                    'role' => Role::find($user_inf->role_id)->description,
+                    'roleModer' => Role::find($user_inf->role_id)->role,
+                    'style' => ForumHelper::roleStyle($user_inf->role_id),
+                    'DATA' => json_decode($user_inf->DATA, false),
+                    'online' => 'online'
+                ];
+            }
         }
     }
     private static function setUserPost($model, $user_posts, $user_role, $user_id)
@@ -222,8 +227,7 @@ class UserViewer
     private static function setUserOtherRole($model, $other_roles_inf)
     {
         foreach ($other_roles_inf as $other_role) {
-            if(!is_null($other_role->topic_id))
-            {
+            if (!is_null($other_role->topic_id)) {
                 $model['user_other_role']->push([
                     'id' => $other_role->id,
                     'user_id' => $other_role->user_id,
@@ -234,8 +238,7 @@ class UserViewer
                     'section_id' => $other_role->section_id,
                 ]);
             }
-            if(!is_null($other_role->forum_id))
-            {
+            if (!is_null($other_role->forum_id)) {
                 $model['user_other_role']->push([
                     'id' => $other_role->id,
                     'user_id' => $other_role->user_id,
@@ -246,8 +249,7 @@ class UserViewer
                     'section_id' => $other_role->section_id,
                 ]);
             }
-            if(!is_null($other_role->section_id))
-            {
+            if (!is_null($other_role->section_id)) {
                 $model['user_other_role']->push([
                     'id' => $other_role->id,
                     'user_id' => $other_role->user_id,

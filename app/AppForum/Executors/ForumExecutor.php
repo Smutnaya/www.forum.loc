@@ -3,6 +3,7 @@
 namespace App\AppForum\Executors;
 
 use App\Forum;
+use App\Images;
 use App\AppForum\Helpers\IpHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
@@ -12,6 +13,7 @@ use App\AppForum\Helpers\CheckedHelper;
 use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
 use App\AppForum\Executors\BaseExecutor;
+use App\AppForum\Managers\ImagesManager;
 use Symfony\Component\Console\Input\Input;
 
 class ForumExecutor extends BaseExecutor
@@ -37,10 +39,21 @@ class ForumExecutor extends BaseExecutor
             self::$result['title_slug'] = ForumHelper::slugify($topic->title);
             $out['check'] = CheckedHelper::checkPostTopic($input, $topic);
             $post = PostManager::post($topic, $out['text'], $out['check'], $user, $ip);
+            //$post = PostManager::post($out['topic'], $out['text'], $out['check'], $user, $ip);
 
+            self::images_valid($post, $out, $user);
+
+            if (!is_null($out['images'])) {
+                foreach ($out['images'] as $image) {
+                    if (!is_null(stristr($post->text, $image->url))) {
+                        ImagesManager::post_id($image, $post->id);
+                    }
+                }
+            }
             $data = json_decode($post->topic->DATA, false);
             $data->last_post->user_name = $post->user->name;
             $data->last_post->user_id = $post->user->id;
+            $data->last_post->avatar = $post->user->avatar;
             $data->last_post->title = $post->topic->title;
             $data->last_post->post_id = $post->topic->id;
             $data->last_post->date = $post->datetime;
@@ -56,6 +69,7 @@ class ForumExecutor extends BaseExecutor
             $data->inf->topic_count++;
             $data->last_post->user_name = $post->user->name;
             $data->last_post->user_id = $post->user->id;
+            $data->last_post->avatar = $post->user->avatar;
             $data->last_post->title = $post->topic->title;
             $data->last_post->post_id = $post->topic->id;
             $data->last_post->date = $post->datetime;
@@ -86,6 +100,13 @@ class ForumExecutor extends BaseExecutor
         $out['forum'] = $forum;
         $out['check'] = CheckedHelper::checkTopic($input, $forum);
         self::$result['success'] = true;
+    }
+
+    private static function images_valid($post, $out, $user)
+    {
+        $out['images'] = null;
+        $images = Images::where([['user_id', $user->id], ['datetime', '>=', strtotime('-12 hours')], ['post_id', null]])->get();
+        if ($images->count() > 0) return $out['images'] = $images;
     }
 
     public static function forum ($forumId, $user)

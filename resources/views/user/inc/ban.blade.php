@@ -36,7 +36,7 @@
                                     @endif
                                 </div>
                                 <div class="row d-flex justify-content-center text_centre mt-2">
-                                    <a id="user-ban-hide1" data-bs-dismiss="modal" aria-label="Close" class="btn btn-sm btn-dark btn-custom mt-2 mb-0 py-0 me-2" style="height: 21px !important">Отмена</a>
+                                    <a onclick="userBanHide()" data-bs-dismiss="modal" aria-label="Close" class="btn btn-sm btn-dark btn-custom mt-2 mb-0 py-0 me-2" style="height: 21px !important">Отмена</a>
                                     <input class="btn btn-sm btn-dark btn-custom ms-2 mt-2 mb-0 py-0" style="height: 21px !important" type="submit" value="Сохранить">
                                 </div>
                             </div>

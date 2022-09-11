@@ -21798,33 +21798,53 @@ input[type=number]:focus {
 }
 
 .min-avatar {
-  width: 42px;
+  width: 42px !important;
+  height: 42px !important;
   padding: 0.1rem !important;
 }
 
 .max-avatar {
-  width: 120px;
+  width: 120px !important;
   padding: 0.1rem !important;
+  height: 120px !important;
 }
 
 .min-logo {
-  width: 47px;
+  width: 47px !important;
+  height: 47px !important;
   padding: 0.1rem !important;
 }
 
 .min-avatar-mob {
-  width: 28px;
+  width: 28 !important;
+  height: 28 !important;
   padding: 0.1rem !important;
 }
 
 .min-avatar-post {
-  width: 39px;
+  width: 39 !important;
+  height: 39 !important;
   padding: 0.1rem !important;
 }
 
 .logo {
   width: 80px;
   padding: 0.1rem !important;
+}
+
+.icon-news {
+  width: 15px !important;
+  height: 15px !important;
+  padding-bottom: 3px !important;
+}
+
+.news A {
+  color: #6a0000 !important;
+  text-decoration: none;
+  font-weight: bold;
+}
+.news A:hover {
+  text-decoration: underline;
 }
 
 .naw-link {
@@ -21890,7 +21910,8 @@ A:hover,
   background: #ffffde;
 }
 .post .logo {
-  width: 100px;
+  width: 100px !important;
+  height: 100px !important;
 }
 .post .inf {
   min-width: 125px;
@@ -21974,9 +21995,10 @@ span[title]:hover::after {
 .scroll ::-webkit-scrollbar {
   width: 3px;
   height: 1px;
+  background: #f4efcd;
 }
 .scroll ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgba(98, 96, 86, 0.2509803922);
+  box-shadow: inset 0 0 5px #f4efcd;
   border-radius: 3px;
   display: none;
 }
@@ -21993,7 +22015,7 @@ span[title]:hover::after {
   width: 3px;
 }
 .scroll:hover ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgba(98, 96, 86, 0.2509803922);
+  box-shadow: inset 0 0 5px #f4efcd;
   border-radius: 3px;
   display: inline;
 }

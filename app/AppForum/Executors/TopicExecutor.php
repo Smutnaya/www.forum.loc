@@ -6,6 +6,7 @@ use App\Post;
 use App\View;
 use App\Forum;
 use App\Topic;
+use App\Images;
 use App\AppForum\Helpers\IpHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
@@ -14,6 +15,7 @@ use App\AppForum\Managers\UserManager;
 use App\AppForum\Managers\ViewManager;
 use App\AppForum\Helpers\CheckedHelper;
 use App\AppForum\Managers\ForumManager;
+use App\AppForum\Managers\ImagesManager;
 use App\AppForum\Managers\TopicManager;
 
 class TopicExecutor extends BaseExecutor
@@ -35,10 +37,24 @@ class TopicExecutor extends BaseExecutor
 
         if (self::$result['success']) {
             $post = PostManager::post($out['topic'], $out['text'], $out['check'], $user, $ip);
+
+            self::images_valid($post, $out, $user);
+
+            if (!is_null($out['images'])) {
+                foreach ($out['images'] as $image) {
+                    if (!is_null(stristr($post->text, $image->url))) {
+                        ImagesManager::post_id($image, $post->id);
+                    }
+                }
+            }
+
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $topicId;
             self::$result['title_slug'] = ForumHelper::slugify($out['topic']->title);
             self::$result['user'] = $user;
+
+            $out['last_post'] = PostExecutor::last_post($out['topic']['id']);
+            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
 
             $data = json_decode($out['topic']->DATA, false);
             $data->last_post->user_name = $post->user->name;
@@ -59,6 +75,7 @@ class TopicExecutor extends BaseExecutor
             $data->inf->post_count++;
             $data->last_post->user_name = $post->user->name;
             $data->last_post->user_id = $post->user->id;
+            $data->last_post->avatar = $post->user->avatar;
             $data->last_post->title = $post->topic->title;
             $data->last_post->post_id = $post->topic->id;
             $data->last_post->date = $post->datetime;
@@ -86,6 +103,13 @@ class TopicExecutor extends BaseExecutor
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkPost($input, $topic);
         self::$result['success'] = true;
+    }
+
+    private static function images_valid($post, $out, $user)
+    {
+        $out['images'] = null;
+        $images = Images::where([['user_id', $user->id], ['datetime', '>=', strtotime('-12 hours')], ['post_id', null]])->get();
+        if ($images->count() > 0) return $out['images'] = $images;
     }
 
     public static function edit($topicId, $user, $input)
@@ -211,6 +235,7 @@ class TopicExecutor extends BaseExecutor
         } else {
             $last_post_data->user_name = $post->user->name;
             $last_post_data->user_id = $post->user->id;
+            $last_post_data->avatar = $post->user->avatar;
             $last_post_data->title = $post->topic->title;
             $last_post_data->post_id = $post->topic->id;
             $last_post_data->date = $post->datetime;
