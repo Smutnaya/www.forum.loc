@@ -58,16 +58,26 @@ class User extends Authenticatable
 
     public function bans()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Ban::class);
     }
     public function bans_moder()
     {
-        return $this->hasMany(User::class, 'user_moder_id');
+        return $this->hasMany(Ban::class, 'user_moder_id');
     }
     public function bans_cancel()
     {
-        return $this->hasMany(User::class, 'user_cancel_id');
+        return $this->hasMany(Ban::class, 'user_cancel_id');
     }
+
+    public function message()
+    {
+        return $this->hasMany(Message::class);
+    }
+    public function message_to()
+    {
+        return $this->hasMany(Message::class, 'user_id_to');
+    }
+
 
     public function other_roles()
     {
@@ -88,4 +98,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Images::class);
     }
+
 }

@@ -248,21 +248,20 @@ input[type="number"]:focus {
 .max-avatar {
     width: 120px !important;
     padding: 0.1rem !important;
-    height: 120px !important;;
+    height: 120px !important;
 }
 .min-logo {
-    width: 47px!important;
-    height: 47px !important;
+    width: 47px !important;
     padding: 0.1rem !important;
 }
 .min-avatar-mob {
-    width: 28!important;
-    height: 28 !important;
+    width: 30px !important;
+    height: 30px !important;
     padding: 0.1rem !important;
 }
 .min-avatar-post {
-    width: 39!important;
-    height: 39 !important;
+    width: 39px !important;
+    height: 39px !important;
     padding: 0.1rem !important;
 }
 .logo {
@@ -498,5 +497,17 @@ span[title]:hover::after {
 .pagination .page-item.active {
     a {
         color: #eee !important;
+    }
+}
+
+.flicker {
+    animation: flicker 1.5s infinite;
+}
+@keyframes flicker {
+    from {
+        opacity: 0.4; /* Непрозрачный текст */
+    }
+    to {
+        opacity: 1; /* Прозрачный текст */
     }
 }

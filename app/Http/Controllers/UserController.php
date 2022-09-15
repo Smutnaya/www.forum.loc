@@ -62,7 +62,7 @@ class UserController extends Controller
                 $permitted_chars = 'abcdefghijklmnopqrstuvwxyz';
                 $filenametostore = 'av' . md5(substr(str_shuffle($permitted_chars), 0, 5) . time()) . '.' . $extension;
 
-                $result = ImagesExecutor::avatar_post($user, $filenametostore, filesize($request->file('image')));
+                $result = ImagesExecutor::avatar_post($user_id, $user, $filenametostore, filesize($request->file('image')));
 
                 if ($result['success']) {
 
@@ -88,5 +88,17 @@ class UserController extends Controller
         } else {
             return redirect()->back()->withErrors(['message' => 'Изображение для загрузки не выбрано']);
         }
+    }
+
+    public function image_del($user_id)
+    {
+        $user = $this->user();
+        $result = ImagesExecutor::avatar_del($user_id, $user);
+
+        if ($result['success']) {
+            return redirect('user/' . $result['user_id']);
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
     }
 }

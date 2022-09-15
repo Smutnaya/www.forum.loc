@@ -46,12 +46,12 @@ use App\AppForum\Helpers\ForumHelper;
                                 @if (!is_null($forum['DATA']->last_post->user_name) && !is_null($forum['DATA']->last_post->user_id) && !is_null($forum['DATA']->last_post->date) && !is_null($forum['DATA']->last_post->title) && !is_null($forum['DATA']->last_post->post_id))
                                     <div class="row">
                                         <div class="col-2 d-none d-xl-block p-1 align-self-center">
-                                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar) && @fopen('http://forum.loc/storage/'.$forum['DATA']->last_post->avatar, 'r')) src="/storage{{ $forum['DATA']->last_post->avatar }}"
+                                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar)) src="/storage{{ $forum['DATA']->last_post->avatar }}"
                                             @else
                                             src="/images/av.png" @endif>
                                         </div>
                                         <div class="col-2 d-xl-none d-block align-self-center">
-                                            <img sstyle="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar-post rounded " alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar) && @fopen('http://forum.loc/storage/'.$forum['DATA']->last_post->avatar, 'r')) src="/storage{{ $forum['DATA']->last_post->avatar }}"
+                                            <img sstyle="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar-post rounded " alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar)) src="/storage{{ $forum['DATA']->last_post->avatar }}"
                                             @else
                                             src="/images/av.png" @endif>
                                         </div>

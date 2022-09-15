@@ -28,18 +28,25 @@ use App\AppForum\Helpers\ForumHelper;
                                             <i class="fa-regular fa-image p-0 d-inline" style="color:#4e5256 !important;" title="Аватар"></i>
                                         </button>
                                         <ul class="dropdown-menu p-2 m-0" style="background: #f9f5dc">
-                                            @if ($model['user_inf']['id'] == $model['user']['id'] || $model['user']['role_id'] > 11)
+                                            @if ($model['user_inf']['id'] == $model['user']['id'] || $model['user']['role_id'] > 10)
                                                 <li>
                                                     <a onclick="toggleImage()" href="#">
                                                         <i class="fa-regular fa-image pt-1 d-inline" style="color:#4e5256 !important;"></i> Загрузить аватар
                                                     </a>
                                                 </li>
                                             @endif
-                                            <li class="mt-1">
-                                                <a href="#">
-                                                    <i class="fa-regular fa-trash-can" style="width: 15px !important"></i> Удалить аватар
-                                                </a>
-                                            </li>
+                                            @if (!is_null($model['user_inf']['avatar']))
+                                                <li class="mt-1">
+                                                    <form action='{{ url('/u/' . $model['user_inf']['id'] . '/image_del') }}' method="post">
+                                                        @csrf
+                                                        <a href="#">
+                                                            <button type="submit" style="border: 0 !important; background: #f9f5dc; outline: 0 !important;" class="p-0">
+                                                                <i class="fa-regular fa-trash-can" style="width: 15px !important"></i> Удалить аватар
+                                                            </button>
+                                                        </a>
+                                                    </form>
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
                                 @endif
@@ -70,13 +77,9 @@ use App\AppForum\Helpers\ForumHelper;
                         <div class="text-center d-flex justify-content-center pt-1">
                             <div class="col-lg-3 col-md-4" style="max-width: 185px; min-width: 140px">
                                 <div class="row">
-                                    <div class="col-12 d-flex justify-content-center"><img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="max-avatar rounded" alt="Cinque Terre"
-                                        @if (!is_null($model['user']) && !is_null($model['user']['avatar']))
-                                        src="/storage{{ $model['user']['avatar'] }}"
+                                    <div class="col-12 d-flex justify-content-center"><img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="max-avatar rounded" alt="Cinque Terre" @if (!is_null($model['user_inf']) && !is_null($model['user_inf']['avatar'])) src="/storage{{ $model['user_inf']['avatar'] }}"
                                         @else
-                                        src="/images/av.png"
-                                        @endif
-                                        ></div>
+                                        src="/images/av.png" @endif></div>
                                     @if ($model['roles'])
                                         <div type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" class="col-12 fw-bold text-black mt-2 text-break text-center" style="font-size: 11pt; {{ $model['user_inf']['style'] }}" title="Нажмите, чтобы изменить статус пользователя">{{ $model['user_inf']['role'] }}</div>
                                     @else
@@ -167,8 +170,8 @@ use App\AppForum\Helpers\ForumHelper;
                         <div class="overflow-auto mb-3 border-bottom" style="max-height: 150px; border-color: #e3dbb7 !important;">
                             @foreach ($model['rolesInstall'] as $role)
                                 <div class="form-check p-0 new-tema">
-                                    <input type="submit" class="btn-check btn-id" name="check[]" id="{{ $role['id'] }}" value="{{ $role['id'] }}">
-                                    <label class="btn btn-outline-primary p-0" for="{{ $role['id'] }}">
+                                    <input type="submit" class="btn-check btn-id" name="check[]" id="r{{ $role['id'] }}" value="{{ $role['id'] }}">
+                                    <label class="btn btn-outline-primary p-0" for="r{{ $role['id'] }}">
                                         <span class="d-sm-inline" style="{{ ForumHelper::roleStyle($role['id']) }}">{{ $role['role'] }}</span>
                                     </label>
                                 </div>

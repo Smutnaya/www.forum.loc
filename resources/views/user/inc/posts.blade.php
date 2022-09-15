@@ -1,4 +1,5 @@
 <div class="my-2 mt-3 title-shadow fw-bold">Последние ответы:</div>
+@if ($model['user_posts']->count() > 0)
 
 @foreach ($model['user_posts'] as $post)
     <div class="my-1">
@@ -16,3 +17,8 @@
         </div> --}}
     </div>
 @endforeach
+@else
+<div class="my-1 fst-italic">
+    Здесь пока ничего
+</div>
+@endif

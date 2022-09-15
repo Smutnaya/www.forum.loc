@@ -449,6 +449,7 @@ class ModerHelper
         self::$result = false;
         if (is_null($user)) return self::$result = false;
 
+
         $bans = Ban::where([['user_id', $user->id], ['forum_out', true]])->get();
         if ($bans->count() > 0 && !is_null($bans)) {
             foreach ($bans as $ban) {

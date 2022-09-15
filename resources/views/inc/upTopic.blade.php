@@ -22,8 +22,10 @@ use App\AppForum\Helpers\ForumHelper;
                 </section>
             @endforeach
         @else
-            <div class="col py-3 fst-italic">
-                Здесь пока пусто ;(
+            <div class="row m-0">
+                <div class="col py-3 fst-italic">
+                    Здесь пока пусто ;(
+                </div>
             </div>
         @endif
     </div>
@@ -49,9 +51,12 @@ use App\AppForum\Helpers\ForumHelper;
                 </section>
             @endforeach
         @else
-            <div class="col py-3 fst-italic">
-                Здесь пока пусто ;(
+            <div class="row m-0">
+                <div class="col py-3 fst-italic">
+                    Здесь пока пусто ;(
+                </div>
             </div>
+
         @endif
     </div>
 </div>

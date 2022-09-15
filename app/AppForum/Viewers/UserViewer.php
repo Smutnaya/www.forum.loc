@@ -48,21 +48,22 @@ class UserViewer
         if (is_null($user_inf)) return $model;
         self::setUser($model, $user_inf);
 
-        $user_id = 0;
-        $user_role = 0;
+        $user_id_view = 0;
+        $user_role_view = 0;
 
         if (!is_null($user)) {
             $model['user'] = $user;
-            $user_id = $user->id;
-            $user_role = $user->role_id;
+            $user_id_view = $user->id;
+            $user_role_view = $user->role_id;
         }
 
         $user_posts = Post::where('user_id', intval($user_id))->orderByDesc('id')->distinct()->limit(50)->get();
-        if ($user_posts->count() > 0) self::setUserPost($model, $user_posts, $user_id,  $user_role);
+        if ($user_posts->count() > 0) self::setUserPost($model, $user_posts, $user_role_view,  $user_id_view);
+
         $forums = Forum::all();
-        if (!is_null($forums)) self::setblockForum($model, $user_role, $forums, $user);
+        if (!is_null($forums)) self::setblockForum($model, $user_role_view, $forums, $user);
         $sections = Section::all();
-        if (!is_null($sections)) self::setblockSection($model, $user_role, $sections);
+        if (!is_null($sections)) self::setblockSection($model, $user_role_view, $sections);
 
         $bans = Ban::where('user_id', $user_inf->id)->orderByDesc('id')->limit(50)->get();
         if ($bans->count() > 0) self::setBan($model, $bans);
@@ -146,9 +147,30 @@ class UserViewer
     }
     private static function setUserPost($model, $user_posts, $user_role, $user_id)
     {
+        $topic_id = collect();
         foreach ($user_posts as $post) {
-            if ($post->hide) {
+            if ($post->hide || $post->moderation) {
                 if ($user_role > 1 || $user_id == $post->user_id) {
+                    if (!$topic_id->contains($post->topic_id)) {
+                        $model['user_posts']->push([
+                            'text' => $post->text,
+                            'id' => $post->id,
+                            'date' => ForumHelper::timeFormat($post->datetime),
+                            'date_d' => $post->datetime,
+                            'hide' => $post->hide,
+                            'moderation' => $post->moderation,
+                            'topic_id' => $post->topic_id,
+                            'topic_title' => $post->topic->title,
+                            'forum_id' => $post->topic->forum_id,
+                            'forum_title' => $post->topic->forum->title,
+                            'section_id' => $post->topic->forum->section_id,
+                            'section_title' => $post->topic->forum->section->title,
+                        ]);
+                        $topic_id->push($post->topic_id);
+                    }
+                }
+            } else {
+                if (!$topic_id->contains($post->topic_id)) {
                     $model['user_posts']->push([
                         'text' => $post->text,
                         'id' => $post->id,
@@ -163,22 +185,8 @@ class UserViewer
                         'section_id' => $post->topic->forum->section_id,
                         'section_title' => $post->topic->forum->section->title,
                     ]);
+                    $topic_id->push($post->topic_id);
                 }
-            } else {
-                $model['user_posts']->push([
-                    'text' => $post->text,
-                    'id' => $post->id,
-                    'date' => ForumHelper::timeFormat($post->datetime),
-                    'date_d' => $post->datetime,
-                    'hide' => $post->hide,
-                    'moderation' => $post->moderation,
-                    'topic_id' => $post->topic_id,
-                    'topic_title' => $post->topic->title,
-                    'forum_id' => $post->topic->forum_id,
-                    'forum_title' => $post->topic->forum->title,
-                    'section_id' => $post->topic->forum->section_id,
-                    'section_title' => $post->topic->forum->section->title,
-                ]);
             }
         }
     }

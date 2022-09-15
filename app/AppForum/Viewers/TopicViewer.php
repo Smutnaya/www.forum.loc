@@ -80,7 +80,7 @@ class TopicViewer
         $skip = ($page - 1) * $take;
 
         $posts = self::getPost(intval($topicId), $skip, $take, $user_role, $topic->forum_id, $topic->forum->section_id, $user);
-        if ($posts->isEmpty()) return $model;
+        if ($posts->isEmpty() || $posts->count() < 1) return $model; // !!!!!!!!!!
         self::setPost($model, $posts, $user, $user_role, $topic->forum_id, $topic->forum->section_id);
 
         $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id);

@@ -58,18 +58,18 @@
                                         @foreach ($model['forums_block'] as $forum)
                                             <div class="form-check p-0 new-tema">
                                                 @if ($forum->section_id == 7)
-                                                    <input type="radio" class="btn-check" name="check[]" id="f{{ $forum['id'] }}" value="{{ $forum['id'] }}">
-                                                    <label class="btn btn-outline-primary p-0" style="color: #bd0000" for="f{{ $forum['id'] }}">
+                                                    <input type="radio" class="btn-check" name="check[]" id="fb{{ $forum['id'] }}" value="{{ $forum['id'] }}">
+                                                    <label class="btn btn-outline-primary p-0" style="color: #bd0000" for="fb{{ $forum['id'] }}">
                                                         <span class="d-sm-inline">{{ $forum['title'] }}</span>
                                                     </label>
                                                 @elseif ($forum->id == 16 || $forum->id == 17 || $forum->id == 39 || $forum->id == 40 || $forum->section_id == 5)
-                                                    <input type="radio" class="btn-check" name="check[]" id="f{{ $forum['id'] }}" value="{{ $forum['id'] }}">
-                                                    <label class="btn btn-outline-primary p-0" style="color: #00299d" for="f{{ $forum['id'] }}">
+                                                    <input type="radio" class="btn-check" name="check[]" id="fb{{ $forum['id'] }}" value="{{ $forum['id'] }}">
+                                                    <label class="btn btn-outline-primary p-0" style="color: #00299d" for="fb{{ $forum['id'] }}">
                                                         <span class="d-sm-inline">{{ $forum['title'] }}</span>
                                                     </label>
                                                 @else
-                                                    <input type="radio" class="btn-check" name="check[]" id="f{{ $forum['id'] }}" value="{{ $forum['id'] }}">
-                                                    <label class="btn btn-outline-primary p-0" style="color: #160f0a" for="f{{ $forum['id'] }}">
+                                                    <input type="radio" class="btn-check" name="check[]" id="fb{{ $forum['id'] }}" value="{{ $forum['id'] }}">
+                                                    <label class="btn btn-outline-primary p-0" style="color: #160f0a" for="fb{{ $forum['id'] }}">
                                                         <span class="d-sm-inline">{{ $forum['title'] }}</span>
                                                     </label>
                                                 @endif
@@ -113,18 +113,18 @@
                                             @foreach ($model['sections_block'] as $section)
                                                 <div class="form-check p-0 new-tema">
                                                     @if ($section->id == 7)
-                                                        <input type="radio" class="btn-check" name="check1[]" id="s{{ $section['id'] }}" value="{{ $section['id'] }}">
-                                                        <label class="btn btn-outline-primary p-0" style="color: #bd0000" for="s{{ $section['id'] }}">
+                                                        <input type="radio" class="btn-check" name="check1[]" id="sb{{ $section['id'] }}" value="{{ $section['id'] }}">
+                                                        <label class="btn btn-outline-primary p-0" style="color: #bd0000" for="sb{{ $section['id'] }}">
                                                             <span class="d-sm-inline">{{ $section['title'] }}</span>
                                                         </label>
                                                     @elseif ($section->id == 5)
-                                                        <input type="radio" class="btn-check" name="check1[]" id="s{{ $section['id'] }}" value="{{ $section['id'] }}">
-                                                        <label class="btn btn-outline-primary p-0" style="color: #00299d" for="s{{ $section['id'] }}">
+                                                        <input type="radio" class="btn-check" name="check1[]" id="sb{{ $section['id'] }}" value="{{ $section['id'] }}">
+                                                        <label class="btn btn-outline-primary p-0" style="color: #00299d" for="sb{{ $section['id'] }}">
                                                             <span class="d-sm-inline">{{ $section['title'] }}</span>
                                                         </label>
                                                     @else
-                                                        <input type="radio" class="btn-check" name="check1[]" id="s{{ $section['id'] }}" value="{{ $section['id'] }}">
-                                                        <label class="btn btn-outline-primary p-0" style="color: #160f0a" for="s{{ $section['id'] }}">
+                                                        <input type="radio" class="btn-check" name="check1[]" id="sb{{ $section['id'] }}" value="{{ $section['id'] }}">
+                                                        <label class="btn btn-outline-primary p-0" style="color: #160f0a" for="sb{{ $section['id'] }}">
                                                             <span class="d-sm-inline">{{ $section['title'] }}</span>
                                                         </label>
                                                     @endif

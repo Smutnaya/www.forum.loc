@@ -21568,6 +21568,20 @@ body {
   font-family: "Open Sans", Arial, Helvetica, sans-serif;
 }
 
+blockquote {
+  background: rgba(241, 233, 194, 0.5607843137);
+  color: #4a4741;
+  margin: 0 0 1rem 1rem;
+  padding: 5px 13px !important;
+  font-size: 14px;
+  font-style: italic;
+  font-family: "Open Sans", "Arial", Helvetica, serif !important;
+  border-style: solid;
+  border-color: rgba(175, 164, 132, 0.2392156863);
+  border-width: 0.005rem;
+  border-radius: 0px 15px !important;
+}
+
 p {
   margin: 0 !important;
 }
@@ -21811,19 +21825,18 @@ input[type=number]:focus {
 
 .min-logo {
   width: 47px !important;
-  height: 47px !important;
   padding: 0.1rem !important;
 }
 
 .min-avatar-mob {
-  width: 28 !important;
-  height: 28 !important;
+  width: 30px !important;
+  height: 30px !important;
   padding: 0.1rem !important;
 }
 
 .min-avatar-post {
-  width: 39 !important;
-  height: 39 !important;
+  width: 39px !important;
+  height: 39px !important;
   padding: 0.1rem !important;
 }
 
@@ -22055,4 +22068,31 @@ span[title]:hover::after {
 
 .pagination .page-item.active a {
   color: #eee !important;
+}
+
+.flicker {
+  -webkit-animation: flicker 1.5s infinite;
+          animation: flicker 1.5s infinite;
+}
+
+@-webkit-keyframes flicker {
+  from {
+    opacity: 0.4;
+    /* Непрозрачный текст */
+  }
+  to {
+    opacity: 1;
+    /* Прозрачный текст */
+  }
+}
+
+@keyframes flicker {
+  from {
+    opacity: 0.4;
+    /* Непрозрачный текст */
+  }
+  to {
+    opacity: 1;
+    /* Прозрачный текст */
+  }
 }

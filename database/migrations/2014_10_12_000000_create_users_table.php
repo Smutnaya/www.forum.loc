@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('id_clan')->nullable();
             $table->unsignedInteger('id_alians')->nullable();
             $table->unsignedInteger('level')->nullable();
+            $table->boolean('ban_message')->default(false);
             $table->rememberToken();
             $table->json('DATA')->default('{"post_count":0,"like":0}');
             $table->unsignedBigInteger('role_id')->default('1');

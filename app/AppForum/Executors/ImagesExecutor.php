@@ -2,6 +2,7 @@
 
 namespace App\AppForum\Executors;
 
+use App\User;
 use App\Images;
 use App\AppForum\Managers\UserManager;
 use Illuminate\Support\Facades\Storage;
@@ -44,25 +45,32 @@ class ImagesExecutor extends BaseExecutor
         self::$result = ['success' => true];
     }
 
-    public static function avatar_post($user, $url, $size)
+    public static function avatar_post($user_id, $user, $url, $size)
     {
         $out = collect();
 
         if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result = ['success' => true];
-        $out['user'] = $user;
 
-        if (self::$result['success']) self::avatar_post_valid($user, $url, $size, $out);
+        if (self::$result['success']) self::avatar_post_valid($user_id, $user, $url, $size, $out);
 
         if (self::$result['success']) {
             UserManager::avatar_post($out['url'], $out['user']);
-            self::$result['user_id'] = $user->id;
+            self::$result['user_id'] = $out['user']['id'];
         }
         return self::$result;
     }
-    private static function avatar_post_valid($user, $url, $size, $out)
+    private static function avatar_post_valid($user_id, $user, $url, $size, $out)
     {
         self::$result = ['success' => false];
+
+        $user_inf = User::find(intval($user_id));
+        if(is_null($user_inf)) return self::$result['message'] = 'Пользователь не найден';
+        $out['user'] = $user_inf;
+
+        if($user_inf->id != $user->id) {
+            if($user->role_id < 11 ) return self::$result['message'] = 'Отсуствую права для установки аватара';
+        }
 
         if (is_null($url)) return self::$result['message'] = 'Проверьте загружаемый файл';
         //'/storage/avatars/'
@@ -71,6 +79,38 @@ class ImagesExecutor extends BaseExecutor
         if (is_null($size)) return self::$result['message'] = 'Проверьте загружаемый файл';
         if ($size < 1) return self::$result['message'] = 'Проверьте загружаемый файл';
         $out['size'] = $size;
+
+        self::$result = ['success' => true];
+    }
+
+    public static function avatar_del($user_id, $user)
+    {
+        $out = collect();
+
+        if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result = ['success' => true];
+
+        if (self::$result['success']) self::avatar_del_valid($user_id, $user, $out);
+
+        if (self::$result['success']) {
+            UserManager::avatar_del($out['user']);
+            self::$result['user_id'] = $out['user']['id'];
+        }
+        return self::$result;
+    }
+    private static function avatar_del_valid($user_id, $user, $out)
+    {
+        self::$result = ['success' => false];
+
+        $user_inf = User::find(intval($user_id));
+        if(is_null($user_inf)) return self::$result['message'] = 'Пользователь не найден';
+        $out['user'] = $user_inf;
+
+        if(is_null($user_inf->avatar)) return self::$result['message'] = 'Пользовательский аватар не был установлен ранее';
+
+        if($user_inf->id != $user->id) {
+            if($user->role_id < 11 ) return self::$result['message'] = 'Отсуствую права для удаления аватара';
+        }
 
         self::$result = ['success' => true];
     }

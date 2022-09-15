@@ -2,6 +2,7 @@
 
 namespace App\AppForum\Helpers;
 
+use App\Message;
 use App\Post;
 use function PHPUnit\Framework\isNull;
 
@@ -131,6 +132,21 @@ class ForumHelper
         $topicPage['pages'] = $pages;
 
         return $topicPage;
+    }
+
+    public static function messagePage($user_id)
+    {
+        $messagePage = collect();
+        $mess_num = 0;
+
+        $mess_num = Message::where('user_id', intval($user_id))->orWhere('user_id_to', intval($user_id))->count();
+
+        $take = 15;
+        $pages = (int) ceil($mess_num / $take);
+        $messagePage['take'] = $take;
+        $messagePage['pages'] = $pages;
+
+        return $messagePage;
     }
 
     public static function roleStyle($user_role)

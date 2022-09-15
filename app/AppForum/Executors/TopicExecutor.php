@@ -59,6 +59,7 @@ class TopicExecutor extends BaseExecutor
             $data = json_decode($out['topic']->DATA, false);
             $data->last_post->user_name = $post->user->name;
             $data->last_post->user_id = $post->user->id;
+            $data->last_post->avatar = $post->user->avatar;
             $data->last_post->title = $post->topic->title;
             $data->last_post->post_id = $post->topic->id;
             $data->last_post->date = $post->datetime;
@@ -229,6 +230,7 @@ class TopicExecutor extends BaseExecutor
         if (is_null($post)) {
             $last_post_data->user_name = null;
             $last_post_data->user_id = null;
+            $last_post_data->avatar = null;
             $last_post_data->title = null;
             $last_post_data->post_id = null;
             $last_post_data->date = null;

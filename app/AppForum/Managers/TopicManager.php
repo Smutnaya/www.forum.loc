@@ -11,6 +11,7 @@ class TopicManager
         $topic = Topic::create([
             'title' => $title,
             'datetime' => time(),
+            'time_post' => time(),
             'user_id' => $user->id,
             'pin' => $check['pin'],
             'block' => $check['block'],

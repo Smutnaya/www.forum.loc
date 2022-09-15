@@ -20,20 +20,43 @@
                         <a aria-current="page" class="naw-link" href=#>В игру</a>
                     </li>
                 </ul>
-                <div class="mx-2">
+
+                {{-- <div class="mx-2">
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
-                </div>
-                <div class="mx-2">
-                    <i class="fa-regular fa-envelope" width="18" height="18"></i>
-                </div>
+                </div> --}}
+                @if (!is_null($model['user']))
+
+                        <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 25px;"></i></a>
+
+                        <a href="{{ url('/message') }}"><span class="position-relative">
+                                <i class="fa-regular fa-envelope align-middle fa-beat" style="font-size: 25px;"></i>
+                                <span class="position-absolute top-100 start-100 translate-middle badge border rounded-circle bg-success p-1 m-0 flicker" style="background-color: #0e7a32 !important; border-color: #0e7a32 !important;  left: 95% !important; top: 91% !important;"><span class="visually-hidden">unread messages</span></span>
+                            </span>
+                        </a>
+
+                @endif
                 <div class="mx-2 ms-3">
-                    @if (!is_null($model['user']) && !is_null($model['user']['avatar'])) <img class="min-avatar" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
+                    @if (!is_null($model['user']) && !is_null($model['user']['avatar']))
+                        <span class="position-relative">
+                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important;" class="min-avatar" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
+                            <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; left: 60% !important; top: 95% !important;">
+                                <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
-                    <img class="min-avatar" alt="avatar" src="/images/av.png"> @endif
+                        <span class="position-relative">
+                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important;" class="min-avatar" alt="avatar" src="/images/av.png">
+                            <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; left: 60% !important; top: 95% !important;">
+                                <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </span>
+                    @endif
                     @if (!is_null($model['user']))
-                    <a class="text-break" href="{{ url('/user/' . $model['user']['id']) }}">{{ $model['user']['name'] }}</a>
+                        {{-- <a class="text-break" href="{{ url('/user/' . $model['user']['id']) }}">{{ $model['user']['name'] }}</a> --}}
                     @else
-                        Гость
+                        Вход
                     @endif
                 </div>
             </div>
@@ -50,21 +73,43 @@
                 </button>
             </div>
             <div class="text-end my-1 col-12 col-sm-5">
-                @if (!is_null($model['user']) &&  !is_null($model['user']['avatar'])) <img class="min-avatar-mob mx-2" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
-                @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
-                <img class="min-avatar-mob mx-2" alt="avatar" src="/images/av.png"> @endif
+                {{-- <div class="mx-2">
+                    <i class="fa-regular fa-bell" width="18" height="18"></i>
+                </div> --}}
                 @if (!is_null($model['user']))
-                    <a class="text-break" href="{{ url('/user/' . $model['user']['id']) }}">{{ $model['user']['name'] }}</a>
-                    @else
-                        Гость
-                    @endif
-                <svg class="mx-2 ms-3" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"></path>
-                </svg>
+                    <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 20px;"></i> </a>
 
-                <svg class="mx-2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
-                </svg>
+                    <a href="{{ url('/message') }}"><span class="position-relative">
+                            <i class="fa-regular fa-envelope align-middle fa-beat" style="font-size: 20px;"></i>
+                            <span class="position-absolute translate-middle badge border rounded-circle bg-success p-1 m-0" style="background-color: #0e7a32 !important; border-color: #0e7a32 !important; left: 80% !important; top: 95% !important;"><span class="visually-hidden">unread messages</span></span>
+                        </span>
+                    </a>
+                @endif
+                <span class="mx-2 ms-2">
+                    @if (!is_null($model['user']) && !is_null($model['user']['avatar']))
+                        <span class="position-relative">
+                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important; padding-left: 0px !important; padding-top: 0px !important;" class="min-avatar-mob p-0" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
+                            <span class="fa-stack position-absolute" style="font-size: 5px; color: #000000bf; left: 60% !important; top: 95% !important;">
+                                <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </span>
+                    @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
+                        <span class="position-relative">
+                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important; padding-left: 0px !important; padding-top: 0px !important;" class="min-avatar-mob p-0" alt="avatar" src="/images/av.png">
+                            <span class="fa-stack position-absolute" style="font-size: 5px; color: #000000bf; left: 60% !important; top: 95% !important;">
+                                <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </span>
+                    @endif
+
+                    @if (!is_null($model['user']))
+                        {{-- <a class="text-break" href="{{ url('/user/' . $model['user']['id']) }}">{{ $model['user']['name'] }}</a> --}}
+                    @else
+                        Вход
+                    @endif
+                </span>
             </div>
         </div>
         <div class="offcanvas offcanvas-top g-0 p-0" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
