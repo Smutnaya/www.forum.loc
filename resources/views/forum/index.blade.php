@@ -12,7 +12,7 @@ use App\AppForum\Helpers\ForumHelper;
             <hr class="hr-color d-md-none d-sm-block ">
 
             @if ($errors->has('message'))
-                <div class="error" style="color:red">{{ $errors->first('message') }}</div>
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif
             <div class="row mb-2">
                 <div class="pb-1 col-8" id="title">

@@ -4,7 +4,7 @@ use App\AppForum\Helpers\ForumHelper;
 @section('content')
     <div class="container-fluid px-0 m-0">
         @if ($errors->has('message'))
-            <div class="error" style="color:red">{{ $errors->first('message') }}</div>
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
         @endif
         @if (Session::has('message'))
             <div class="alert alert-success" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ Session::get('message') }}</div>
@@ -15,6 +15,7 @@ use App\AppForum\Helpers\ForumHelper;
         @endif
         <h6 class="text-secondary title-shadow pt-1 pb-2">Информация о пользователе</h6>
         <div class="col-12 inf text-centre py-2 p-2 pb-3 shadow-sm fs-5" style="background: rgb(246, 240, 204);">
+
             @if (is_null($model['user_inf']))
                 <div class="my-3 mb-5 centre error" style="color:red">Данные не найдены</div>
             @else
@@ -91,10 +92,10 @@ use App\AppForum\Helpers\ForumHelper;
                                         <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;">{{ $model['user_inf']['roleModer'] }}</div>
                                     @elseif ($model['user']['role_id'] > 1)
                                         @if ($model['other_role_inf'] && !$model['other_role_bf_inf'])
-                                            <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;" onclick="toggleRoles()" type="button">индивидуальный доступ</div>
+                                            <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button">индивидуальный доступ</div>
                                         @endif
                                         @if ($model['other_role_bf_inf'])
-                                            <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;" onclick="toggleRoles()" type="button">индивидуальный доступ (модерация)</div>
+                                            <div class="col-12 fw-bold text-black text-break text-center lh-sm" style="font-size: 8pt;" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button">индивидуальный доступ (модерация)</div>
                                         @endif
                                     @endif
                                 @endif
@@ -110,12 +111,37 @@ use App\AppForum\Helpers\ForumHelper;
                                 @if ($model['user']['role_id'] > 1 || $model['other_role_bf'])
                                     <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                 @endif
+                                @if ($model['user']['role_id'] > 10)
+                                    @if ($model['user_inf']['ban_message'])
+                                        <form style="display: inline;" method='post' action='{{ url('/u/' . $model['user_inf']['id'] . '/ban_message') }}'>
+                                            @csrf
+                                            <input type="submit" class="btn-check btn-id" name="check[]" id="b{{ $model['user_inf']['id'] }}" value="{{ $model['user_inf']['id'] }}">
+                                            <label for="b{{ $model['user_inf']['id'] }}">
+                                                <span type="button" class="fa-stack" style="width: 20px;" title="бан сообщений">
+                                                    <i class="fa-solid fa-x fa-stack-1x" style="color:#6a0000; font-size: 10px;"></i>
+                                                    <i class="fa-regular fa-message fa-stack-1x"></i>
+                                                </span>
+                                            </label>
+                                        </form>
+                                    @else
+                                        <form style="display: inline;" method='post' action='{{ url('/u/' . $model['user_inf']['id'] . '/ban_message') }}'>
+                                            @csrf
+                                            <input type="submit" class="btn-check btn-id" name="check[]" id="b{{ $model['user_inf']['id'] }}" value="{{ $model['user_inf']['id'] }}">
+                                            <label for="b{{ $model['user_inf']['id'] }}">
+                                                <span type="button" class="fa-stack" style="width: 20px;" title="бан сообщений">
+                                                    <i class="fa-regular fa-message fa-stack-1x"></i>
+                                                    <i class="fa-solid fa-check fa-stack-1x align-middle" style="color:#6a0000; font-size: 12px;"></i>
+                                                </span>
+                                            </label>
+                                        </form>
+                                    @endif
+                                @endif
                                 @if ($model['user']['role_id'] != $model['user_inf']['role_id'])
                                     {{-- @if ($model['user']['role_id'] == 4 || $model['user']['role_id'] > 8)
                                         <i class="fa-regular fa-circle-user me-2 ms-1 text-end" title="доступы"></i>
                                     @endif --}}
                                     @if ($model['user']['role_id'] > 10 && $model['user_inf']['role_id'] <= $model['user']['role_id'])
-                                        <i onclick="toggleRoles()" type="button" class="fa-brands fa-earlybirds me-2 ms-1 text-end" style="color: #6a0000;" title="доп.доступы"></i>
+                                        <i onclick="toggleRoles()" type="button" class="fa-brands fa-earlybirds me-2 ms-2 text-end" style="color: #6a0000;" title="доп.доступы"></i>
                                     @endif
                                 @endif
                             @endif
@@ -125,7 +151,7 @@ use App\AppForum\Helpers\ForumHelper;
                             <div class="row" style="min-height: 215px">
                                 <div class="col-4 d-flex justify-content-center align-items-center" style="color:#4e5256">ответов: <span style="color:rgb(0, 0, 116)" class="fw-bolder">&nbsp;{{ $model['user_inf']['DATA']->post_count }}</span></div>
                                 <div class="col-4 d-flex justify-content-center align-items-center" style="color:#4e5256">рейтинг: <span style="color: @if ($model['user_inf']['DATA']->like < 0) #6a0000 @else #0e583d @endif " class="fw-bolder">&nbsp;{{ $model['user_inf']['DATA']->like }}</span></div>
-                                <div class="col-4 d-flex justify-content-center align-items-center"><span style="color:#4e5256">написать</span>&nbsp;&nbsp;<i class="fa-regular fa-envelope" style="color:black"></i></div>
+                                <div class="col-4 d-flex justify-content-center align-items-center" style="color:#4e5256">загрузка файлов:<span style="color:black">&nbsp;{{ $model['user_inf']['limit'] }}/20 Мб</span></div>
                             </div>
                         </div>
                     </div>
@@ -137,7 +163,7 @@ use App\AppForum\Helpers\ForumHelper;
                             @else
                                 <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d" title="Рейтинг"></i> <span style="color:#0e583d">{{ $model['user_inf']['DATA']->like }}</span></span>
                             @endif
-                            <span class="text-muted"><i class="fa-regular fa-envelope ms-3 me-1" style="color:black"></i></span>
+                            <span class="ms-2" style="color:#342d29"><i class="fa-regular fa-file-image me-1"></i>&nbsp;{{ $model['user_inf']['limit'] }}/20мб</span>
                             <div class="col-12">
                                 @if (!is_null($model['user']))
                                     @if ($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id'])
@@ -146,12 +172,37 @@ use App\AppForum\Helpers\ForumHelper;
                                     @if ($model['user']['role_id'] > 1)
                                         <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                     @endif
+                                    @if ($model['user']['role_id'] > 10)
+                                        @if ($model['user_inf']['ban_message'])
+                                            <form style="display: inline;" method='post' action='{{ url('/u/' . $model['user_inf']['id'] . '/ban_message') }}'>
+                                                @csrf
+                                                <input type="submit" class="btn-check btn-id" name="check[]" id="b{{ $model['user_inf']['id'] }}" value="{{ $model['user_inf']['id'] }}">
+                                                <label for="b{{ $model['user_inf']['id'] }}">
+                                                    <span type="button" class="fa-stack" style="width: 20px;" title="бан сообщений">
+                                                        <i class="fa-solid fa-x fa-stack-1x" style="color:#6a0000; font-size: 10px;"></i>
+                                                        <i class="fa-regular fa-message fa-stack-1x"></i>
+                                                    </span>
+                                                </label>
+                                            </form>
+                                        @else
+                                            <form style="display: inline;" method='post' action='{{ url('/u/' . $model['user_inf']['id'] . '/ban_message') }}'>
+                                                @csrf
+                                                <input type="submit" class="btn-check btn-id" name="check[]" id="b{{ $model['user_inf']['id'] }}" value="{{ $model['user_inf']['id'] }}">
+                                                <label for="b{{ $model['user_inf']['id'] }}">
+                                                    <span type="button" class="fa-stack" style="width: 20px;" title="бан сообщений">
+                                                        <i class="fa-regular fa-message fa-stack-1x"></i>
+                                                        <i class="fa-solid fa-check fa-stack-1x align-middle" style="color:#6a0000; font-size: 12px;"></i>
+                                                    </span>
+                                                </label>
+                                            </form>
+                                        @endif
+                                    @endif
                                     @if ($model['user']['role_id'] != $model['user_inf']['role_id'])
                                         {{-- @if ($model['user']['role_id'] == 4 || $model['user']['role_id'] > 8)
                                             <i class="fa-regular fa-circle-user me-2 ms-1 text-end" title="доступы"></i>
                                         @endif --}}
                                         @if ($model['user']['role_id'] > 10)
-                                            <i onclick="toggleRoles()" type="button" class="fa-brands fa-earlybirds me-2 ms-1 text-end" style="color: #6a0000;" title="доп.доступы"></i>
+                                            <i onclick="toggleRoles()" type="button" class="fa-brands fa-earlybirds me-2 ms-2 text-end" style="color: #6a0000;" title="доп.доступы"></i>
                                         @endif
                                     @endif
                                 @endif

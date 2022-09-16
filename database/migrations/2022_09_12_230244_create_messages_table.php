@@ -22,7 +22,7 @@ class CreateMessagesTable extends Migration
             $table->longtext('text');
             $table->unsignedInteger('datetime');
             $table->boolean('view')->default(false);
-            $table->unsignedBigInteger('reply');
+            $table->boolean('hide')->default(false);
         });
     }
 

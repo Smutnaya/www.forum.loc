@@ -20,6 +20,13 @@ class UserManager
         ])->save();
     }
 
+    public static function ban_message($user, $ban_message)
+    {
+        $user->fill([
+            'ban_message' => $ban_message
+        ])->save();
+    }
+
     public static function avatar_post($url, $user)
     {
         // if(!is_null($user->avatar))

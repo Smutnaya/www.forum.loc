@@ -7,6 +7,8 @@ use App\Post;
 use App\Role;
 use App\User;
 use App\Forum;
+use App\Images;
+use App\Message;
 use App\Section;
 use App\Other_role;
 use App\AppForum\Helpers\AsideHelper;
@@ -21,6 +23,7 @@ class UserViewer
             'sectionsAside' => collect(), // id, title, description
             'user_inf' => null,
             'user' => null,
+            'message_new' => null,
             'roles' => false,
             'rolesInstall' => collect(),
             'user_posts' => collect(),
@@ -46,7 +49,10 @@ class UserViewer
 
         $user_inf = User::find(intval($user_id));
         if (is_null($user_inf)) return $model;
-        self::setUser($model, $user_inf);
+        $limit = Images::where([['user_id', $user_inf->id], ['datetime', '>=', strtotime(date('Y-m-d'))]])->sum('size');
+        if($limit > 0) $limit /= 1048576;
+        $limit = round( $limit, 1);
+        self::setUser($model, $user_inf, $limit);
 
         $user_id_view = 0;
         $user_role_view = 0;
@@ -55,6 +61,8 @@ class UserViewer
             $model['user'] = $user;
             $user_id_view = $user->id;
             $user_role_view = $user->role_id;
+            $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+            $model['message_new'] = $mes->count();
         }
 
         $user_posts = Post::where('user_id', intval($user_id))->orderByDesc('id')->distinct()->limit(50)->get();
@@ -70,11 +78,12 @@ class UserViewer
 
         $model['roles'] = ModerHelper::roles($model['user'], $model['user_inf']);
 
+
         $rolesInstall = Role::all();
         if ($rolesInstall->count() > 0) self::setRolesInstall($model, $model['user'], $rolesInstall);
 
         if (!is_null($user)) {
-            $other_roles = Other_role::where('user_id', $user_id)->get();
+            $other_roles = Other_role::where('user_id', intval($user_id))->get();
             if ($other_roles->count() > 0) $model['other_role'] = true;
             $other_roles_bf = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
             if ($other_roles_bf->count() > 0) $model['other_role_bf'] = true;
@@ -94,31 +103,33 @@ class UserViewer
         return $model;
     }
 
-    private static function setUser($model, $user_inf)
+    private static function setUser($model, $user_inf, $limit)
     {
         $model['user_inf'] = [
             'id' => $user_inf->id,
             'name' => $user_inf->name,
             'ip' => $user_inf->ip,
+            'ban_message' => $user_inf->ban_message,
             'role_id' => $user_inf->role_id,
             'ip_online' => null,
             'avatar' => $user_inf->avatar,
             'role' => Role::find($user_inf->role_id)->description,
             'style' => ForumHelper::roleStyle($user_inf->role_id),
             'DATA' => json_decode($user_inf->DATA, false),
-            'online' => null
+            'online' => null,
+            'limit' => $limit,
         ];
 
         if (!is_null($user_inf->online)) {
             $model['user_inf'] = ['ip_online' => $user_inf->online->ip];
-
-
             $online = $user_inf->online->datetime;
+
             if ($online < strtotime('-15 minute')) {
                 $model['user_inf'] = [
                     'id' => $user_inf->id,
                     'name' => $user_inf->name,
                     'ip' => $user_inf->ip,
+                    'ban_message' => $user_inf->ban_message,
                     'role_id' => $user_inf->role_id,
                     'ip_online' => $user_inf->online->ip,
                     'avatar' => $user_inf->avatar,
@@ -126,13 +137,15 @@ class UserViewer
                     'roleModer' => Role::find($user_inf->role_id)->role,
                     'style' => ForumHelper::roleStyle($user_inf->role_id),
                     'DATA' => json_decode($user_inf->DATA, false),
-                    'online' => ForumHelper::timeFormat($online)
+                    'online' => ForumHelper::timeFormat($online),
+                    'limit' => $limit,
                 ];
             } else {
                 $model['user_inf'] = [
                     'id' => $user_inf->id,
                     'name' => $user_inf->name,
                     'ip' => $user_inf->ip,
+                    'ban_message' => $user_inf->ban_message,
                     'role_id' => $user_inf->role_id,
                     'ip_online' => $user_inf->online->ip,
                     'avatar' => $user_inf->avatar,
@@ -140,7 +153,8 @@ class UserViewer
                     'roleModer' => Role::find($user_inf->role_id)->role,
                     'style' => ForumHelper::roleStyle($user_inf->role_id),
                     'DATA' => json_decode($user_inf->DATA, false),
-                    'online' => 'online'
+                    'online' => 'online',
+                    'limit' => $limit,
                 ];
             }
         }

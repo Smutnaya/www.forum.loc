@@ -21,7 +21,7 @@ class CkeditorController extends Controller
 
         $allowed_extension = array("jpg", "gif", "png", "jpeg", "bmp");
         //"jpg", "GPG", "gif", "GIF", "png", "PNG", "jpeg", "JPEG", "bmp", "BMP"
-        if (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) < 2 * 1000000) {
+        if (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) < 2 * 1048576) {
             //filename to store
 
             //$filenametostore = $filename . '_' . time() . '.' . $extension;
@@ -45,7 +45,7 @@ class CkeditorController extends Controller
             } else {
                 echo $result['message'];
             }
-        } elseif (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) > 2000000) {
+        } elseif (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) > 2 * 1048576) {
             echo 'Максимально допустимый размер файла 2мб';
         } else {
             echo 'Не удалось загрузить изображение! Допустимые форматы для загрузки: "jpg", "gif", "png", "jpeg", "bmp".';

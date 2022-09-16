@@ -47,9 +47,9 @@ class ModerHelper
         $user_role = ModerHelper::user_role($user);
 
         if ($user_role == 0) {
-            return $forums_vis = Forum::where([['private', false], ['section_id', $section_id]])->get();
+            return $forums_vis = Forum::where([['private', false], ['section_id', intval($section_id)]])->get();
         }
-        $forums = Forum::where('section_id', $section_id)->get();
+        $forums = Forum::where('section_id', intval($section_id))->get();
         $id_forums = collect();
         foreach ($forums as $forum) {
             if ($user_role >= 2 && $user_role <= 3 && $forum->section_id != 7) {

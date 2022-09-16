@@ -165,7 +165,7 @@ use App\AppForum\Helpers\ModerHelper;
                         <hr class="my-2 mx-1" style="background: #b59a6b9e;">
                     @endif
 
-                    @if ($model['bans_old']->count() > 0)
+                    @if ($model['bans_old']->count() > 0 && !is_null($model['user']) && $model['user']['role_id'] > 1)
                         <h6 class="fw-bolder mt-2 mb-1">Архив</h6>
                         <div class=" overflow-auto " style="max-height: 300px;">
                             @foreach ($model['bans_old'] as $ban)

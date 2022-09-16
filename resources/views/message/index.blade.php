@@ -1,7 +1,13 @@
 @extends('layouts.topic')
 @section('content')
     <div class="conteiner-fluid">
-
+        @if ($errors->has('message'))
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
+        @endif
+        @if (Session::has('messageOk'))
+            <div class="mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #009b7421 !important; border-color: #4f5c541c !important; border: 1px solid transparent;
+        border-radius: 0.25rem; text-align: center;">{{ Session::get('messageOk') }}</div>
+        @endif
         <div class="row mb-2">
             <div class="pb-1 col-12" id="title">
                 <h4 class="title-shadow">Сообщения</h4>
@@ -31,17 +37,20 @@
                 @foreach ($model['messages'] as $message)
                     <div class="table-color text-break">
                         <div class="row mx-1 py-1 ">
-                            <div class="col align-self-center">
+                            <div class="col align-self-center text-break">
                                 <div class="col">
+                                    @if ($message['user']['id'] != $model['user']['id'] && !$message['view'])
+                                        <span style="color: #0e7a32 !important; font-size: 15px; margin-left: -10px;" class="font-bold flicker align-items-center">&bull;</span>
+                                    @endif
                                     Тема: <span class="fw-bold">
                                         <a href="{{ url('/m/' . $message['id']) }}">{{ $message['title'] }}
                                         </a>
                                     </span>
 
                                     @if ($message['user']['id'] != $model['user']['id'] && !$message['view'])
-                                    <span style="color: #0e7a32 !important;" class="font-bold flicker">&bull;</span> <span class="forum-desc fw-bold"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
+                                        {{-- <span style="color: #0e7a32 !important; font-size: 15px;" class="font-bold flicker">&bull;</span> --}} <span class="font-bold">&bull;</span> <span class="forum-desc fw-bold"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
                                     @else
-                                    <span class="font-bold">&bull;</span>  <span class="forum-desc"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
+                                        <span class="font-bold">&bull;</span> <span class="forum-desc"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
                                     @endif
                                 </div>
                                 <div class="row forum-desc">
@@ -52,6 +61,15 @@
                                         Кому: <a class="post-a-color" href="{{ url('/user/' . $message['user_to']['id']) }}">{{ $message['user_to']['name'] }}</a>
                                     </div> --}}
                                 </div>
+                            </div>
+                            <div class="col-1 d-flex justify-content-end align-items-center">
+                                <form method='post' action='{{ url('/' . $message['id'] . '/hide') }}'>
+                                    @csrf
+                                    <input type="submit" class="btn-check btn-id" name="check[]" id="{{ $message['id'] }}" value="{{ $message['id'] }}">
+                                    <label for="{{ $message['id'] }}">
+                                        <i type="button" class="fa-solid fa-xmark"></i>
+                                    </label>
+                                </form>
                             </div>
                         </div>
                     </div>

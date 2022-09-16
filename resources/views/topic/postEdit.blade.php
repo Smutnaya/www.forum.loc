@@ -11,7 +11,7 @@
             @endif
 
             @if ($errors->has('message'))
-                <div class="error pb-1 text-danger">{{ $errors->first('message') }}</div>
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif
 
             <form method='post' action='{{ url('/p/' . $model['post']['id'] . '/save/' . $model['page']) }}'>

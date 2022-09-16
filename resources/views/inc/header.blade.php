@@ -25,32 +25,55 @@
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
                 </div> --}}
                 @if (!is_null($model['user']))
-
-                        <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 25px;"></i></a>
-
-                        <a href="{{ url('/message') }}"><span class="position-relative">
-                                <i class="fa-regular fa-envelope align-middle fa-beat" style="font-size: 25px;"></i>
-                                <span class="position-absolute top-100 start-100 translate-middle badge border rounded-circle bg-success p-1 m-0 flicker" style="background-color: #0e7a32 !important; border-color: #0e7a32 !important;  left: 95% !important; top: 91% !important;"><span class="visually-hidden">unread messages</span></span>
-                            </span>
-                        </a>
-
+                    @if (!is_null($model['message_new']))
+                        @if ($model['message_new'] == 0)
+                            <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 25px;"></i></a>
+                        @else
+                            <a href="{{ url('/message') }}"><span class="position-relative">
+                                    <i class="fa-regular fa-envelope align-middle fa-beat" style="font-size: 25px;"></i>
+                                    <span class="position-absolute top-100 start-100 translate-middle badge border rounded-circle bg-success p-1 m-0 flicker" style="background-color: #0e7a32 !important; border-color: #0e7a32 !important;  left: 95% !important; top: 91% !important;"><span class="visually-hidden">unread messages</span></span>
+                                </span>
+                            </a>
+                        @endif
+                    @endif
                 @endif
                 <div class="mx-2 ms-3">
                     @if (!is_null($model['user']) && !is_null($model['user']['avatar']))
                         <span class="position-relative">
-                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important;" class="min-avatar" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
-                            <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; left: 60% !important; top: 95% !important;">
-                                <i class="fa-solid fa-circle fa-stack-2x"></i>
-                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
-                            </span>
+                            <a type="button" href="{{ url('/user/' . $model['user']['id']) }}">
+                                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important;" class="min-avatar" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
+                            </a>
+                            <a type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                                <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; right: 0% !important; top: 95% !important;">
+                                    <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                    <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                            </ul>
                         </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
                         <span class="position-relative">
-                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important;" class="min-avatar" alt="avatar" src="/images/av.png">
-                            <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; left: 60% !important; top: 95% !important;">
-                                <i class="fa-solid fa-circle fa-stack-2x"></i>
-                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
-                            </span>
+                            <a type="button" href="{{ url('/user/' . $model['user']['id']) }}">
+                                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important;" class="min-avatar" alt="avatar" src="/images/av.png">
+                            </a>
+                            <a type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                                <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; right: 0% !important; top: 95% !important;">
+                                    <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                    <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                            </ul>
+
+                            {{-- <a type="button" href="{{ url('/message') }}">
+                                <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; left: 60% !important; top: 95% !important;">
+                                    <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                    <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a> --}}
                         </span>
                     @endif
                     @if (!is_null($model['user']))
@@ -77,30 +100,49 @@
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
                 </div> --}}
                 @if (!is_null($model['user']))
-                    <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 20px;"></i> </a>
+                    @if (!is_null($model['message_new']))
 
-                    <a href="{{ url('/message') }}"><span class="position-relative">
-                            <i class="fa-regular fa-envelope align-middle fa-beat" style="font-size: 20px;"></i>
-                            <span class="position-absolute translate-middle badge border rounded-circle bg-success p-1 m-0" style="background-color: #0e7a32 !important; border-color: #0e7a32 !important; left: 80% !important; top: 95% !important;"><span class="visually-hidden">unread messages</span></span>
-                        </span>
-                    </a>
+                        @if ($model['message_new'] == 0)
+                            <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 20px;"></i> </a>
+                        @else
+                            <a href="{{ url('/message') }}"><span class="position-relative">
+                                    <i class="fa-regular fa-envelope align-middle fa-beat" style="font-size: 20px;"></i>
+                                    <span class="position-absolute translate-middle badge border rounded-circle bg-success p-1 m-0 flicker" style="background-color: #0e7a32 !important; border-color: #0e7a32 !important; left: 80% !important; top: 95% !important;"><span class="visually-hidden">unread messages</span></span>
+                                </span>
+                            </a>
+                        @endif
+                    @endif
                 @endif
                 <span class="mx-2 ms-2">
                     @if (!is_null($model['user']) && !is_null($model['user']['avatar']))
                         <span class="position-relative">
-                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important; padding-left: 0px !important; padding-top: 0px !important;" class="min-avatar-mob p-0" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
-                            <span class="fa-stack position-absolute" style="font-size: 5px; color: #000000bf; left: 60% !important; top: 95% !important;">
-                                <i class="fa-solid fa-circle fa-stack-2x"></i>
-                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
-                            </span>
+                            <a type="button" href="{{ url('/user/' . $model['user']['id']) }}">
+                                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important; padding-left: 0px !important; padding-top: 0px !important;" class="min-avatar-mob p-0" alt="avatar" src="/storage{{ $model['user']['avatar'] }}">
+                            </a>
+                            <a type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                                <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; right: 0% !important; top: 95% !important;">
+                                    <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                    <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                            </ul>
                         </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
                         <span class="position-relative">
-                            <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important; padding-left: 0px !important; padding-top: 0px !important;" class="min-avatar-mob p-0" alt="avatar" src="/images/av.png">
-                            <span class="fa-stack position-absolute" style="font-size: 5px; color: #000000bf; left: 60% !important; top: 95% !important;">
-                                <i class="fa-solid fa-circle fa-stack-2x"></i>
-                                <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
-                            </span>
+                            <a type="button" href="{{ url('/user/' . $model['user']['id']) }}">
+                                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important; border-radius: 20px !important; padding-left: 0px !important; padding-top: 0px !important;" class="min-avatar-mob p-0" alt="avatar" src="/images/av.png">
+                            </a>
+                            <a type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                                <span class="fa-stack position-absolute" style="font-size: 7px; color: #000000bf; right: 0% !important; top: 75% !important;">
+                                    <i class="fa-solid fa-circle fa-stack-2x"></i>
+                                    <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                            </ul>
                         </span>
                     @endif
 

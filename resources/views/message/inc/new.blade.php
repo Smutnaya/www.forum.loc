@@ -2,7 +2,7 @@
 @section('content')
     <div>
         @if ($errors->has('message'))
-        <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
         @endif
         @if (Session::has('messageOk'))
             <div class="mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #009b7421 !important; border-color: #4f5c541c !important; border: 1px solid transparent;
@@ -19,10 +19,10 @@
 
 
                 <p class="forum_comment mb-0">Кому:</p>
-                <input type="text" name="to" id="to" maxlength="100" class="border border-1 input-text"></p>
+                <input type="text" name="to" id="to" maxlength="100" class="border border-1 input-text" @if (!is_null($model['to'])) value="{{ $model['to'] }}" @endif></p>
 
                 <p class="forum_comment mb-0 mt-3">Тема:</p>
-                <input type="text" name="title" id="title" maxlength="100" title="*не более 100 символов" class="border border-1 input-text"></p>
+                <input type="text" name="title" id="title" maxlength="100" title="*не более 100 символов" class="border border-1 input-text" @if (!is_null($model['title'])) value="{{ $model['title'] }}" @endif></p>
 
                 <p class="forum_comment mb-0 mt-1">Текст:</p>
                 @include('inc.ckeditor')

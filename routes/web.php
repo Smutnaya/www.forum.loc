@@ -47,11 +47,15 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/u/{id}/role_section', 'OtherRoleController@role_section');
     Route::any('/u/{id}/image', 'UserController@image');
     Route::any('/u/{id}/image_del', 'UserController@image_del');
+    Route::any('/u/{id}/ban_message', 'UserController@ban_message');
 
     Route::get('/message', 'MessageController@index');
     Route::get('/new_message', 'MessageController@new_message');
     Route::any('/save_message', 'MessageController@save_message');
     Route::any('/m/{id}', 'MessageController@history');
+    Route::any('/{id}/reply', 'MessageController@reply');
+    Route::any('/{id}/hide', 'MessageController@hide');
+    Route::any('/m/u/{id}', 'MessageController@user_message');
 
     Route::get('/t/{id}/{page?}', 'TopicController@index');
     Route::any('/t/{id}/post', 'TopicController@post');

@@ -62,5 +62,39 @@ class UserExecutor extends BaseExecutor
         return $result;
     }
 
+    public static function ban_message($user_id, $user)
+    {
+        $out = collect();
 
+        if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result = ['success' => true];
+
+        if (self::$result['success']) self::ban_message_valid(intval($user_id), $out, $user);
+
+        if (self::$result['success']) {
+            UserManager::ban_message($out['user'], $out['ban_message']);
+            self::$result['user_id'] = $out['user']['id'];
+        }
+        return self::$result;
+    }
+    private static function ban_message_valid($user_id, $out, $user)
+    {
+        self::$result = ['success' => false];
+
+        $user_ban = User::find(intval($user_id));
+        if (is_null($user_ban)) return self::$result['message'] = 'Данные о пользователе не найдены';
+        $out['user'] = $user_ban;
+        if($user_ban->ban_message)
+        {
+            $out['ban_message'] = false;
+            self::$result['message'] = 'Пользователю '.  $user_ban->name .' снято ограничение в праве отправки ПМ';
+        } else {
+            $out['ban_message'] = true;
+            self::$result['message'] = 'Пользователь '.  $user_ban->name .' ограничен в праве отправки ПМ';
+        }
+
+        if($user->role_id < 11) return self::$result['message'] = 'Не достаточно правд для блокировки';
+
+        self::$result['success'] = true;
+    }
 }

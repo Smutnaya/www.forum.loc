@@ -35,10 +35,45 @@ class MessageController extends Controller
 
         return redirect()->back()->withErrors(['message' => $result['message']]);
     }
+
     public function history($message_id)
     {
         $user = $this->user();
         $model = MessageViewer::history($user, $message_id);
         return view('message.inc.message', compact('model'));
+    }
+    public function reply($message_id)
+    {
+        if(!request()->isMethod('post')) return redirect('/');
+
+        $user = $this->user();
+        $result = MessageExecutor::reply($user, $message_id, request()->all());
+        if($result['success'])
+        {
+            return redirect('/message')->with(['messageOk' => $result['message']]);
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+    }
+
+    public function hide($message_id)
+    {
+        if(!request()->isMethod('post')) return redirect('/');
+
+        $user = $this->user();
+        $result = MessageExecutor::hide($user, $message_id, request()->all());
+        if($result['success'])
+        {
+            return redirect('/message')->with(['messageOk' => $result['message']]);
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+    }
+
+    public function user_message($post_id)
+    {
+        $user = $this->user();
+        $model = MessageViewer::user_message($user, $post_id);
+        return view('message.inc.new', compact('model'));
     }
 }

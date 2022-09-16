@@ -5,6 +5,7 @@ namespace App\AppForum\Viewers;
 use App\Post;
 use App\Topic;
 use App\Online;
+use App\Message;
 use App\Section;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
@@ -17,6 +18,7 @@ class MainViewer
             'sectionsAside' => collect(), // id, title, description
             'onlines' => collect(),
             'user' => null,
+            'message_new' => null,
             'news' => collect(),
             'last_posts' => collect(),
             'new_topics' => collect(),
@@ -37,10 +39,12 @@ class MainViewer
         if ($news->count() > 0) self::setNews($model, $news);
         if (!is_null($user)) {
             $model['user'] = $user;
+            $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+            $model['message_new'] = $mes->count();
         }
 
         // последние ответы
-        $last_posts = Topic::where('time_post', '!=', 'null')->orderBy('time_post', 'desc')->distinct()->limit(20)->get();
+        $last_posts = Topic::where('time_post', '!=', 'null')->orderByDesc('time_post')->distinct()->limit(20)->get();
         if ($last_posts->count() > 0) self::setLastPost($model, $last_posts);
         // новые темы
         $new_topics = Topic::orderBy('datetime', 'desc')->limit(20)->get();

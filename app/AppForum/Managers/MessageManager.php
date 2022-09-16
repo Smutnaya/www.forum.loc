@@ -23,4 +23,11 @@ class MessageManager
             'view' => true
         ])->save();
     }
+
+    public static function hide($message)
+    {
+        $message->fill([
+            'hide' => true
+        ])->save();
+    }
 }

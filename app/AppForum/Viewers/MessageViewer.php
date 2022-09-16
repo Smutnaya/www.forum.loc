@@ -6,6 +6,7 @@ use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Managers\MessageManager;
 use App\Message;
+use App\Post;
 
 class MessageViewer
 {
@@ -14,8 +15,11 @@ class MessageViewer
         return collect([
             'sectionsAside' => collect(), // id, title, description
             'user' => null,
+            'message_new' => null,
             'messages' => collect(),
             'message' => null,
+            'title' => null,
+            'to' => null,
 
             'pagination' => collect([
                 'page' => null,
@@ -35,6 +39,8 @@ class MessageViewer
 
         if (is_null($user)) return $model;
         $model['user'] = $user;
+        $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+        $model['message_new'] = $mes->count();
 
         //$messages = Message::where('user_id', $user->id)->get();
         //$messages = Message::all();
@@ -62,9 +68,9 @@ class MessageViewer
 
         if (!is_null($skip)) {
             //$messages = Message::where('user_id', $user->id)->orWhere('user_id_to',  $user->id)->orderByDesc('view')->orderByDesc('datetime')->skip($skip)->take($take)->get();
-            $messages = Message::where('user_id_to',  $user->id)->orderBy('view')->orderByDesc('datetime')->skip($skip)->take($take)->get();
+            $messages = Message::where([['user_id_to',  $user->id], ['hide', false]])->orderBy('view')->orderByDesc('datetime')->skip($skip)->take($take)->get();
         } else {
-            $messages = Message::where('user_id_to',  $user->id)->orderBy('view')->orderByDesc('datetime')->get();
+            $messages = Message::where([['user_id_to',  $user->id], ['hide', false]])->orderBy('view')->orderByDesc('datetime')->get();
         }
 
         return $messages;
@@ -95,6 +101,30 @@ class MessageViewer
 
         if (is_null($user)) return $model;
         $model['user'] = $user;
+        $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+        $model['message_new'] = $mes->count();
+
+        return $model;
+    }
+
+    public static function user_message($user, $post_id)
+    {
+        $model = self::init();
+
+        // aside
+        $sectionsAside = AsideHelper::sectionAside($user);
+        $model['sectionsAside'] = $sectionsAside;
+
+        if (is_null($user)) return $model;
+        $model['user'] = $user;
+        $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+        $model['message_new'] = $mes->count();
+
+        $post = Post::find(intval($post_id));
+        if (!is_null($post)) {
+            $model['title'] = 'т: ' . $post->topic->title;
+            $model['to'] = $post->user->name;
+        }
 
         return $model;
     }
@@ -109,8 +139,10 @@ class MessageViewer
 
         if (is_null($user)) return $model;
         $model['user'] = $user;
+        $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+        $model['message_new'] = $mes->count();
 
-        $message = Message::find($message_id);
+        $message = Message::find(intval($message_id));
         if (is_null($message)) return $model;
         self::setHistory($model, $message);
 
@@ -121,15 +153,15 @@ class MessageViewer
 
     private static function setHistory($model, $message)
     {
-            $model['message'] = [
-                'id' => $message->id,
-                'title' => $message->title,
-                'text' => $message->text,
-                'datetime' => ForumHelper::timeFormat($message->datetime),
-                'date' => $message->datetime,
-                'view' => $message->view,
-                'user' => $message->user,
-                'user_to' => $message->user_to,
-            ];
+        $model['message'] = [
+            'id' => $message->id,
+            'title' => $message->title,
+            'text' => $message->text,
+            'datetime' => ForumHelper::timeFormat($message->datetime),
+            'date' => $message->datetime,
+            'view' => $message->view,
+            'user' => $message->user,
+            'user_to' => $message->user_to,
+        ];
     }
 }

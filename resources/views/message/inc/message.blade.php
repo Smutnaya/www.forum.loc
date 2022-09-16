@@ -1,10 +1,18 @@
 @extends('layouts.topic')
 @section('content')
     <div class="conteiner-fluid">
-
+        @if ($errors->has('message'))
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
+        @endif
+        @if (Session::has('messageOk'))
+            <div class="mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #009b7421 !important; border-color: #4f5c541c !important; border: 1px solid transparent;
+            border-radius: 0.25rem; text-align: center;">{{ Session::get('messageOk') }}</div>
+        @endif
         <div class="row mb-2">
             <div class="pb-1 col-12" id="title">
-                <a href="{{ url('/message') }}"><h4 class="title-shadow">Сообщения</h4></a>
+                <a href="{{ url('/message') }}">
+                    <h4 class="title-shadow"><i class="fa-solid fa-angle-left align-middle" style="padding-bottom: 3px; font-size: 15px;"></i> Сообщения</h4>
+                </a>
             </div>
         </div>
         <div class="border border-ligh shadow-sm mb-3" style="background: #faf2cc;">
@@ -39,7 +47,7 @@
 
                 <div id="menu-post-field" style="display:none">
                     <div class="row">
-                        <form method='post' action='{{-- {{ url('t/' . $model['topic']['id'] . '/post') }} --}}'>
+                        <form method='post' action='{{ url('/' . $model['message']['id'] . '/reply') }}'>
                             @csrf
                             @include('inc.ckeditor')
                             <div class="col d-grid gap-2 d-flex justify-content-end my-2">

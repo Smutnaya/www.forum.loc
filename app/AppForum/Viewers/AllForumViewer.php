@@ -2,11 +2,12 @@
 
 namespace App\AppForum\Viewers;
 
-use App\AppForum\Helpers\AsideHelper;
 use App\Forum;
-use App\Other_role;
 use App\Topic;
+use App\Message;
 use App\Section;
+use App\Other_role;
+use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ModerHelper;
 
 class AllForumViewer
@@ -17,6 +18,7 @@ class AllForumViewer
             'sections' => collect(),
             'forums' => collect(),
             'user' => null,
+            'message_new' => null,
             'sectionsAside' => collect(),
             'other_roles' => collect(),
             'last_posts' => collect(),
@@ -39,6 +41,8 @@ class AllForumViewer
 
         if (!is_null($user)) {
             $model['user'] = $user;
+            $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+            $model['message_new'] = $mes->count();
         }
 
         $sections = $sectionsAside;

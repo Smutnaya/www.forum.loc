@@ -55,7 +55,7 @@ class UserController extends Controller
 
             $allowed_extension = array("jpg", "gif", "png", "jpeg", "bmp");
             //"jpg", "GPG", "gif", "GIF", "png", "PNG", "jpeg", "JPEG", "bmp", "BMP"
-            if (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) < 2 * 1000000) {
+            if (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) < 2 * 1048576) {
                 //filename to store
 
                 //$filenametostore = $filename . '_' . time() . '.' . $extension;
@@ -74,7 +74,7 @@ class UserController extends Controller
                 } else {
                     echo $result['message'];
                 }
-            } elseif (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) > 2000000) {
+            } elseif (in_array(mb_strtolower($extension), $allowed_extension) && filesize($request->file('upload')) > 2 * 1048576) {
                 echo 'Максимально допустимый размер файла 2мб';
             } else {
                 echo 'Не удалось загрузить изображение! Допустимые форматы для загрузки: "jpg", "gif", "png", "jpeg", "bmp".';
@@ -97,6 +97,18 @@ class UserController extends Controller
 
         if ($result['success']) {
             return redirect('user/' . $result['user_id']);
+        }
+
+        return redirect()->back()->withErrors(['message' => $result['message']]);
+    }
+
+    public function ban_message($user_id)
+    {
+        $user = $this->user();
+        $result = UserExecutor::ban_message($user_id, $user);
+
+        if ($result['success']) {
+            return redirect('user/' . $result['user_id'])->with(['messageCancel' => $result['message']]);
         }
 
         return redirect()->back()->withErrors(['message' => $result['message']]);

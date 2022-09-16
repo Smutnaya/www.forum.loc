@@ -9,11 +9,9 @@ use App\AppForum\Helpers\ForumHelper;
                 <a class="fw-bold text-break" href="{{ url('/user/' . $post['user_post']['id']) }}">{{ $post['user_post']['name'] }}</a>
             </div>
             <div class="col-12">
-                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="logo rounded" alt="Cinque Terre" @if (!is_null($post['avatar']))
-                src="/storage{{ $post['avatar'] }}"
+                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="logo rounded" alt="Cinque Terre" @if (!is_null($post['avatar'])) src="/storage{{ $post['avatar'] }}"
                 @else
-                src="/images/av.png"
-                @endif>
+                src="/images/av.png" @endif>
             </div>
             <div class="col-12 my-1">
                 <span class="fw-bold text-black my-2 text-break" style="font-size: 10pt; {{ $post['user_role_style'] }}">{{ $post['user_role'] }}</span><br>
@@ -24,7 +22,17 @@ use App\AppForum\Helpers\ForumHelper;
                     <span class="text-muted"><i class="fa-regular fa-thumbs-up me-1 ms-2" style="color:#0e583d" title="Рейтинг"></i> <span style="color:#0e583d">{{ $post['user_DATA']->like }}</span></span>
                 @endif
                 <br>
-                <span class="text-muted"><i class="fa-regular fa-envelope me-1" style="color:#2f4f4fe8"></i> <span style="color:#2f4f4fe8">написать</span></span>
+                @if (!is_null($model['user']))
+                    <span class="text-muted">
+                        <form method='post' action='{{ url('/m/u/' . $post['id']) }}'>
+                            @csrf
+                            <input type="submit" class="btn-check btn-id" name="check[]" id="m{{ $post['id'] }}" value="{{ $post['id'] }}">
+                            <label type="button" for="m{{ $post['id'] }}">
+                                <i class="fa-regular fa-envelope me-1" style="color:#2f4f4fe8"></i> <span style="color:#2f4f4fe8">написать</span>
+                            </label>
+                        </form>
+                    </span>
+                @endif
             </div>
         </div>
         <div class="col-md-9 col-xl-10 col-sm-12 text-break text" @if ($post['hide']) style="background-color: #f7f7e4;" @endif>

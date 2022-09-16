@@ -3,6 +3,7 @@
 namespace App\AppForum\Viewers;
 
 use App\Forum;
+use App\Message;
 use App\Section;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ModerHelper;
@@ -16,6 +17,7 @@ class SectionViewer
             'breadcrump' => null,
             'sectionTitle' => null,
             'user' => null,
+            'message_new' => null,
             'forums' => collect(),
             'sectionsAside' => collect(),
         ]);
@@ -30,6 +32,8 @@ class SectionViewer
         $model['sectionsAside'] = $sectionsAside;
         if (!is_null($user)) {
             $model['user'] = $user;
+            $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+            $model['message_new'] = $mes->count();
         }
 
         $forums = ModerHelper::getForum($user, intval($sectionId));

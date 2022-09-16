@@ -7,6 +7,7 @@ use App\Post;
 use App\Role;
 use App\User;
 use App\Topic;
+use App\Message;
 use App\Section;
 use App\Other_role;
 use App\AppForum\Helpers\AsideHelper;
@@ -22,6 +23,7 @@ class TopicViewer
         return collect([
             'breadcrump' => null,
             'user' => null,
+            'message_new' => null,
             'userBan' => false,
             'forum' => null,
             'section' => null,
@@ -52,7 +54,11 @@ class TopicViewer
         $sectionsAside = AsideHelper::sectionAside($user);
         $model['sectionsAside'] = $sectionsAside;
 
-        if (!is_null($user)) $model['user'] = $user;
+        if (!is_null($user)) {
+            $model['user'] = $user;
+            $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
+            $model['message_new'] = $mes->count();
+        }
         $user_role = ModerHelper::user_role($user);
 
         $topic = Topic::find(intval($topicId)); // eloquent
@@ -73,7 +79,7 @@ class TopicViewer
 
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
 
-        $topicPage = ForumHelper::topicPage($topicId, $user_role);
+        $topicPage = ForumHelper::topicPage(intval($topicId), $user_role);
         $pages = $topicPage['pages'];
         $take = $topicPage['take'];
         $page = ForumHelper::parsePage($page, $pages);
@@ -124,59 +130,59 @@ class TopicViewer
         $posts = collect();
 
         if ($user_role == 0 && !is_null($skip)) {
-            $posts = Post::where([['topic_id', $topicId], ['moderation', false], ['hide', false]])->skip($skip)->take($take)->get();
+            $posts = Post::where([['topic_id', intval($topicId)], ['moderation', false], ['hide', false]])->skip($skip)->take($take)->get();
         } elseif ($user_role == 0 && is_null($skip)) {
-            $posts = Post::where([['topic_id', $topicId], ['moderation', false], ['hide', false]])->get();
+            $posts = Post::where([['topic_id', intval($topicId)], ['moderation', false], ['hide', false]])->get();
         }
 
         if ($section_id == 3) {
             if ($user_role > 0 && $user_role < 8 && !is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->skip($skip)->take($take)->get();
             } elseif ($user_role > 0 && $user_role < 8 && is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->get();
             }
 
             if ($user_role > 7 && !is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+                $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
             } elseif ($user_role > 7 && is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->get();
+                $posts = Post::where('topic_id', intval($topicId))->get();
             }
         } else {
             if ($user_role == 1 && !is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->skip($skip)->take($take)->get();
             } elseif ($user_role == 1 && is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->get();
             }
             if ($user_role > 1 && !is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+                $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
             } elseif ($user_role > 1 && is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->get();
+                $posts = Post::where('topic_id', intval($topicId))->get();
             }
         }
 
         if ($forum_id == 1 || $forum_id == 3) {
             if ($user_role >= 1 && $user_role < 11 && !is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->skip($skip)->take($take)->get();
             } elseif ($user_role >= 1 && $user_role < 11 && is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->get();
             }
             if ($user_role > 10 && !is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+                $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
             } elseif ($user_role > 10 && is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->get();
+                $posts = Post::where('topic_id', intval($topicId))->get();
             }
         }
         if ($forum_id == 2) {
             if ($user_role >= 1 && $user_role < 9 && !is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->skip($skip)->take($take)->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->skip($skip)->take($take)->get();
             } elseif ($user_role >= 1 && $user_role < 9 && is_null($skip)) {
-                $posts = Post::where([['topic_id', $topicId], ['hide', false]])->get();
+                $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->get();
             }
 
             if ($user_role > 8 && !is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->skip($skip)->take($take)->get();
+                $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
             } elseif ($user_role > 8 && is_null($skip)) {
-                $posts = Post::where('topic_id', $topicId)->get();
+                $posts = Post::where('topic_id', intval($topicId))->get();
             }
         }
 
@@ -185,11 +191,11 @@ class TopicViewer
 
             if (!is_null($other_roles)) {
                 foreach ($other_roles as $other_role) {
-                    if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation == true) $posts = Post::where('topic_id', $topicId)->get();
-                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id && $other_role->moderation == true) $posts = Post::where('topic_id', $topicId)->get();
+                    if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation == true) $posts = Post::where('topic_id', intval($topicId))->get();
+                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id && $other_role->moderation == true) $posts = Post::where('topic_id', intval($topicId))->get();
                     if ($other_role->topic_id != null) {
                         $topic = Topic::find($other_role->topic_id);
-                        if ($topic->id == $topicId && $other_role->moderation == true) $posts = Post::where('topic_id', $topicId)->get();
+                        if ($topic->id == $topicId && $other_role->moderation == true) $posts = Post::where('topic_id', intval($topicId))->get();
                     }
                 }
             }

@@ -7,7 +7,7 @@
             <div class="my-3 mb-5 centre error" style="color:red">Отсутствуют права для просмотра темы</div>
         @else
             @if ($errors->has('message'))
-                <div class="error" style="color:red">{{ $errors->first('message') }}</div>
+            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
             <div class="row">

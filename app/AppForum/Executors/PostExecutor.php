@@ -107,7 +107,7 @@ class PostExecutor extends BaseExecutor
         $images2 = Images::where([['user_id', $user_id], ['datetime', '>=', strtotime('-12 hours')], ['post_id', null]])->get();
         if ($images2->count() > 0) $out['images2'] = $images2;
 
-        $images_del = Images::where('post_id', $post_id)->get();
+        $images_del = Images::where('post_id', intval($post_id))->get();
         if ($images_del->count() > 0) $out['images_del'] = $images_del;
     }
 
@@ -120,7 +120,7 @@ class PostExecutor extends BaseExecutor
         else self::$result = ['success' => true];
 
         if (self::$result['success']) self::post_valid_moder(intval($postId), $user, $input, $out);
-        if (self::$result['success']) self::valid_moderation($postId, $user);
+        if (self::$result['success']) self::valid_moderation(intval($postId), $user);
         $out['text'] = $input['text'];
 
         $user_role = ModerHelper::user_role($user);
@@ -220,7 +220,7 @@ class PostExecutor extends BaseExecutor
         if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::premodUnhide_valid(intval($postId), $out);
         $out['user'] = $user;
-        self::valid_moderation($postId, $user);
+        self::valid_moderation(intval($postId), $user);
 
         if (self::$result['success']) {
             PostManager::unhide($out['post'], $out['user']);
@@ -269,8 +269,8 @@ class PostExecutor extends BaseExecutor
                 }
             }
 
-            $out['last_post'] = self::last_post($topic_id);
-            $out['topic'] = Topic::find($topic_id);
+            $out['last_post'] = self::last_post(intval($topic_id));
+            $out['topic'] = Topic::find(intval($topic_id));
             TopicManager::lastPostEdit($out['topic'], $out['last_post']);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
@@ -298,7 +298,7 @@ class PostExecutor extends BaseExecutor
         if (is_null($user_role)) return self::$result['message'] = 'Отсутсвуют права для удаления ответа';
         if ($user_role < 11) return self::$result['message'] = 'Отсутсвуют права для удаления ответа';
 
-        $images_del = Images::where('post_id', $postId)->get();
+        $images_del = Images::where('post_id', intval($postId))->get();
         if ($images_del->count() > 0) $out['images_del'] = $images_del;
 
         self::$result['success'] = true;
@@ -306,7 +306,7 @@ class PostExecutor extends BaseExecutor
 
     public static function last_post($topic_id)
     {
-        $last_post_collect = Post::where([['topic_id', $topic_id], ['moderation', false], ['hide', false]])->orderBy('datetime', 'desc')->limit(2)->get();
+        $last_post_collect = Post::where([['topic_id', intval($topic_id)], ['moderation', false], ['hide', false]])->orderBy('datetime', 'desc')->limit(2)->get();
         if ($last_post_collect->count() < 2) return null;
         if ($last_post_collect->count() == 2) {
             $last_post = $last_post_collect['0']->datetime;

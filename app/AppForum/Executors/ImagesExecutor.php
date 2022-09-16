@@ -40,7 +40,7 @@ class ImagesExecutor extends BaseExecutor
 
         //TODO: исправить на 10 метров
         $limit = Images::where([['user_id', $user->id], ['datetime', '>=', strtotime(date('Y-m-d'))]])->sum('size');
-        if ($limit > 20 * 1000000) return self::$result['message'] = 'Превышен суточный лимит на загрузку файлов (20 МБ)';
+        if ($limit > 20 * 1048576) return self::$result['message'] = 'Превышен суточный лимит на загрузку файлов (20 МБ)';
 
         self::$result = ['success' => true];
     }
