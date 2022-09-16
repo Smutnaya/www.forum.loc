@@ -11,13 +11,13 @@
                         <a aria-current="page" class="naw-link" href="{{ url('/fs') }}">Форумы</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-current="page" class="naw-link" href=#>Газеты</a>
+                        <a aria-current="page" class="naw-link" href=#>Газеты и блоги</a>
                     </li>
                     <li class="nav-item">
                         <a aria-current="page" class="naw-link" href=#>FAQ</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-current="page" class="naw-link" href=#>В игру</a>
+                        <a aria-current="page" class="naw-link" href="https://vsmuta.com">В игру</a>
                     </li>
                 </ul>
 
@@ -165,13 +165,13 @@
                         <a class="py-1" aria-current="page" href="{{ url('/fs') }}">Форумы</a>
                     </li>
                     <li class="nav-item">
-                        <a class="py-1" aria-current="page" href=#>Газеты</a>
+                        <a class="py-1" aria-current="page" href=#>Газеты и блоги</a>
                     </li>
                     <li class="nav-item">
                         <a class="py-1" aria-current="page" href=#>FAQ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="py-1" aria-current="page" href=#>В игру</a>
+                        <a class="py-1" aria-current="page" href="https://vsmuta.com">В игру</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider my-2">

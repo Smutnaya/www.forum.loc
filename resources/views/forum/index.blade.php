@@ -2,6 +2,13 @@
 use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
+@section('title-block')
+    @if (!is_null( $model['forumTitle']))
+    {{ $model['forumTitle'] }} -  Форум игры Времена Смуты
+    @else
+        Форум игры Времена Смуты
+    @endif
+@endsection
 @section('content')
     {{-- @dd($model['user']) --}}
     <div class="container-fluid px-0">
@@ -12,7 +19,7 @@ use App\AppForum\Helpers\ForumHelper;
             <hr class="hr-color d-md-none d-sm-block ">
 
             @if ($errors->has('message'))
-            <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
+                <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif
             <div class="row mb-2">
                 <div class="pb-1 col-8" id="title">
@@ -90,9 +97,10 @@ use App\AppForum\Helpers\ForumHelper;
                                         <div class="row">
                                             <div class="col-2 d-none d-xl-block p-1 align-self-center">
                                                 @if (!is_null($topic['DATA']->last_post->avatar))
-                                                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" src="/storage{{ $topic['DATA']->last_post->avatar }}">
+                                                    <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" src="/storage{{ $topic['DATA']->last_post->avatar }}">
                                                 @else
-                                                <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre"src="/images/av.png"> @endif
+                                                    <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre"src="/images/av.png">
+                                                @endif
                                             </div>
                                             <div class="col-2 d-xl-none d-block align-self-center">
                                                 <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar-post rounded " alt="Cinque Terre" @if (!is_null($topic['DATA']->last_post->avatar)) src="/storage{{ $topic['DATA']->last_post->avatar }}"

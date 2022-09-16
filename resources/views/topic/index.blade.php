@@ -1,4 +1,11 @@
 @extends('layouts.topic')
+@section('title-block')
+    @if (!is_null( $model['topic']))
+    {{ $model['topic']['title'] }} -  Форум игры Времена Смуты
+    @else
+    Форум игры Времена Смуты
+    @endif
+@endsection
 @section('content')
     <div class="conteiner">
         @if (is_null($model['topic']))

@@ -1,4 +1,11 @@
 @extends('layouts.topic')
+@section('title-block')
+    @if (!is_null( $model['forumTitle']))
+    {{ $model['forumTitle'] }} -  Создание новой темы
+    @else
+    Создание новой темы - Форум игры Времена Смуты
+    @endif
+@endsection
 @section('content')
     <div class="pb-2 align-self-center" id="breadcrump">
 

@@ -2,6 +2,7 @@
 use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
+@section('title-block')Список форумов игры Времена Смуты@endsection
 @section('content')
     <div class="container-fluid px-0">
         <div class="pb-1 align-self-center" id="breadcrump">

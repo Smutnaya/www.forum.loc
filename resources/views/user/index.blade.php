@@ -1,6 +1,14 @@
 @php
 use App\AppForum\Helpers\ForumHelper;
-@endphp@extends('layouts.user')
+@endphp
+@extends('layouts.user')
+@section('title-block')
+    @if (!is_null( $model['user_inf']))
+    {{ $model['user_inf']['name'] }} -  Форум игры Времена Смуты
+    @else
+    Форум игры Времена Смуты
+    @endif
+@endsection
 @section('content')
     <div class="container-fluid px-0 m-0">
         @if ($errors->has('message'))

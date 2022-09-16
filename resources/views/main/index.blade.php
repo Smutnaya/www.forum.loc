@@ -1,5 +1,5 @@
 @extends('layouts.main')
-
+@section('title-block')Форум игры Времена Смуты@endsection
 @section('content')
     <div class="container-fluid px-0">
         <div class="row">

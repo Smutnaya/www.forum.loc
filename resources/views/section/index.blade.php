@@ -2,6 +2,13 @@
 use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
+@section('title-block')
+    @if (!is_null( $model['sectionTitle']))
+    {{ $model['sectionTitle'] }} -  Форум игры Времена Смуты
+    @else
+    Форум игры Времена Смуты
+    @endif
+@endsection
 @section('content')
     <div class="container-fluid px-0">
         @if ($model['forums']->count() == 0)

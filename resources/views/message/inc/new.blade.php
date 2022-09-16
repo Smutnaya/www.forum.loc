@@ -1,4 +1,11 @@
 @extends('layouts.topic')
+@section('title-block')
+    @if (!is_null($model['user']))
+        {{ $model['user']['name'] }} - Новое сообщение
+    @else
+        Новое сообщение
+    @endif
+@endsection
 @section('content')
     <div>
         @if ($errors->has('message'))

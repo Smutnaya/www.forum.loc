@@ -1,4 +1,11 @@
 @extends('layouts.topic')
+@section('title-block')
+    @if (!is_null($model['user']))
+        {{ $model['user']['name'] }} -  {{ $model['message']['title'] }}
+    @else
+        Личные сообщения
+    @endif
+@endsection
 @section('content')
     <div class="conteiner-fluid">
         @if ($errors->has('message'))
