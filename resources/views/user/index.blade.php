@@ -3,13 +3,14 @@ use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.user')
 @section('title-block')
-    @if (!is_null( $model['user_inf']))
-    {{ $model['user_inf']['name'] }} -  Форум игры Времена Смуты
+    @if (!is_null($model['user_inf']))
+        {{ $model['user_inf']['name'] }} - Форум игры Времена Смуты
     @else
-    Форум игры Времена Смуты
+        Форум игры Времена Смуты
     @endif
 @endsection
 @section('content')
+    {{-- @dd($model) --}}
     <div class="container-fluid px-0 m-0">
         @if ($errors->has('message'))
             <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
@@ -113,7 +114,7 @@ use App\AppForum\Helpers\ForumHelper;
                     <div class="col-lg-9 col-12 d-lg-block d-none" style="color:#4e5256 !important;">
                         <div class="col-12 text-end">
                             @if (!is_null($model['user']))
-                                @if (($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id']) || ($model['other_role_bf'] && $model['user']['role_id'] != $model['user_inf']['role_id']))
+                                @if (($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id']) || ($model['other_role_bf'] && $model['user']['role_id'] >= $model['user_inf']['role_id'] && $model['user']['id'] != $model['user_inf']['id']))
                                     <i onclick="toggleBan()" type="button" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан"></i>
                                 @endif
                                 @if ($model['user']['role_id'] > 1 || $model['other_role_bf'])
@@ -174,10 +175,10 @@ use App\AppForum\Helpers\ForumHelper;
                             <span class="ms-2" style="color:#342d29"><i class="fa-regular fa-file-image me-1"></i>&nbsp;{{ $model['user_inf']['limit'] }}/20мб</span>
                             <div class="col-12">
                                 @if (!is_null($model['user']))
-                                    @if ($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id'])
+                                    @if (($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id']) || ($model['other_role_bf'] && $model['user']['role_id'] >= $model['user_inf']['role_id'] && $model['user']['id'] != $model['user_inf']['id']))
                                         <i onclick="toggleBan()" type="button" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан" id="btn-user_ban"></i>
                                     @endif
-                                    @if ($model['user']['role_id'] > 1)
+                                    @if ($model['user']['role_id'] > 1 || $model['other_role_bf'])
                                         <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                     @endif
                                     @if ($model['user']['role_id'] > 10)

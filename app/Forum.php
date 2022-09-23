@@ -14,6 +14,11 @@ class Forum extends Model
         return $this->hasMany(Topic::class);
     }
 
+    public function newspaper()
+    {
+        return $this->hasMany(Newspaper::class);
+    }
+
     public function other_roles()
     {
         return $this->hasMany(Other_role::class);

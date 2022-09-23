@@ -28,6 +28,8 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->json('DATA')->default('{"post_count":0,"like":0}');
             $table->unsignedBigInteger('role_id')->default('1');
+            $table->unsignedBigInteger('newspaper_id')->nullable();
+            $table->unsignedInteger('newspaper_role')->nullable();
 
             //$table->timestamps();
         });

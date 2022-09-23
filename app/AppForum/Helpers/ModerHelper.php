@@ -261,9 +261,10 @@ class ModerHelper
     public static function moderPostEdit($user_role_id, $user, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id, $topic_id)
     {
         self::$result = false;
+        if(is_null($user)) $user_id = 0;
         if ($user_role_id == 1 && $post_user_id == $user_id && time() <= $post_datetime + 1800 && is_null($post_DATA->date_moder)) return self::$result = true;
-        if ($user_role_id > 1 && $user_role_id < 9 && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
-        if ($user_role_id > 8) return self::$result = true;
+        if ($user_role_id > 1 && $user_role_id < 9 && $post_user_id == $user_id && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
+        if ($user_role_id > 7 || $user_role_id == 4) return self::$result = true;
 
         if (!is_null($user)) {
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
@@ -336,7 +337,7 @@ class ModerHelper
             if ($user_role_id > 11) return self::$result = true;
         }
         if ($section_id == 6) {
-            if ($user_role_id > 7) return self::$result = true;
+            if ($user_role_id > 7 || $user_role_id == 4) return self::$result = true;
         }
 
         //$section_id 7
@@ -405,7 +406,7 @@ class ModerHelper
             if ($user_role_id > 11) return self::$result = true;
         }
         if ($section_id == 6) {
-            if ($user_role_id > 7) return self::$result = true;
+            if ($user_role_id > 7 || $user_role_id == 4) return self::$result = true;
         }
 
         //$section_id 7

@@ -77,7 +77,14 @@ class PostExecutor extends BaseExecutor
         if (is_null($post)) return self::$result['message'] = 'Пост не найден';
 
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для редактирования тем на данном форуме';
+
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+
+        if ($newspaper != $post->topic->forum_id && !ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для редактирования тем на данном форуме';
 
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
@@ -91,7 +98,7 @@ class PostExecutor extends BaseExecutor
         $out['data'] = json_encode($data);
 
 
-        if (!(ModerHelper::moderPostEdit($user->role_id, $user, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        if ($newspaper != $post->topic->forum_id && !(ModerHelper::moderPostEdit($user->role_id, $user, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы11111';
 
         self::$result['success'] = true;
     }
@@ -161,7 +168,13 @@ class PostExecutor extends BaseExecutor
         if (is_null($post)) return self::$result['message'] = 'Пост не найден';
 
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для модерации тем на данном форуме';
+
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+        if ($newspaper != $post->topic->forum_id && !ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для модерации тем на данном форуме';
 
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
@@ -192,7 +205,11 @@ class PostExecutor extends BaseExecutor
             PostManager::premod($out['post'], $out['user']);
             $out['last_post'] = self::last_post($out['post']['topic_id']);
             $out['topic'] = Topic::find($out['post']['topic_id']);
-            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            $topic = TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            if ($topic->forum->section_id == 6 && $topic->forum_id != 53) {
+                $moder = 0;
+                TopicManager::premod_topic($topic, $moder);
+            }
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $out['user'];
@@ -242,8 +259,12 @@ class PostExecutor extends BaseExecutor
     {
         $post = Post::find(intval($postId));
         self::$result['success'] = false;
-        //$user_role_id, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id
-        if (!(ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для модерации темы';
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+        if ($newspaper != $post->topic->forum_id && !(ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для модерации темы';
 
         self::$result['success'] = true;
     }
@@ -306,9 +327,9 @@ class PostExecutor extends BaseExecutor
 
     public static function last_post($topic_id)
     {
-        $last_post_collect = Post::where([['topic_id', intval($topic_id)], ['moderation', false], ['hide', false]])->orderBy('datetime', 'desc')->limit(2)->get();
-        if ($last_post_collect->count() < 2) return null;
-        if ($last_post_collect->count() == 2) {
+        $last_post_collect = Post::where([['topic_id', intval($topic_id)], ['moderation', false], ['hide', false]])->orderBy('datetime', 'desc')->limit(1)->get();
+        if ($last_post_collect->count() < 1) return null;
+        if ($last_post_collect->count() == 1) {
             $last_post = $last_post_collect['0']->datetime;
         }
 

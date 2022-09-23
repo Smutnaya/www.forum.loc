@@ -14,6 +14,7 @@ use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
 use App\AppForum\Executors\BaseExecutor;
 use App\AppForum\Managers\ImagesManager;
+use App\News;
 use Symfony\Component\Console\Input\Input;
 
 class ForumExecutor extends BaseExecutor
@@ -24,17 +25,19 @@ class ForumExecutor extends BaseExecutor
     {
         $out = collect();
 
-        if(!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
-        else if(!is_null(BaseExecutor::tema_valid($input['title']))) self::$result = ['success' => false, 'message' => BaseExecutor::tema_valid($input['title'])];
-        else if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
-        else self::$result['success'] = true;  $out['text'] = $input['text']; $out['title'] = $input['title'];
+        if (!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
+        else if (!is_null(BaseExecutor::tema_valid($input['title']))) self::$result = ['success' => false, 'message' => BaseExecutor::tema_valid($input['title'])];
+        else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result['success'] = true;
+        $out['text'] = $input['text'];
+        $out['title'] = $input['title'];
 
-        if(self::$result['success']) self::topic_valid(intval($forumId), $input, $out, $user);
+        if (self::$result['success']) self::topic_valid(intval($forumId), $input, $out, $user);
 
         $ip = IpHelper::getIp();
-        if(self::$result['success'])
-        {
-            $topic = TopicManager::post($out['forum'], $out['title'], $out['check'], $user);
+        if (self::$result['success']) {
+            $out['time_post'] = time();
+            $topic = TopicManager::post($out['forum'], $out['title'], $out['check'], $out['time_post'], $out['news'], $user);
             self::$result['topicId'] = $topic->id;
             self::$result['title_slug'] = ForumHelper::slugify($topic->title);
             $out['check'] = CheckedHelper::checkPostTopic($input, $topic);
@@ -86,16 +89,32 @@ class ForumExecutor extends BaseExecutor
     {
         self::$result['success'] = false;
         $forum = Forum::find(intval($forumId));
-        if(is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
+        if (is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
 
         if (ModerHelper::banForum($user, $forum)) return self::$result['message'] = 'Пользователь заблокирован на данном форуме';
 
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+        $out['news'] = null;
+        if ($forum->section_id == 6 && $forum->id != 53) {
+            if (isset($input['news'])) {
+                $news = News::find(intval($input['news']));
+                if (is_null($news)) return self::$result['message'] = 'Категория для новости не найдена';
+                $out['news'] = $news->id;
+            } else {
+                return self::$result['message'] = 'Не задана категория для новости';
+            }
+        }
+
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме1';
 
-        if($forum->block && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if ($forum->block && $newspaper != $forum->id && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме2';
 
-        if(mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+        if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
         $out['forum'] = $forum;
         $out['check'] = CheckedHelper::checkTopic($input, $forum);
@@ -109,27 +128,26 @@ class ForumExecutor extends BaseExecutor
         if ($images->count() > 0) return $out['images'] = $images;
     }
 
-    public static function forum ($forumId, $user)
+    public static function forum($forumId, $user)
     {
         self::$result['success'] = false;
 
-        if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result['success'] = true;
 
-        if(self::$result['success']) self::forum_valid($forumId, $user);
+        if (self::$result['success']) self::forum_valid($forumId, $user);
 
-        if(self::$result['success']) self::$result['message'] = 'OK';
+        if (self::$result['success']) self::$result['message'] = 'OK';
         return self::$result;
     }
 
     private static function forum_valid($forumId, $user)
     {
         $forum = Forum::find(intval($forumId));
-        if(is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
+        if (is_null($forum)) return self::$result['message'] = 'Раздел с темами не найден';
 
         if (ModerHelper::banForum($user, $forum)) return self::$result['message'] = 'Пользователь заблокирован на данном форуме';
 
         self::$result['success'] = true;
     }
-
 }

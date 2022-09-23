@@ -3,10 +3,10 @@ use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
 @section('title-block')
-    @if (!is_null( $model['sectionTitle']))
-    {{ $model['sectionTitle'] }} -  Форум игры Времена Смуты
+    @if (!is_null($model['sectionTitle']))
+        {{ $model['sectionTitle'] }} - Форум игры Времена Смуты
     @else
-    Форум игры Времена Смуты
+        Форум игры Времена Смуты
     @endif
 @endsection
 @section('content')
@@ -39,11 +39,14 @@ use App\AppForum\Helpers\ForumHelper;
                                             Темы: &nbsp; <span class="fw-bold">{{ $forum['DATA']->inf->topic_count }}</span>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-end">
-                                            Ответы: &nbsp; <span class="fw-bold">{{ $forum['DATA']->inf->post_count }}</span>
+                                    @if ($forum['id'] == 53 || $forum['section_id'] != 6)
+                                        <div class="row">
+                                            <div class="col d-flex justify-content-end">
+                                                Ответы: &nbsp; <span class="fw-bold">{{ $forum['DATA']->inf->post_count }}</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
+
                                 </div>
                             </div>
 
@@ -72,8 +75,10 @@ use App\AppForum\Helpers\ForumHelper;
                                             <div class="row m-0">
                                                 <div class="col p-0">
                                                     <span class="forum-desc">
-                                                        <a class="text-dark" style="font-size: 10pt;" href="{{ url('/user/' . $forum['DATA']->last_post->user_id) }}">{{ $forum['DATA']->last_post->user_name }}</a>
-                                                        <span style="font-size: 8pt;" class="text-muted"> &bull;&nbsp;
+                                                        <span>
+                                                            <a class="text-dark" style="font-size: 10pt;" href="{{ url('/user/' . $forum['DATA']->last_post->user_id) }}">{{ $forum['DATA']->last_post->user_name }}</a>
+                                                        </span>
+                                                        <span style="font-size: 8pt;" class="text-muted d-inline-block"> &bull;&nbsp;
                                                             <a href="{{ url('/t/' . $forum['DATA']->last_post->post_id . '/end') }} ">{{ ForumHelper::timeFormat($forum['DATA']->last_post->date) }}
                                                             </a>
                                                         </span>

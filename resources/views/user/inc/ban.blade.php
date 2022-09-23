@@ -1,6 +1,6 @@
 @if (!is_null($model['user']))
     <div class="col-12 mt-3 text-break scroll" style="background: rgb(246, 240, 204); display:none;" id="user_ban">
-        <div id="carouselExampleDark" data-bs-touch="true" class="carousel carousel-dark slide mx-0" data-bs-interval="false" data-bs-ride="carousel">
+        <div id="carouselExampleDark" data-bs-touch="true" class="carousel carousel-dark mx-0" data-bs-interval="false" data-bs-ride="carousel">
             <div class="carousel-indicators mb-1">
                 <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 3"></button>

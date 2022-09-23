@@ -14,6 +14,11 @@ class Topic extends Model
         return $this->hasMany(Post::class);
     }
 
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function other_roles()
     {
         return $this->hasMany(Other_role::class);
@@ -32,5 +37,10 @@ class Topic extends Model
     public function bans()
     {
         return $this->hasMany(Ban::class);
+    }
+
+    public function news()
+    {
+        return $this->belongsTo(News::class);
     }
 }

@@ -2,11 +2,12 @@
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
 @endphp
+
 @if (!is_null($model['user']))
     <div class="col-12 mt-3 mb-3 pb-3 text-break scroll border-2 border-bottom border-secondary" style="display:none; border-color: #e2d5ac !important;" id="user_ban_inf">
-        @if (!is_null($model['user']) && $model['user']['role_id'] > 2  || $model['other_role_bf'])
+        @if (!is_null($model['user']) && ($model['user']['role_id'] > 1 || $model['other_role_bf']))
             <h5>История блокировок пользователя</h5>
-            @if (!is_null($model['bans_activ']) || $model['bans_activ']->count() > 0 || !is_null($model['bans_old']) || $model['bans_old']->count() > 0)
+            @if ($model['bans_activ']->count() > 0 || $model['bans_old']->count() > 0)
                 <div class="overflow-auto " style="background-color: #f1e9c2;  max-height: 400px;">
                     @if ($model['bans_activ']->count() > 0)
                         <h6 class="fw-bolder">Действующие</h6>
@@ -165,7 +166,7 @@ use App\AppForum\Helpers\ModerHelper;
                         <hr class="my-2 mx-1" style="background: #b59a6b9e;">
                     @endif
 
-                    @if ($model['bans_old']->count() > 0 && !is_null($model['user']) && $model['user']['role_id'] > 1)
+                    @if (($model['bans_old']->count() > 0 && !is_null($model['user']) && $model['user']['role_id'] > 1) || $model['other_role_bf'])
                         <h6 class="fw-bolder mt-2 mb-1">Архив</h6>
                         <div class=" overflow-auto " style="max-height: 300px;">
                             @foreach ($model['bans_old'] as $ban)
@@ -182,8 +183,10 @@ use App\AppForum\Helpers\ModerHelper;
                                             </div>
                                             <div style="font-size: 9pt;">
                                                 <span>выдан </span>
-                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 2)
+                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 3)
                                                     <span>модератором </span>
+                                                @elseif ($ban->user_moder->role_id == 1)
+                                                    <span>пользователем </span>
                                                 @elseif ($ban->user_moder->role_id == 4)
                                                     <span>администратором форума </span>
                                                 @elseif ($ban->user_moder->role_id >= 5 && $ban->user_moder->role_id <= 8)
@@ -210,8 +213,10 @@ use App\AppForum\Helpers\ModerHelper;
                                             </div>
                                             <div style="font-size: 9pt;">
                                                 <span>выдан </span>
-                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 2)
+                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 3)
                                                     <span>модератором </span>
+                                                @elseif ($ban->user_moder->role_id == 1)
+                                                    <span>пользователем </span>
                                                 @elseif ($ban->user_moder->role_id == 4)
                                                     <span>администратором форума </span>
                                                 @elseif ($ban->user_moder->role_id >= 5 && $ban->user_moder->role_id <= 8)
@@ -238,8 +243,10 @@ use App\AppForum\Helpers\ModerHelper;
                                             </div>
                                             <div style="font-size: 9pt;">
                                                 <span>выдан </span>
-                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 2)
+                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 3)
                                                     <span>модератором </span>
+                                                @elseif ($ban->user_moder->role_id == 1)
+                                                    <span>пользователем </span>
                                                 @elseif ($ban->user_moder->role_id == 4)
                                                     <span>администратором форума </span>
                                                 @elseif ($ban->user_moder->role_id >= 5 && $ban->user_moder->role_id <= 8)
@@ -266,8 +273,10 @@ use App\AppForum\Helpers\ModerHelper;
                                             </div>
                                             <div style="font-size: 9pt;">
                                                 <span>выдан </span>
-                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 2)
+                                                @if ($ban->user_moder->role_id == 2 || $ban->user_moder->role_id == 3)
                                                     <span>модератором </span>
+                                                @elseif ($ban->user_moder->role_id == 1)
+                                                    <span>пользователем </span>
                                                 @elseif ($ban->user_moder->role_id == 4)
                                                     <span>администратором форума </span>
                                                 @elseif ($ban->user_moder->role_id >= 5 && $ban->user_moder->role_id <= 8)
@@ -310,8 +319,10 @@ use App\AppForum\Helpers\ModerHelper;
                                         @if ($ban->cancel)
                                             <div class="fst-italic" style="font-size: 9pt; opacity: 80% !important;">
                                                 <span>отмена: {{ date('d.m.Y H:i', $ban->datetime_cancel) }} - </span>
-                                                @if ($ban->user_cancel->role_id == 2 || $ban->user_cancel->role_id == 2)
+                                                @if ($ban->user_cancel->role_id == 2 || $ban->user_cancel->role_id == 3)
                                                     <span>модератором </span>
+                                                @elseif ($ban->user_moder->role_id == 1)
+                                                    <span>пользователем </span>
                                                 @elseif ($ban->user_cancel->role_id == 4)
                                                     <span>администратором форума </span>
                                                 @elseif ($ban->user_cancel->role_id >= 5 && $ban->user_cancel->role_id <= 8)

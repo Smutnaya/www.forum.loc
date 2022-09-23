@@ -6,16 +6,17 @@ use App\Topic;
 
 class TopicManager
 {
-    public static function post($forum, $title, $check, $user)
+    public static function post($forum, $title, $check, $time_post, $news, $user)
     {
         $topic = Topic::create([
             'title' => $title,
             'datetime' => time(),
-            'time_post' => time(),
+            'time_post' => $time_post,
             'user_id' => $user->id,
             'pin' => $check['pin'],
             'block' => $check['block'],
             'hide' => $check['hide'],
+            'news_id' => $news,
             'moderation' => $check['moder'],
             'forum_id' => $forum->id,
         ]);
@@ -33,6 +34,8 @@ class TopicManager
             'block' => $check['block'],
             'DATA' => $forum_data,
         ])->save();
+
+        return $topic;
     }
 
     public static function dataedit($topic, $DATA)
@@ -40,6 +43,17 @@ class TopicManager
         $topic->fill([
             'DATA' => $DATA
         ])->save();
+
+        return $topic;
+    }
+
+    public static function premod_topic($topic, $moder)
+    {
+        $topic->fill([
+            'moderation' => $moder
+        ])->save();
+
+        return $topic;
     }
 
     public static function lastPostEdit($topic, $last_post)
@@ -47,6 +61,8 @@ class TopicManager
         $topic->fill([
             'time_post' => $last_post
         ])->save();
+
+        return $topic;
     }
 
     public static function move($topic, $forum_id)

@@ -15,8 +15,9 @@ use App\AppForum\Managers\UserManager;
 use App\AppForum\Managers\ViewManager;
 use App\AppForum\Helpers\CheckedHelper;
 use App\AppForum\Managers\ForumManager;
-use App\AppForum\Managers\ImagesManager;
 use App\AppForum\Managers\TopicManager;
+use App\AppForum\Managers\ImagesManager;
+use App\AppForum\Managers\CommentManager;
 
 class TopicExecutor extends BaseExecutor
 {
@@ -93,7 +94,12 @@ class TopicExecutor extends BaseExecutor
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+        if ($newspaper != $topic->forum_id && !ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
         if (ModerHelper::banTopic($user, $topic)) return self::$result['message'] = 'Пользователь заблокирован в теме';
 
@@ -140,16 +146,21 @@ class TopicExecutor extends BaseExecutor
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
         if (mb_strlen($input['title']) > 13000 && !is_null($input['title'])) $out['title'] = mb_strimwidth($input['title'], 0, 100, "...");
-
-        if (!(ModerHelper::moderTopicEdit($user->role_id, $user->id, $topic->datetime, json_decode($topic->DATA, false), $topic->user_id, $topic->forum_id, $topic->forum->section_id, $topic->id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+        if ($newspaper != $topic->forum_id && !(ModerHelper::moderTopicEdit($user->role_id, $user->id, $topic->datetime, json_decode($topic->DATA, false), $topic->user_id, $topic->forum_id, $topic->forum->section_id, $topic->id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
+        $user_role = ModerHelper::user_role($user);
+        if ($newspaper != $topic->forum_id && !ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
 
         $forum_data = json_decode($topic->DATA, false);
         if ($user->id != $topic->user_id) $forum_data->moder = time();
         $out['forum_data'] = json_encode($forum_data);
         $out['topic'] = $topic;
-        $out['check'] = CheckedHelper::checkTopic($input, $topic->forum);
+        $out['check'] = CheckedHelper::checkTopicEdit($input);
 
         self::$result['success'] = true;
     }
@@ -286,5 +297,63 @@ class TopicExecutor extends BaseExecutor
             self::$result['success'] = true;
         }
         $out['DATA'] = json_encode($data);
+    }
+
+
+    //comments
+    public static function comment($topicId, $user, $input)
+    {
+        $out = collect();
+
+        if (!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
+        else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
+        else self::$result = ['success' => true];
+
+        if (self::$result['success']) self::comment_valid(intval($topicId), $input, $out, $user);
+
+        $out['text'] = $input['text'];
+        $ip = IpHelper::getIp();
+
+        if (self::$result['success']) {
+            $comment = CommentManager::post($out['topic']['id'], $out['text'], $user->id, $ip);
+
+            self::$result['message'] = 'OK';
+            self::$result['topicId'] = $topicId;
+            self::$result['title_slug'] = ForumHelper::slugify($out['topic']->title);
+            self::$result['user'] = $user;
+
+            $data = json_decode($out['topic']->DATA, false);
+            $data->inf->comment++;
+            $out['DATA'] = json_encode($data);
+            TopicManager::dataedit($out['topic'], $out['DATA']);
+
+            $data = json_decode($comment->user->DATA, false);
+            $data->post_count++;
+            $out['DATA'] = json_encode($data);
+            UserManager::dataedit($user, $out['DATA']);
+        }
+        return self::$result;
+    }
+
+    private static function comment_valid($topicId, $input, $out, $user)
+    {
+        self::$result = ['success' => false];
+        $topic = Topic::find(intval($topicId));
+        if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
+
+        $user_role = ModerHelper::user_role($user);
+        if (is_null($user->newspaper_id)) {
+            $newspaper = 0;
+        } else {
+            $newspaper = $user->newspaper->forum_id;
+        }
+
+        if ($newspaper != $topic->forum_id && !ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if ($newspaper != $topic->forum_id && ModerHelper::banTopic($user, $topic)) return self::$result['message'] = 'Пользователь заблокирован в теме';
+        if (mb_strlen($input['text']) > 7500 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 7500, "...");
+        if ($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id)) return self::$result['message'] = 'Тема закрыта для комментариев';
+
+        $out['topic'] = $topic;
+        self::$result['success'] = true;
     }
 }

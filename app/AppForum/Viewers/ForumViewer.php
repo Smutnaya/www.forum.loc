@@ -13,6 +13,7 @@ use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
+use App\News;
 
 class ForumViewer
 {
@@ -27,12 +28,16 @@ class ForumViewer
             'topics' => collect(),
             'posts' => collect(),
             'forumId' => null,
+            'section_id' => null,
+            'forum_id' => null,
             'visForum' => null,
             'moder' => false,
+            'editor' => false,
             'sections' => collect(),
             'sectionsAside' => collect(),
             'last_posts' => collect(),
             'new_topics' => collect(),
+            'news' => collect(),
 
             'pagination' => collect([
                 'page' => null,
@@ -57,6 +62,7 @@ class ForumViewer
         if (is_null($forum)) return $model;
         $model['forumTitle'] = $forum->title;
         $model['forumId'] = $forum->id;
+        $model['sectionId'] = $forum->section_id;
         $model['forumBlock'] = $forum->block;
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
 
@@ -86,6 +92,10 @@ class ForumViewer
             $model['user'] = $user;
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+
+            if (!is_null($user->newspaper_id) && $user->newspaper->forum_id == $forum->id) {
+                $model['editor'] = true;
+            }
         }
 
         // последние ответы
@@ -264,8 +274,12 @@ class ForumViewer
             if ($section_id == 6) {
                 if ($user_role > 7) {
                     return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+                } elseif (!is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $forum->id) {
+                    return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+                } elseif ($user_role == 4) {
+                    return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                 } else {
-                    return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+                    return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false], ['moderation', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                 }
             }
             if ($section_id == 7) {
@@ -410,7 +424,7 @@ class ForumViewer
                 }
             }
             if ($section_id == 6) {
-                if ($user_role > 7) {
+                if ($user_role > 7 || $user_role == 4 || !is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $forum->id) {
                     return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->get();
                 } else {
                     return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->get();
@@ -463,6 +477,9 @@ class ForumViewer
             $model['user'] = $user;
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+            if (!is_null($user->newspaper_id) && $user->newspaper->forum_id == intval($forumId)) {
+                $model['editor'] = true;
+            }
         }
 
         $forum = Forum::find(intval($forumId));
@@ -474,14 +491,21 @@ class ForumViewer
         if ($forum->section->hide || $forum->hide) $model['sections']['hide'] = true;
         $model['sections']['id'] = $forum->section->id;
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlForum(intval($forumId));
+
+        $model['section_id'] = $forum->section_id;
+        $model['forum_id'] = $forum->id;
+
+        $model['news'] = News::all();
+
         return $model;
     }
 
     private static function setTopic($model, $topics)
     {
+        $top = null;
         foreach ($topics as $topic) {
             //if (!is_null($user)) { //$topic->moderation && $topic->$user_id == $user_id && $user_role == 1 ||
-            $model['topics']->push([
+            $top = [
                 'id' => $topic->id,
                 'title' => $topic->title,
                 'title_slug' => ForumHelper::slugify($topic->title),
@@ -494,8 +518,15 @@ class ForumViewer
                 'forum_id' => $topic->forum_id,
                 'user_id' => $topic->user_id,
                 'user' => $topic->user->name,
-            ]);
+                'news_id' => 0,
+                'news_title' => null,
+            ];
+
+            if (!is_null($topic->news_id)) {
+                $top['news_id'] = $topic->news_id;
+                $top['news_title'] = $topic->news->title;
+            }
+            $model['topics']->push($top);
         }
-        //}
     }
 }

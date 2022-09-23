@@ -59,7 +59,8 @@ class SectionViewer
             'id' => $forum->id,
             'title' => $forum->title,
             'description' => $forum->description,
-            'DATA' => json_decode($forum->DATA, false)
+            'DATA' => json_decode($forum->DATA, false),
+            'section_id' => $forum->section_id,
         ]);
     }
 }

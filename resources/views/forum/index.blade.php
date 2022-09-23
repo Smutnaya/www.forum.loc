@@ -3,8 +3,8 @@ use App\AppForum\Helpers\ForumHelper;
 @endphp
 @extends('layouts.forum')
 @section('title-block')
-    @if (!is_null( $model['forumTitle']))
-    {{ $model['forumTitle'] }} -  Форум игры Времена Смуты
+    @if (!is_null($model['forumTitle']))
+        {{ $model['forumTitle'] }} - Форум игры Времена Смуты
     @else
         Форум игры Времена Смуты
     @endif
@@ -42,6 +42,11 @@ use App\AppForum\Helpers\ForumHelper;
                                 <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
                             </div>
+                        @elseif ($model['editor'])
+                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                    тема</a>
+                            </div>
                         @endif
                     @endif
                 </div>
@@ -71,21 +76,35 @@ use App\AppForum\Helpers\ForumHelper;
                                         </a>
                                     </span>
                                     <div class="forum-desc">
-                                        <a class="post-a-color" href="{{ url('/user/' . $topic['user_id']) }}">{{ $topic['user'] }}</a> &bull; {{ $topic['datetime'] }}
+                                        @if ($model['forumId'] == 53 || $model['sectionId'] != 6)
+                                            <a class="post-a-color" href="{{ url('/user/' . $topic['user_id']) }}">{{ $topic['user'] }}</a> &bull; {{ $topic['datetime'] }}
+                                        @else
+                                            @if ($topic['news_id'] > 0)
+                                                # {{ $topic['news_title'] }}
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
 
                                 <div class="col-xl-2 col-lg-3 col-sm-2 d-none d-sm-block align-self-center">
                                     <div class="container-fluid forum-desc">
-                                        <div class="row">
+                                        @if ($model['forumId'] == 53 || $model['sectionId'] != 6)
+                                            <div class="row">
+                                                <div class="col d-flex justify-content-end">
+                                                    Ответы: &nbsp; <span class="fw-bold">{{ $topic['DATA']->inf->post_count }}</span>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="row">
+                                                <div class="col d-flex justify-content-end">
+                                                    Комментарии: &nbsp; <span class="fw-bold">{{ $topic['DATA']->inf->comment }}</span>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div class="row" style="height: 19px !important;">
                                             <div class="col d-flex justify-content-end">
                                                 Просмотры: &nbsp; <span class="fw-bold">
                                                     {{ $topic['DATA']->inf->views }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col d-flex justify-content-end">
-                                                Ответы: &nbsp; <span class="fw-bold">{{ $topic['DATA']->inf->post_count }}</span>
                                             </div>
                                         </div>
                                     </div>

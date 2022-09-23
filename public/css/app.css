@@ -21568,20 +21568,6 @@ body {
   font-family: "Open Sans", Arial, Helvetica, sans-serif;
 }
 
-blockquote {
-  background: rgba(241, 233, 194, 0.5607843137);
-  color: #4a4741;
-  margin: 0 0 1rem 1rem;
-  padding: 5px 13px !important;
-  font-size: 14px;
-  font-style: italic;
-  font-family: "Open Sans", "Arial", Helvetica, serif !important;
-  border-style: solid;
-  border-color: rgba(175, 164, 132, 0.2392156863);
-  border-width: 0.005rem;
-  border-radius: 0px 15px !important;
-}
-
 p {
   margin: 0 !important;
 }

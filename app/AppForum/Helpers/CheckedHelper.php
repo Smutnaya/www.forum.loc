@@ -23,6 +23,21 @@ class CheckedHelper
         $out = self::setCheck($input, $out);
         return $out;
     }
+    public static function checkTopicEdit($input)
+    {
+        $out = [
+            'pin' => 0,
+            'block' => 0,
+            'hide' => 0,
+            'moder' => 0
+        ];
+
+        if(!isset($input['check'])) return $out;
+
+        $out = self::setCheck($input, $out);
+        return $out;
+    }
+
 
     public static function checkPostTopic($input, $topic)
     {

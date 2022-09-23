@@ -96,6 +96,7 @@ class UserViewer
                 self::setUserOtherRole($model, $other_roles_inf);
                 //dd($other_role_inf);
             }
+
             $other_role_bf_inf = Other_role::where([['user_id', $user_inf->id], ['moderation', true]])->get();
             if ($other_role_bf_inf->count() > 0) $model['other_role_bf_inf'] = true;
         }

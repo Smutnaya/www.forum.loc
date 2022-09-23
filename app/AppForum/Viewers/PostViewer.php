@@ -24,6 +24,9 @@ class PostViewer
             'page' => null,
             'postModer' => false,
             'postEdit' => false,
+            'editor' => false,
+            'section_id' => null,
+            'forum_id' => null,
             'sectionsAside' => collect(),
         ]);
     }
@@ -45,6 +48,11 @@ class PostViewer
 
         $post = Post::find(intval($postId));
         if (is_null($post)) return $model;
+        if (!is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $post->forum_id) {
+            $model['editor'] = true;
+        }
+        $model['section_id'] = $post->topic->forum->section_id;
+        $model['forum_id'] = $post->topic->forum_id;
         $model['post'] = $post;
         $model['DATA'] = json_decode($post->DATA);
         $model['topic'] = $post->topic;
@@ -54,7 +62,7 @@ class PostViewer
         $model['page'] = ForumHelper::parsePage($page, $pages);
 
         if (is_null($user)) return $model;
-        $model['postEdit'] = ModerHelper::moderPostEdit($user->role_id, $user, $post->user_id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id);
+        $model['postEdit'] = ModerHelper::moderPostEdit($user->role_id, $user, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum->id, $post->topic->forum->section_id, $post->topic_id);
         $model['postModer'] = ModerHelper::moderPost($user->role_id, $post->topic->forum_id, $post->topic->forum->section_id, $user, $post->topic_id);
 
         return $model;

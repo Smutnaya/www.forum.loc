@@ -1,9 +1,11 @@
 <?php
 
+use App\News;
 use App\Post;
 use App\Role;
 use App\User;
 use App\Forum;
+use App\Newspaper;
 use App\Topic;
 use App\Section;
 use Illuminate\Database\Seeder;
@@ -132,10 +134,27 @@ class DatabaseSeeder extends Seeder
             // лента новостей игры
             ['title'=> '[Дайджест ВС - ПУБЛИКАЦИЯ]', 'description' => 'Лента новостей игры. ПУБЛИКАЦИЯ','section_id' => 1, 'private' => true, 'moderation' => true],
 
+            // газетка тест
+            ['title'=> 'Тестовая газетка', 'description' => 'тест-тест-тест', 'block' => true, 'section_id' => 6, 'moderation' => true],
+
 
             //['title'=> '', 'description' => '', 'section_id' => 1],
         ];
         foreach($forums as $forum) Forum::insert($forum);
+
+        News::insert([
+            ['title' => 'Новости'],
+            ['title' => 'Рейтинги'],
+            ['title' => 'Обзоры'],
+            ['title' => 'Политика Времен'],
+            ['title' => 'Интервью'],
+            ['title' => 'Турниры и конкурсы'],
+            ['title' => 'Полет фантазии'],
+            ['title' => 'Смутный юмор'],
+            ['title' => 'Не виртуальная реальность'],
+            ['title' => 'Другое'],
+            //['title' => 'Пользователь'],
+        ]);
 
         Role::insert([
             ['role' => 'Пользователь', 'description' => 'Пользователь'],
@@ -152,13 +171,20 @@ class DatabaseSeeder extends Seeder
             ['role' => 'Администратор', 'description' => 'Администратор'],
         ]);
 
+        User::insert([
+            ['name' => 'смутная леди', 'email' => '12@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 12, 'newspaper_id' => null, 'newspaper_role' => null],
+            ['name' => 'Никудышный Шаромыжник', 'email' => '123@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 1, 'newspaper_id' => 1, 'newspaper_role' => 1],
+        ]);
+
+        Newspaper::insert([
+            ['title' => 'Тестовая газетка', 'description' => 'тест-тест-тест', 'forum_id' => '73'],
+        ]);
+
+
 /*         Topic::insert([
             ['title' => 'aaa', 'datetime' => strtotime('+5 minutes'), 'user_id' => 1, 'forum_id' => 1],
         ]);
 */
-        User::insert([
-            ['name' => 'смутная леди', 'email' => '12@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 12],
-            ['name' => 'Никудышный Шаромыжник', 'email' => '123@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 1],
-        ]);
+
     }
 }

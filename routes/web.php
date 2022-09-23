@@ -61,6 +61,8 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/t/{id}/post', 'TopicController@post');
     Route::any('/t/{id}/edit', 'TopicController@edit');
     Route::any('/t/{id}/move', 'TopicController@move');
+    Route::any('/t/{id}/comment', 'TopicController@comment');
+
 
     Route::get('/p/{id}/edit/{page?}', 'PostController@index_edit');
     Route::get('/p/{id}/moder/{page?}', 'PostController@index');
@@ -69,6 +71,8 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/p/{id}/premod/{page?}', 'PostController@premod');
     Route::any('/p/{id}/unhide/{page?}', 'PostController@unhide');
     Route::any('/p/{id}/del/{page?}', 'PostController@del');
+
+    Route::any('/c/{id}/del', 'CommentController@del');
 
     Route::any('/p/{id}/like/{page?}', 'LikeController@like');
     Route::any('/p/{id}/likem/{page?}', 'LikeController@likem');

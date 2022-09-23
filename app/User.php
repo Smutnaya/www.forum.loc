@@ -78,6 +78,10 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'user_id_to');
     }
 
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
     public function other_roles()
     {
@@ -97,6 +101,11 @@ class User extends Authenticatable
     public function images()
     {
         return $this->hasMany(Images::class);
+    }
+
+    public function newspaper()
+    {
+        return $this->belongsTo(Newspaper::class);
     }
 
 }
