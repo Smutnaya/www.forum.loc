@@ -30,6 +30,10 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('role_id')->default('1');
             $table->unsignedBigInteger('newspaper_id')->nullable();
             $table->unsignedInteger('newspaper_role')->nullable();
+            $table->unsignedInteger('clan_id')->nullable();
+            $table->unsignedInteger('clan_role')->nullable();
+            $table->unsignedInteger('alliance_id')->nullable();
+            $table->boolean('speaker')->default(false);
 
             //$table->timestamps();
         });

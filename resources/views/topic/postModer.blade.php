@@ -19,16 +19,17 @@
                 @csrf
                 <div>
                     <h5 class="title-shadow mb-4 text-danger">Модерация ответа</h5>
-                    <p class="forum_comment mb-0">Настройки:</p>
-                    <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
-                        <input type="checkbox" class="btn-check" name="check[]" id="btncheck3" autocomplete="off" value="hide" @if ($model['post']['hide'] == 1) checked @endif>
-                        <label class="btn btn-outline-primary px-0" for="btncheck3"><i class="fa-regular fa-eye-slash forum-desc me-2"></i><span class="d-sm-inline d-none">скрыть</span></label>
 
-                        @if ($model['section_id'] == 6 && $model['forum_id'] != 53)
+                    @if ($model['section_id'] != 7)
+                        <p class="forum_comment mb-0">Настройки:</p>
+                        <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
+                            <input type="checkbox" class="btn-check" name="check[]" id="btncheck3" autocomplete="off" value="hide" @if ($model['post']['hide'] == 1) checked @endif>
+                            <label class="btn btn-outline-primary px-0" for="btncheck3"><i class="fa-regular fa-eye-slash forum-desc me-2"></i><span class="d-sm-inline d-none">скрыть</span></label>
+
                             <input type="checkbox" class="btn-check" name="check[]" id="btncheck4" autocomplete="off" value="moder" @if ($model['post']['moderation'] == 1) checked @endif>
                             <label class="btn btn-outline-primary px-0" for="btncheck4"><i class="fa-regular fa-hourglass forum-desc me-2"></i><span class="d-sm-inline d-none">модерация</span></label>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                     @if ($model['topic']['hide'] == 1)
                         <p class="small" style="color:#6a0000 !important">* тема скрыта</p>
                     @endif

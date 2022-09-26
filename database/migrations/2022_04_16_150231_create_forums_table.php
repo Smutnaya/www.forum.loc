@@ -22,8 +22,10 @@ class CreateForumsTable extends Migration
             $table->boolean('hide')->default(false);
             $table->boolean('private')->default(false);
             $table->boolean('block')->default(false);
+            $table->unsignedInteger('clan_id')->nullable();
+            $table->unsignedInteger('alliance_id')->nullable();
             $table->json('DATA')->default('{"last_post":{"user_name":null,"user_id":null,"avatar":null,"title":null,"post_id":null,"date":null},"inf":{"post_count":0,"topic_count":0}}');
-            $table->unsignedBigInteger('section_id');
+            $table->unsignedBigInteger('section_id')->index();
         });
     }
 

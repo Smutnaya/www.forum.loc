@@ -16,6 +16,7 @@ class TopicManager
             'pin' => $check['pin'],
             'block' => $check['block'],
             'hide' => $check['hide'],
+            'private' => $check['private'],
             'news_id' => $news,
             'moderation' => $check['moder'],
             'forum_id' => $forum->id,
@@ -32,6 +33,7 @@ class TopicManager
             'moderation' => $check['moder'],
             'pin' => $check['pin'],
             'block' => $check['block'],
+            'private' => $check['private'],
             'DATA' => $forum_data,
         ])->save();
 

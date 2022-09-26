@@ -12,7 +12,8 @@ class CheckedHelper
             'pin' => 0,
             'block' => 0,
             'hide' => 0,
-            'moder' => 0
+            'moder' => 0,
+            'private' => 0
         ];
 
         if($forum->section->moderation || $forum->moderation) $out['moder'] = 1;
@@ -29,7 +30,8 @@ class CheckedHelper
             'pin' => 0,
             'block' => 0,
             'hide' => 0,
-            'moder' => 0
+            'moder' => 0,
+            'private' => 0
         ];
 
         if(!isset($input['check'])) return $out;

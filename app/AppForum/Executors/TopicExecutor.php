@@ -18,6 +18,7 @@ use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
 use App\AppForum\Managers\ImagesManager;
 use App\AppForum\Managers\CommentManager;
+use App\AppForum\Helpers\ClanAllianceHelper;
 
 class TopicExecutor extends BaseExecutor
 {
@@ -100,12 +101,13 @@ class TopicExecutor extends BaseExecutor
             $newspaper = $user->newspaper->forum_id;
         }
         if ($newspaper != $topic->forum_id && !ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
+        if ($topic->private && !ClanAllianceHelper::userAllianceModer($user, $topic->forum) && !ClanAllianceHelper::userClanModer($user, $topic->forum)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
         if (ModerHelper::banTopic($user, $topic)) return self::$result['message'] = 'Пользователь заблокирован в теме';
 
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 
-        if ($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
+        if ($topic->block && !ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id) && !ClanAllianceHelper::userAllianceModer($user, $topic->forum) && !ClanAllianceHelper::userClanModer($user, $topic->forum)) return self::$result['message'] = 'Тема закрыта для новых публикаций';
 
         $out['topic'] = $topic;
         $out['check'] = CheckedHelper::checkPost($input, $topic);

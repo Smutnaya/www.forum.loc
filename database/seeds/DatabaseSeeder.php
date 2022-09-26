@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Дополнительные форумы'],
             ['title' => 'Сенат', 'moderation' => true],
             ['title' => 'Кланы и альянсы - Политика'],
-            ['title' => 'Форумы'],
+            ['title' => 'Кланы и альянсы - Форумы'],
             ['title' => 'Газеты и блоги'],
             ['title' => '[Сенат. Рабочий]', 'private' => true],
         ];
@@ -134,11 +134,9 @@ class DatabaseSeeder extends Seeder
             // лента новостей игры
             ['title'=> '[Дайджест ВС - ПУБЛИКАЦИЯ]', 'description' => 'Лента новостей игры. ПУБЛИКАЦИЯ','section_id' => 1, 'private' => true, 'moderation' => true],
 
-            // газетка тест
-            ['title'=> 'Тестовая газетка', 'description' => 'тест-тест-тест', 'block' => true, 'section_id' => 6, 'moderation' => true],
+            // ceнат архив
+            ['title'=> '[Скрытый архив]', 'description' => 'Ветка для хлама... прячем от "лишних" глаз', 'section_id' =>7, 'private' => true],
 
-
-            //['title'=> '', 'description' => '', 'section_id' => 1],
         ];
         foreach($forums as $forum) Forum::insert($forum);
 

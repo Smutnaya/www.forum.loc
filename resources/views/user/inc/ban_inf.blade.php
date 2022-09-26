@@ -5,7 +5,7 @@ use App\AppForum\Helpers\ModerHelper;
 
 @if (!is_null($model['user']))
     <div class="col-12 mt-3 mb-3 pb-3 text-break scroll border-2 border-bottom border-secondary" style="display:none; border-color: #e2d5ac !important;" id="user_ban_inf">
-        @if (!is_null($model['user']) && ($model['user']['role_id'] > 1 || $model['other_role_bf']))
+        @if (!is_null($model['user']) && ($model['user']['role_id'] > 0 || $model['other_role_bf']))
             <h5>История блокировок пользователя</h5>
             @if ($model['bans_activ']->count() > 0 || $model['bans_old']->count() > 0)
                 <div class="overflow-auto " style="background-color: #f1e9c2;  max-height: 400px;">
@@ -166,7 +166,7 @@ use App\AppForum\Helpers\ModerHelper;
                         <hr class="my-2 mx-1" style="background: #b59a6b9e;">
                     @endif
 
-                    @if (($model['bans_old']->count() > 0 && !is_null($model['user']) && $model['user']['role_id'] > 1) || $model['other_role_bf'])
+                    @if (($model['bans_old']->count() > 0 && !is_null($model['user']) && $model['user']['role_id'] > 0) || $model['other_role_bf'])
                         <h6 class="fw-bolder mt-2 mb-1">Архив</h6>
                         <div class=" overflow-auto " style="max-height: 300px;">
                             @foreach ($model['bans_old'] as $ban)
@@ -335,12 +335,14 @@ use App\AppForum\Helpers\ModerHelper;
                                                     <span>администратором </span>
                                                 @endif
                                                 <a href="{{ url('/user/' . $ban->user_cancel_id) }}"><span style="{{ ForumHelper::roleStyle($ban->user_cancel->role_id) }}"> {{ $ban->user_cancel->name }}</span></a>
-                                                &ensp; <span style="display: inline-flex;">
-                                                    <details>
-                                                        <summary>ПРИЧИНА</summary>
-                                                        <div class="text-break">{{ $ban->text_cancel }}</div>
-                                                    </details>
-                                                </span>
+                                                @if (!is_null($model['user']) && ($model['user']['role_id'] > 1 || $model['other_role_bf']))
+                                                    &ensp; <span style="display: inline-flex;">
+                                                        <details>
+                                                            <summary>ПРИЧИНА</summary>
+                                                            <div class="text-break">{{ $ban->text_cancel }}</div>
+                                                        </details>
+                                                    </span>
+                                                @endif
                                             </div>
                                         @endif
 

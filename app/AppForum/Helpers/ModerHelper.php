@@ -60,6 +60,8 @@ class ModerHelper
                 if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role >= 5 && $user_role <= 8 && $forum->section_id != 7) {
                 if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) self::collectionContains($id_forums, $forum, $forums_vis);
+            } elseif ($user_role >= 5 && $user_role <= 8 && $forum->section_id == 7 ) {
+                self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role >= 9) {
                 self::collectionContains($id_forums, $forum, $forums_vis);
             }
@@ -115,6 +117,8 @@ class ModerHelper
                 if ($forum->id != 16 && $forum->id != 17 && $forum->id != 72) {
                     self::collectionContains($id_forums, $forum, $forums_vis);
                 }
+            } elseif ($user_role >= 5 && $user_role <= 8 && $forum->section_id == 7) {
+                self::collectionContains($id_forums, $forum, $forums_vis);
             } elseif ($user_role >= 9) {
                 self::collectionContains($id_forums, $forum, $forums_vis);
             }
@@ -159,21 +163,19 @@ class ModerHelper
             $vis = false;
         } elseif ($user_role == 4 && $forum_id == 17) {
             $vis = false;
-        }elseif ($user_role == 4 && $forum_id == 72) {
+        } elseif ($user_role == 4 && $forum_id == 72) {
             $vis = false;
         } elseif ($user_role > 11) {
             $vis = true;
         } elseif ($forum_id == 52 || $forum_id == 53) {
             $vis = true;
         } else {
-            if ($user_role < 9 && ($forum_id == 16 || $forum_id == 17 || $forum_id == 72 || $forum_id == 70 || $section_id == 5)) $vis = false;
-            if ($user_role < 8 && ($forum_id == 56 || $forum_id == 58 || $forum_id == 67 || $forum_id == 68 || $forum_id == 69 || $section_id == 5)) $vis = false;
-            if ($user_role < 7 && ($forum_id == 62 || $forum_id == 63 || $forum_id == 64 || $section_id == 5)) $vis = false;
-            if ($user_role < 6 && ($forum_id == 54 || $forum_id == 55 || $forum_id == 57 || $forum_id == 59 || $forum_id == 60 || $forum_id == 61 || $forum_id == 66 || $section_id == 5)) $vis = false;
-            if ($user_role < 5 && ($forum_id == 65 || $forum_id == 71 || $section_id == 5)) $vis = false;
-            if ($user_role < 4 && $section_id == 5) $vis = false;
+            if ($user_role < 9 && ($forum_id == 16 || $forum_id == 17 || $forum_id == 72 || $forum_id == 70)) $vis = false;
+            if ($user_role < 8 && ($forum_id == 56 || $forum_id == 58 || $forum_id == 67 || $forum_id == 68 || $forum_id == 69 || $forum_id == 73)) $vis = false;
+            if ($user_role < 7 && ($forum_id == 62 || $forum_id == 63 || $forum_id == 64)) $vis = false;
+            if ($user_role < 6 && ($forum_id == 54 || $forum_id == 55 || $forum_id == 57 || $forum_id == 59 || $forum_id == 60 || $forum_id == 61 || $forum_id == 66)) $vis = false;
+            if ($user_role < 5 && ($forum_id == 65 || $forum_id == 71)) $vis = false;
             if ($user_role < 2 && $forum_id == 40) $vis = false;
-            if ($user_role >= 9 &&  $user_role < 12 && $section_id == 5) $vis = false;
         }
 
         if (!is_null($user)) {
@@ -199,8 +201,10 @@ class ModerHelper
     public static function moderTopicEdit($user_role_id, $user_id, $topic_datetime, $topic_DATA, $topic_user_id, $forum_id, $section_id, $topic_id)
     {
         self::$result = false;
+        $forum = Forum::find(intval($forum_id));
+
         if ($user_role_id == 1 && $topic_user_id == $user_id && time() <= $topic_datetime + 900 && is_null($topic_DATA->moder)) return self::$result = true;
-        //if ($user_role_id > 1 && $topic_user_id == $user_id && time() <= $topic_datetime + 900 && is_null($topic_DATA->moder)) return self::$result = true;
+        if ($user_role_id > 1 && $topic_user_id == $user_id && time() <= $topic_datetime + 900 && is_null($topic_DATA->moder)) return self::$result = true;
 
         $user = User::find($user_id);
         $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
@@ -215,6 +219,11 @@ class ModerHelper
                 }
             }
         }
+        if ($section_id == 5) {
+            if ($user_role_id == 12) return self::$result = true;
+            if ($forum_id == 52 && ($user_role_id > 7 || $user_role_id == 4)) return self::$result = true;
+            if ($forum_id != 52 && ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) return self::$result = true;
+        }
 
         if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 69 && $forum_id != 70) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10 || $user_role_id == 11 && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
@@ -223,7 +232,7 @@ class ModerHelper
         if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 27 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 4 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 7) return self::$result = true;
         if ($user_role_id == 11 && $section_id == 5 && $forum_id != 52) return self::$result = false;
-        if ($user_role_id > 10) return self::$result = true;
+        if ($user_role_id > 11) return self::$result = true;
         return self::$result;
     }
 
@@ -235,10 +244,10 @@ class ModerHelper
         if ($user_role_id == 9 || $user_role_id == 10  && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
         if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id < 5) return self::$result = true;
-        if ($user_role_id < 8 && $user_role_id >= 5 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id < 8 && $user_role_id >= 5 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $user_role_id < 8 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 73 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 4 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 7) return self::$result = true;
         if ($user_role_id == 11 && $section_id == 5 && $forum_id != 52) return self::$result = false;
-        if ($user_role_id > 10) return self::$result = true;
+        if ($user_role_id > 11) return self::$result = true;
         return self::$result;
     }
     public static function moderTopicMoveTo($user_role_id, $forum_id, $section_id, $user, $topic_id)
@@ -247,11 +256,11 @@ class ModerHelper
 
         if ($user_role_id == 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 69 && $forum_id != 70 && $section_id != 5) return self::$result = true;
         if ($user_role_id == 11 && $section_id == 5 && $forum_id != 52) return self::$result = false;
-        if ($user_role_id > 10) return self::$result = true;
+        if ($user_role_id > 11) return self::$result = true;
         if ($user_role_id == 9 || $user_role_id == 10 && ($forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 5)) return self::$result = true;
         if ($user_role_id == 2 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 3 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id < 5) return self::$result = true;
-        if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $section_id != 3 && $section_id < 5) return self::$result = true;
+        if ($user_role_id >= 5 && $user_role_id < 8 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $forum_id != 16 && $forum_id != 17 && $forum_id != 72 && $forum_id != 73 && $section_id != 3 && $section_id < 5) return self::$result = true;
         if ($user_role_id == 4 && $forum_id != 1 && $forum_id != 2 && $forum_id != 3 && $section_id != 7) return self::$result = true;
         return self::$result;
     }
@@ -261,10 +270,16 @@ class ModerHelper
     public static function moderPostEdit($user_role_id, $user, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id, $topic_id)
     {
         self::$result = false;
-        if(is_null($user)) $user_id = 0;
+        $forum = Forum::find(intval($forum_id));
+
+        if (is_null($user)) $user_id = 0;
         if ($user_role_id == 1 && $post_user_id == $user_id && time() <= $post_datetime + 1800 && is_null($post_DATA->date_moder)) return self::$result = true;
         if ($user_role_id > 1 && $user_role_id < 9 && $post_user_id == $user_id && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
-        if ($user_role_id > 7 || $user_role_id == 4) return self::$result = true;
+        if ($section_id == 5) {
+            if ($user_role_id == 12) return self::$result = true;
+            if ($forum_id == 52 && ($user_role_id > 7 || $user_role_id == 4)) return self::$result = true;
+            if ($forum_id != 52 && ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) return self::$result = true;
+        }
 
         if (!is_null($user)) {
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
@@ -287,6 +302,7 @@ class ModerHelper
     public static function moderPost($user_role_id, $forum_id, $section_id, $user, $topic_id)
     {
         self::$result = false;
+        $forum = Forum::find(intval($forum_id));
 
         if (!is_null($user)) {
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
@@ -340,6 +356,13 @@ class ModerHelper
             if ($user_role_id > 7 || $user_role_id == 4) return self::$result = true;
         }
 
+        // $section_id 5
+        if ($section_id == 5) {
+            if ($user_role_id == 12) return self::$result = true;
+            if ($forum_id == 52 && ($user_role_id > 7 || $user_role_id == 4)) return self::$result = true;
+            if ($forum_id != 52 && ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) return self::$result = true;
+        }
+
         //$section_id 7
         if ($forum_id == 59 || $forum_id == 60 || $forum_id == 61 || $forum_id == 65 || $forum_id == 66 || $forum_id == 71) {
             if ($user_role_id > 5) return self::$result = true;
@@ -360,6 +383,7 @@ class ModerHelper
     public static function moderForum($user_role_id, $forum_id, $section_id, $user)
     {
         self::$result = false;
+        $forum = Forum::find(intval($forum_id));
 
         if (!is_null($user)) {
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
@@ -409,6 +433,13 @@ class ModerHelper
             if ($user_role_id > 7 || $user_role_id == 4) return self::$result = true;
         }
 
+        // $section_id 5
+        if ($section_id == 5) {
+            if ($user_role_id == 12) return self::$result = true;
+            if ($forum_id == 52 && ($user_role_id > 7 || $user_role_id == 4)) return self::$result = true;
+            if ($forum_id != 52 && ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) return self::$result = true;
+        }
+
         //$section_id 7
         if ($forum_id == 59 || $forum_id == 60 || $forum_id == 61 || $forum_id == 65 || $forum_id == 66 || $forum_id == 71) {
             if ($user_role_id > 5) return self::$result = true;
@@ -416,10 +447,10 @@ class ModerHelper
         if ($forum_id == 62 || $forum_id == 63 || $forum_id == 64) {
             if ($user_role_id > 6) return self::$result = true;
         }
-        if ($forum_id == 54 || $forum_id == 55 || $forum_id == 56 || $forum_id == 57 || $forum_id == 58 || $forum_id == 67 || $forum_id == 68 || $forum_id == 69) {
+        if ($forum_id == 54 || $forum_id == 55 || $forum_id == 56 || $forum_id == 57 || $forum_id == 58 || $forum_id == 67 || $forum_id == 68 || $forum_id == 69 || $forum_id == 73) {
             if ($user_role_id > 7) return self::$result = true;
         }
-        if ($forum_id == 70) {
+        if ($forum_id == 70 ) {
             if ($user_role_id > 8) return self::$result = true;
         }
 

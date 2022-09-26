@@ -19,14 +19,12 @@ class CreateComplainsTable extends Migration
             $table->longtext('text');
             $table->longtext('ip')->nullable();
             $table->unsignedInteger('datetime');
-            $table->unsignedBigInteger('topic_id');
             $table->unsignedBigInteger('post_id');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->boolean('close')->default(false);
+            $table->boolean('close')->default(false)->index();
             $table->boolean('approval')->nullable();
             $table->unsignedInteger('close_datetime');
             $table->unsignedBigInteger('user_id_close')->nullable();
-
         });
     }
 

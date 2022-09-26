@@ -22,7 +22,7 @@ class CreateCommentsTable extends Migration
             //$table->boolean('moderation')->default(false);
             //$table->boolean('hide')->default(false);
             $table->json('DATA')->default('{"user_name_edit":null,"user_id_edit":null,"date_edit":null,"like":0,"like_name":null,"dislike":0,"dislike_name":null}');
-            $table->unsignedBigInteger('topic_id');
+            $table->unsignedBigInteger('topic_id')->index();
             $table->unsignedBigInteger('post_id')->nullable();
             $table->unsignedBigInteger('user_id');
         });

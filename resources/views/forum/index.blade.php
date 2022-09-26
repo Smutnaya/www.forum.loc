@@ -10,7 +10,7 @@ use App\AppForum\Helpers\ForumHelper;
     @endif
 @endsection
 @section('content')
-    {{-- @dd($model['user']) --}}
+    {{-- @dd($model) --}}
     <div class="container-fluid px-0">
         @if (!is_null($model['breadcrump']) && $model['visForum'])
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
@@ -47,6 +47,11 @@ use App\AppForum\Helpers\ForumHelper;
                                 <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
                             </div>
+                        @elseif ($model['user_alliance_moder'] || $model['user_clan_moder'])
+                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                    тема</a>
+                            </div>
                         @endif
                     @endif
                 </div>
@@ -60,16 +65,19 @@ use App\AppForum\Helpers\ForumHelper;
                             <div class="row mx-1 py-1 ">
                                 <div class="col align-self-center">
                                     @if ($topic['pin'])
-                                        <i class="fa fa-thumb-tack forum-desc" title="Закрепеленная тема"></i>
+                                        <i class="fa fa-thumb-tack forum-desc me-1" title="Закрепеленная тема"></i>
                                     @endif
                                     @if ($topic['block'])
-                                        <i class="fa-solid fa-lock forum-desc" title="Тема закрыта"></i>
+                                        <i class="fa-solid fa-lock forum-desc me-1" title="Тема закрыта"></i>
                                     @endif
                                     @if ($topic['hide'])
-                                        <i class="fa-regular fa-eye-slash forum-desc" title="Скрытая тема"></i>
+                                        <i class="fa-regular fa-eye-slash forum-desc me-1" title="Скрытая тема"></i>
                                     @endif
                                     @if ($topic['moderation'])
                                         <i class="fa-regular fa-hourglass forum-desc me-1" title="Премодерация публикаций в теме"></i>
+                                    @endif
+                                    @if ($topic['private'] && $model['sectionId'] == 5)
+                                        <i class="fa-solid fa-chess-rook forum-desc me-1" title="Внутренний доступ"></i>
                                     @endif
                                     <span class="fw-bold">
                                         <a href="{{ url('/t/' . $topic['id'] . '-' . $topic['title_slug']) }}">{{ $topic['title'] }}

@@ -16,7 +16,7 @@ class CreateOtherRolesTable extends Migration
         Schema::create('other_roles', function (Blueprint $table) {
             $table->id();
             //$table->timestamps();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->index();
             $table->unsignedInteger('datetime');
             //$table->unsignedInteger('datetime_end');
             $table->boolean('moderation')->default(false);

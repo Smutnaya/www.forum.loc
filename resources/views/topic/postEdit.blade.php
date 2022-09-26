@@ -6,7 +6,7 @@
     @if (is_null($model['post']))
         <div class="text-danger">Пост не найден!</div>
     @else
-        @if ($model['postEdit'] || $model['editor'])
+        @if ($model['postEdit'] || $model['postModer'] || $model['editor'] || $model['user_alliance_moder'] || $model['user_clan_moder'])
             @if (!is_null($model['breadcrump']))
                 @include('inc.breadcrump', ['posts' => $model['breadcrump']])
             @endif
@@ -19,19 +19,19 @@
                 @csrf
                 <div>
                     <h5 class="title-shadow mb-4">Редактирование ответа</h5>
-                    @if ($model['user']['role_id'] > 1)
-                        <p class="forum_comment mb-0">Настройки:</p>
-                        <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
-                            <input type="checkbox" class="btn-check" name="check[]" id="btncheck3" autocomplete="off" value="hide" @if ($model['post']['hide'] == 1) checked @endif>
-                            <label class="btn btn-outline-primary px-0" for="btncheck3"><i class="fa-regular fa-eye-slash forum-desc me-2">
-                                </i><span class="d-sm-inline d-none">скрыть</span></label>
+                    @if ($model['user']['role_id'] > 1 || $model['editor'] || $model['user_alliance_moder'] || $model['user_clan_moder'])
+                        @if ($model['section_id'] != 7)
+                            <p class="forum_comment mb-0">Настройки:</p>
+                            <div class="btn-group col-12 mb-3 new-tema" role="group" aria-label="Basic checkbox toggle button group" style="height: 31px !important">
+                                <input type="checkbox" class="btn-check" name="check[]" id="btncheck3" autocomplete="off" value="hide" @if ($model['post']['hide'] == 1) checked @endif>
+                                <label class="btn btn-outline-primary px-0" for="btncheck3"><i class="fa-regular fa-eye-slash forum-desc me-2">
+                                    </i><span class="d-sm-inline d-none">скрыть</span></label>
 
-                            @if ($model['section_id'] == 6 && $model['forum_id'] != 53)
                                 <input type="checkbox" class="btn-check" name="check[]" id="btncheck4" autocomplete="off" value="moder" @if ($model['post']['moderation'] == 1) checked @endif>
                                 <label class="btn btn-outline-primary px-0" for="btncheck4"><i class="fa-regular fa-hourglass forum-desc me-2"></i>
                                     <span class="d-sm-inline d-none">модерация</span></label>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     @endif
                     @if ($model['topic']['hide'] == 1)
                         <p class="small" style="color:#6a0000 !important">* тема скрыта</p>

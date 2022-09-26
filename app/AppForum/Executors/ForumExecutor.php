@@ -24,6 +24,7 @@ class ForumExecutor extends BaseExecutor
     public static function post($forumId, $user, $input)
     {
         $out = collect();
+        //dd($input);
 
         if (!is_null(BaseExecutor::text_valid($input['text']))) self::$result = ['success' => false, 'message' => BaseExecutor::text_valid($input['text'])];
         else if (!is_null(BaseExecutor::tema_valid($input['title']))) self::$result = ['success' => false, 'message' => BaseExecutor::tema_valid($input['title'])];
@@ -110,9 +111,9 @@ class ForumExecutor extends BaseExecutor
         }
 
         $user_role = ModerHelper::user_role($user);
-        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме1';
+        if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
-        if ($forum->block && $newspaper != $forum->id && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме2';
+        if ($forum->block && $newspaper != $forum->id && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
         if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
 

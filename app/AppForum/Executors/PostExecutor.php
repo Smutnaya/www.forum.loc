@@ -59,7 +59,9 @@ class PostExecutor extends BaseExecutor
                 }
             }
 
-            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            if (!is_null($out['last_post'])) {
+                TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            }
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
@@ -98,7 +100,7 @@ class PostExecutor extends BaseExecutor
         $out['data'] = json_encode($data);
 
 
-        if ($newspaper != $post->topic->forum_id && !(ModerHelper::moderPostEdit($user->role_id, $user, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы11111';
+        if ($newspaper != $post->topic->forum_id && !(ModerHelper::moderPostEdit($user->role_id, $user, $user->id, $post->datetime, json_decode($post->DATA, false), $post->user_id, $post->topic->forum_id, $post->topic->forum->section_id, $post->topic_id))) return self::$result['message'] = 'Отсутсвуют права для редактирования темы';
 
         self::$result['success'] = true;
     }
@@ -148,8 +150,10 @@ class PostExecutor extends BaseExecutor
             }
 
             $out['last_post'] = self::last_post($out['post']['topic_id']);
-            $out['topic'] = Topic::find($out['post']['topic_id']);
-            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            if (!is_null($out['last_post'])) {
+                $out['topic'] = Topic::find($out['post']['topic_id']);
+                TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            }
 
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
@@ -205,7 +209,10 @@ class PostExecutor extends BaseExecutor
             PostManager::premod($out['post'], $out['user']);
             $out['last_post'] = self::last_post($out['post']['topic_id']);
             $out['topic'] = Topic::find($out['post']['topic_id']);
-            $topic = TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            $topic = $out['topic'];
+            if (!is_null($out['last_post'])) {
+                TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            }
             if ($topic->forum->section_id == 6 && $topic->forum_id != 53) {
                 $moder = 0;
                 TopicManager::premod_topic($topic, $moder);
@@ -242,8 +249,10 @@ class PostExecutor extends BaseExecutor
         if (self::$result['success']) {
             PostManager::unhide($out['post'], $out['user']);
             $out['last_post'] = self::last_post($out['post']['topic_id']);
-            $out['topic'] = Topic::find($out['post']['topic_id']);
-            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            if (!is_null($out['last_post'])) {
+                $out['topic'] = Topic::find($out['post']['topic_id']);
+                TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            }
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $out['user'];
@@ -291,8 +300,10 @@ class PostExecutor extends BaseExecutor
             }
 
             $out['last_post'] = self::last_post(intval($topic_id));
-            $out['topic'] = Topic::find(intval($topic_id));
-            TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            if (!is_null($out['last_post'])) {
+                $out['topic'] = Topic::find(intval($topic_id));
+                TopicManager::lastPostEdit($out['topic'], $out['last_post']);
+            }
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $out['user'];

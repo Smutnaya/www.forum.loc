@@ -14,6 +14,8 @@ use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 use App\Comment;
+use App\AppForum\Helpers\ClanAllianceHelper;
+use App\Forum;
 
 class TopicViewer
 {
@@ -40,6 +42,10 @@ class TopicViewer
             'first_post' => null,
             'section_id' => null,
             'forum_id' => null,
+            'user_clan' => false,
+            'user_clan_moder' => false,
+            'user_alliance' => false,
+            'user_alliance_moder' => false,
 
             'pagination' => collect([
                 'page' => null,
@@ -76,6 +82,11 @@ class TopicViewer
 
         if (!is_null($user)) {
             $section = ModerHelper::getSection($user);
+
+            $model['user_clan'] = ClanAllianceHelper::userClan($user, $topic->forum);
+            $model['user_clan_moder'] = ClanAllianceHelper::userClanModer($user, $topic->forum);
+            $model['user_alliance'] = ClanAllianceHelper::userAlliance($user, $topic->forum);
+            $model['user_alliance_moder'] = ClanAllianceHelper::userAllianceModer($user, $topic->forum);
         } else $section = null;
 
         if (!is_null($section)) $model['section'] = $section;
@@ -103,12 +114,13 @@ class TopicViewer
         $model['pagination']['pages'] = $pages;
 
         if (!is_null($user)) {
+            $model['moder'] = ModerHelper::moderForum($user_role, $topic->forum_id, $topic->forum->section_id, $user);
             $model['topicEdit'] = ModerHelper::moderTopicEdit($model['user']['role_id'], $model['user']['id'], $model['topic']['datetime_d'], $model['topic']['DATA'], $model['topic']['user_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $model['topic']['id']);
             $model['topicMove'] = ModerHelper::moderTopicMove($model['user']['role_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $user, $model['topic']['id']);
 
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
 
-            if ($other_roles->count() > 0) {
+            if (!$model['moder'] && $other_roles->count() > 0) {
                 foreach ($other_roles as $other_role) {
                     if ($other_role->section_id != null && $other_role->section_id == $topic->forum->section_id && $other_role->moderation == true) $model['moder'] = true;
                     if ($other_role->forum_id != null && $other_role->forum_id == $topic->forum_id && $other_role->moderation == true) $model['moder'] = true;
@@ -117,7 +129,9 @@ class TopicViewer
             }
         }
 
-        if (ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user) && self::visitTopic($topic, $user_role, $user) || $model['moder'])  $model['visit_forum'] = true;
+        //dd(self::visitTopic($topic, $user_role, $user, $model['moder']));
+
+        if (ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user) && self::visitTopic($topic, $user_role, $user, $model['moder'])) $model['visit_forum'] = true;
 
         if ($topic->forum->section_id == 6 && $topic->forum_id != 53) {
             $comments = Comment::where('topic_id', $topic->id)->orderByDesc('datetime')->get();
@@ -158,6 +172,7 @@ class TopicViewer
     public static function getPost($topicId, $skip = null, $take = null, $user_role, $forum_id, $section_id, $user)
     {
         $posts = collect();
+        $forum = Forum::find(intval($forum_id));
 
         if ($user_role == 0 && !is_null($skip)) {
             $posts = Post::where([['topic_id', intval($topicId)], ['moderation', false], ['hide', false]])->skip($skip)->take($take)->get();
@@ -236,6 +251,43 @@ class TopicViewer
             }
         }
 
+        if ($section_id == 5) {
+            if ($user_role == 12 && !is_null($skip)) $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
+            if ($user_role == 12 && is_null($skip)) $posts = Post::where('topic_id', intval($topicId))->get();
+            if ($forum_id == 52 && !is_null($skip)) {
+                if ($user_role > 7 || $user_role == 4) {
+                    $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
+                } else {
+                    $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->skip($skip)->take($take)->get();
+                }
+            }
+
+            if ($forum_id == 52 && is_null($skip)) {
+                if ($user_role > 7 || $user_role == 4) {
+                    $posts = Post::where('topic_id', intval($topicId))->get();
+                } else {
+                    $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->get();
+                }
+            }
+
+            if ($forum_id != 52 && !is_null($skip)) {
+                if (ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) {
+                    $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
+                } else {
+                    $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->skip($skip)->take($take)->get();
+                }
+            }
+
+            if ($forum_id != 52 && is_null($skip)) {
+
+                if (ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) {
+                    $posts = Post::where('topic_id', intval($topicId))->get();
+                } else {
+                    $posts = Post::where([['topic_id', intval($topicId)], ['hide', false]])->get();
+                }
+            }
+        }
+
         if (!is_null($user)) {
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
 
@@ -262,6 +314,7 @@ class TopicViewer
                 'hide' => $topic->hide,
                 'block' => $topic->block,
                 'pin' => $topic->pin,
+                'private' => $topic->private,
                 'moderation' => $topic->moderation,
                 'id' => $topic->id,
                 'datetime' => ForumHelper::timeFormat($topic->datetime),
@@ -280,6 +333,7 @@ class TopicViewer
                 'hide' => $topic->hide,
                 'block' => $topic->block,
                 'pin' => $topic->pin,
+                'private' => $topic->private,
                 'moderation' => $topic->moderation,
                 'id' => $topic->id,
                 'datetime' => ForumHelper::timeFormat($topic->datetime),
@@ -297,6 +351,7 @@ class TopicViewer
 
     private static function setPost($model, $posts, $user, $user_role, $forum_id, $section_id)
     {
+        $forum = Forum::find(intval($forum_id));
         foreach ($posts as $post) {
             $user_post = User::find($post->user_id);
             if (!is_null($user)) {
@@ -311,6 +366,12 @@ class TopicViewer
                         if ($user_role > 0 && $user_role < 8 && $post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         } elseif ($user->newspaper_id != null && $user->newspaper->forum_id == $post->topic->forum_id) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        }
+                    }elseif ($section_id == 5) {
+                        if ($post->user_id == $user->id) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        } elseif (ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
                     } else {
@@ -377,7 +438,7 @@ class TopicViewer
         }
     }
 
-    private static function visitTopic($topic, $user_role, $user)
+    public static function visitTopic($topic, $user_role, $user, $moder)
     {
         $visit = true;
         $user_id = 0;
@@ -390,6 +451,17 @@ class TopicViewer
         if ($topic->forum_id == 2 && $user_role >= 1 && $user_role < 9 && $topic->hide) $visit = false;
         if ($topic->user_id == $user_id && $user_role >= 1 && $topic->moderation) $visit = true;
         if ($topic->forum->section_id == 6 && !is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $topic->forum_id ||  $user_role >= 7) $visit = true;
+        if ($topic->forum->section_id == 5 && $topic->forum_id != 52  && $user_role < 12) {
+            if ($topic->hide) {
+                if (!ClanAllianceHelper::userAllianceModer($user, $topic->forum) && !ClanAllianceHelper::userClanModer($user, $topic->forum)) $visit = false;
+            }
+            if (!$topic->hide) {
+                if (!$topic->private) $visit = true;
+                if ($topic->private && !ClanAllianceHelper::userAllianceModer($user, $topic->forum) && !ClanAllianceHelper::userClanModer($user, $topic->forum)) $visit = false;
+                if ($topic->private && !ClanAllianceHelper::userAlliance($user, $topic->forum) && !ClanAllianceHelper::userClan($user, $topic->forum)) $visit = false;
+            }
+        }
+        if ($topic->forum->section_id == 7 && $user_role < 8 && $topic->hide && !$moder) $visit = false;
 
         return $visit;
     }

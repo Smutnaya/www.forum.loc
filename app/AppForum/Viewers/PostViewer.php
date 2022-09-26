@@ -8,6 +8,7 @@ use App\Section;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Helpers\ClanAllianceHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class PostViewer
@@ -28,6 +29,10 @@ class PostViewer
             'section_id' => null,
             'forum_id' => null,
             'sectionsAside' => collect(),
+            'user_clan' => false,
+            'user_clan_moder' => false,
+            'user_alliance' => false,
+            'user_alliance_moder' => false,
         ]);
     }
 
@@ -51,6 +56,14 @@ class PostViewer
         if (!is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $post->forum_id) {
             $model['editor'] = true;
         }
+
+        if (!is_null($user)) {
+            $model['user_clan'] = ClanAllianceHelper::userClan($user, $post->topic->forum);
+            $model['user_clan_moder'] = ClanAllianceHelper::userClanModer($user, $post->topic->forum);
+            $model['user_alliance'] = ClanAllianceHelper::userAlliance($user, $post->topic->forum);
+            $model['user_alliance_moder'] = ClanAllianceHelper::userAllianceModer($user, $post->topic->forum);
+        }
+
         $model['section_id'] = $post->topic->forum->section_id;
         $model['forum_id'] = $post->topic->forum_id;
         $model['post'] = $post;

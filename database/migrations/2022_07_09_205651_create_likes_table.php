@@ -18,8 +18,8 @@ class CreateLikesTable extends Migration
             //$table->timestamps();
             $table->longtext('action');
             $table->unsignedInteger('datetime');
-            $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('post_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
         });
     }
 

@@ -18,7 +18,7 @@ class CreateViewsTable extends Migration
             //$table->timestamps();
             $table->longtext('ip')->nullable();
             $table->unsignedInteger('datetime');
-            $table->unsignedBigInteger('topic_id');
+            $table->unsignedBigInteger('topic_id')->index();
             $table->unsignedBigInteger('user_id')->nullable();
         });
     }

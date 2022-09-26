@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             //$table->id();
             $table->string('url', 255)->primary();
             //$table->timestamps();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->index();
             $table->unsignedInteger('datetime');
             $table->unsignedBigInteger('size');
             $table->unsignedBigInteger('post_id')->nullable();

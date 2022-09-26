@@ -7,10 +7,11 @@
     @endif
 @endsection
 @section('content')
+{{-- @dd($model) --}}
     <div class="conteiner">
         @if (is_null($model['topic']))
             <div class="my-3 mb-5 centre error" style="color:red">Тема не найдена</div>
-        @elseif ($model['visit_forum'] == false)
+        @elseif ($model['visit_forum'] == false && !$model['user_clan'] && !$model['user_alliance'])
             <div class="my-3 mb-5 centre error" style="color:red">Отсутствуют права для просмотра темы</div>
         @else
             @if ($errors->has('message'))
@@ -55,7 +56,7 @@
                 {{-- @dd($model['newPost']) --}}
 
                 @if (!is_null($model['user']))
-                    @if ((!$model['topic']['block'] && !$model['userBan'] && $model['topic']['forum_id'] != 38 && $model['topic']['forum_id'] != 39) || $model['newPost'])
+                    @if ((!$model['topic']['block'] && !$model['userBan'] && $model['topic']['forum_id'] != 38 && $model['topic']['forum_id'] != 39) || $model['newPost'] || $model['user_alliance_moder'] || $model['user_clan_moder'])
                         <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                             <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
                         </div>
