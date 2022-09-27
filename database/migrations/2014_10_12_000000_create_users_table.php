@@ -34,7 +34,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('clan_role')->nullable();
             $table->unsignedInteger('alliance_id')->nullable();
             $table->boolean('speaker')->default(false);
-
+            $table->unsignedInteger('action_time')->nullable();
             //$table->timestamps();
         });
     }

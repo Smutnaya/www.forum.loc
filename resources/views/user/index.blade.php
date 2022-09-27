@@ -120,7 +120,7 @@ use App\AppForum\Helpers\ForumHelper;
                                 @if ($model['user']['role_id'] > 0 || $model['other_role_bf'])
                                     <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                 @endif
-                                @if ($model['user']['role_id'] > 10)
+                                @if ($model['user']['role_id'] > 10 && $model['user']['role_id'] != $model['user_inf']['role_id'])
                                     @if ($model['user_inf']['ban_message'])
                                         <form style="display: inline;" method='post' action='{{ url('/u/' . $model['user_inf']['id'] . '/ban_message') }}'>
                                             @csrf

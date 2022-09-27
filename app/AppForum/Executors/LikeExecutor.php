@@ -18,7 +18,15 @@ class LikeExecutor extends BaseExecutor
     {
         $out = collect();
         $out['action'] = null;
-        self::likes_valid(intval($postId), $user, $out);
+
+        if (!is_null(BaseExecutor::action_time_valid($user))) {
+            self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+        } else self::$result['success'] = true;
+
+        if (self::$result['success']) {
+            self::$result['success'] = false;
+            self::likes_valid(intval($postId), $user, $out);
+        }
 
         if (self::$result['success']) {
             $out['action_new'] = 'like';
@@ -43,6 +51,7 @@ class LikeExecutor extends BaseExecutor
 
             PostManager::updata($out['post'], $out['data']);
             UserManager::dataedit($out['user'], $out['user_data']);
+            UserManager::actionTimeEdit($user);
             self::$result['message'] = 'OK';
             self::$result['topicId'] = $out['post']['topic_id'];
             self::$result['user'] = $user;
@@ -58,7 +67,14 @@ class LikeExecutor extends BaseExecutor
     {
         $out = collect();
         $out['action'] = null;
-        self::likes_valid(intval($postId), $user, $out);
+        if (!is_null(BaseExecutor::action_time_valid($user))) {
+            self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+        } else self::$result['success'] = true;
+
+        if (self::$result['success']) {
+            self::$result['success'] = false;
+            self::likes_valid(intval($postId), $user, $out);
+        }
         if (self::$result['success']) {
             $data = json_decode($out['post']['DATA'], false);
             $user_data = json_decode($out['user']['DATA'], false);
@@ -90,7 +106,14 @@ class LikeExecutor extends BaseExecutor
     {
         $out = collect();
         $out['action'] = null;
-        self::likes_valid(intval($postId), $user, $out);
+        if (!is_null(BaseExecutor::action_time_valid($user))) {
+            self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+        } else self::$result['success'] = true;
+
+        if (self::$result['success']) {
+            self::$result['success'] = false;
+            self::likes_valid(intval($postId), $user, $out);
+        }
 
         if (self::$result['success']) {
             $out['action_new'] = 'dislike';
@@ -130,7 +153,14 @@ class LikeExecutor extends BaseExecutor
     {
         $out = collect();
         $out['action'] = null;
-        self::likes_valid(intval($postId), $user, $out);
+        if (!is_null(BaseExecutor::action_time_valid($user))) {
+            self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+        } else self::$result['success'] = true;
+
+        if (self::$result['success']) {
+            self::$result['success'] = false;
+            self::likes_valid(intval($postId), $user, $out);
+        }
 
         if (self::$result['success']) {
             $data = json_decode($out['post']['DATA'], false);
@@ -162,15 +192,14 @@ class LikeExecutor extends BaseExecutor
     private static function likes_valid($postId, $user, $out)
     {
         $post = Post::find(intval($postId));
-        if(is_null($post)) return self::$result['message'] = 'Пост не найден';
-        if(is_null($user)) return self::$result['message'] = 'Выполните вход на сайт';
+        if (is_null($post)) return self::$result['message'] = 'Пост не найден';
+        if (is_null($user)) return self::$result['message'] = 'Выполните вход на сайт';
 
         $out['post'] = $post;
         $out['user'] = $post->user;
 
         $like = Like::where([['post_id', $post->id], ['user_id', $user->id]])->first();
-        if (!is_null($like))
-        {
+        if (!is_null($like)) {
             $out['action'] = $like->action;
             $out['like_user'] = User::find(intval($like->user_id));
         }

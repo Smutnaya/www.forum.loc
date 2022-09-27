@@ -8,6 +8,7 @@ use App\Section;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 use App\AppForum\Helpers\ClanAllianceHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
@@ -33,6 +34,7 @@ class PostViewer
             'user_clan_moder' => false,
             'user_alliance' => false,
             'user_alliance_moder' => false,
+            'complaints' => collect(),
         ]);
     }
 
@@ -62,6 +64,7 @@ class PostViewer
             $model['user_clan_moder'] = ClanAllianceHelper::userClanModer($user, $post->topic->forum);
             $model['user_alliance'] = ClanAllianceHelper::userAlliance($user, $post->topic->forum);
             $model['user_alliance_moder'] = ClanAllianceHelper::userAllianceModer($user, $post->topic->forum);
+            $model['complaints'] = ComplaintHelper::review();
         }
 
         $model['section_id'] = $post->topic->forum->section_id;

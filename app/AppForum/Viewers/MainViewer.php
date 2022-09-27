@@ -6,9 +6,9 @@ use App\Post;
 use App\Topic;
 use App\Online;
 use App\Message;
-use App\Section;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 
 class MainViewer
 {
@@ -22,7 +22,7 @@ class MainViewer
             'news' => collect(),
             'last_posts' => collect(),
             'new_topics' => collect(),
-            // 'posts' => collect(),
+            'complaints' => collect(),
             // 'topics' => collect(),
         ]);
     }
@@ -41,6 +41,7 @@ class MainViewer
             $model['user'] = $user;
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+            $model['complaints'] = ComplaintHelper::review();
         }
 
         // последние ответы

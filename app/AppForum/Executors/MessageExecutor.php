@@ -3,8 +3,9 @@
 namespace App\AppForum\Executors;
 
 use App\User;
-use App\AppForum\Managers\MessageManager;
 use App\Message;
+use App\AppForum\Managers\UserManager;
+use App\AppForum\Managers\MessageManager;
 
 class MessageExecutor extends BaseExecutor
 {
@@ -19,11 +20,17 @@ class MessageExecutor extends BaseExecutor
         else if(!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result['success'] = true;  $out['text'] = $input['text']; $out['title'] = $input['title'];
 
+        if (self::$result['success']) {
+            if (!is_null(BaseExecutor::action_time_valid($user))) {
+                self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+            } else self::$result['success'] = true;
+        }
+
         if (self::$result['success']) self::save_message_valid($input, $out, $user);
 
         if (self::$result['success']) {
             MessageManager::new_message($out);
-            // self::$result['user_id'] = $out['user']['id'];
+            UserManager::actionTimeEdit($user);
         }
         return self::$result;
     }

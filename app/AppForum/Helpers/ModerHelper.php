@@ -7,10 +7,7 @@ use App\User;
 use App\Forum;
 use App\Topic;
 use App\Section;
-
 use App\Other_role;
-use function PHPUnit\Framework\isNull;
-
 class ModerHelper
 {
     public static $result = false;

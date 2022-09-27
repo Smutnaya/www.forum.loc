@@ -2,15 +2,6 @@
 
 namespace App\AppForum\Helpers;
 
-use App\Ban;
-use App\User;
-use App\Forum;
-use App\Topic;
-use App\Section;
-
-use App\Other_role;
-use function PHPUnit\Framework\isNull;
-
 class ClanAllianceHelper
 {
     public static $result = false;

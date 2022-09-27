@@ -2,11 +2,12 @@
 
 namespace App\AppForum\Viewers;
 
+use App\Post;
+use App\Message;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 use App\AppForum\Managers\MessageManager;
-use App\Message;
-use App\Post;
 
 class MessageViewer
 {
@@ -20,6 +21,7 @@ class MessageViewer
             'message' => null,
             'title' => null,
             'to' => null,
+            'complaints' => collect(),
 
             'pagination' => collect([
                 'page' => null,
@@ -39,6 +41,7 @@ class MessageViewer
 
         if (is_null($user)) return $model;
         $model['user'] = $user;
+        $model['complaints'] = ComplaintHelper::review();
         $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
         $model['message_new'] = $mes->count();
 

@@ -40,7 +40,7 @@ class BanExecutor extends BaseExecutor
 
         if (!is_null($user_moder)) $out['user_moder'] = $user_moder;
 
-        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя банить :)';
+        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя наказывать :)';
         if ($user_ban->role_id > $user_moder->role_id) return self::$result['message'] = 'Недостаточно прав для блокировки';
 
         if (empty($input['check'])) return self::$result['message'] = 'Не выбрана ветка форума';
@@ -98,7 +98,7 @@ class BanExecutor extends BaseExecutor
 
         if (!is_null($user_moder)) $out['user_moder'] = $user_moder;
 
-        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя банить :)';
+        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя наказывать :)';
         if ($user_ban->role_id > $user_moder->role_id) return self::$result['message'] = 'Недостаточно прав для блокировки';
 
         if (empty($input['check1'])) return self::$result['message'] = 'Не выбран форум';
@@ -156,7 +156,7 @@ class BanExecutor extends BaseExecutor
 
         if (!is_null($user_moder)) $out['user_moder'] = $user_moder;
 
-        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя банить :)';
+        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя наказывать :)';
         if ($user_ban->role_id > $user_moder->role_id) return self::$result['message'] = 'Недостаточно прав для блокировки';
 
         if (empty($input['id'])) return self::$result['message'] = 'Не выбрана тема';
@@ -214,7 +214,7 @@ class BanExecutor extends BaseExecutor
 
         if (!is_null($user_moder)) $out['user_moder'] = $user_moder;
 
-        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя банить :)';
+        if ($user_ban->id == $user_moder->id) return self::$result['message'] = 'Не стоит себя наказывать :)';
         if ($user_ban->role_id > $user_moder->role_id) return self::$result['message'] = 'Недостаточно прав для блокировки';
         if ($user_moder->role_id < 11) return self::$result['message'] = 'Недостаточно прав для блокировки';
 

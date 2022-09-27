@@ -24,7 +24,13 @@
                 {{-- <div class="mx-2">
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
                 </div> --}}
+
                 @if (!is_null($model['user']))
+                    @if ($model['user']['role_id'] > 2 && $model['complaints']->count() > 0)
+                        <a href="{{ url('/cw') }}">
+                            <i class="fa-regular fa-hourglass-half mx-3 align-middle" style="color: #7c0011;"></i>
+                        </a>
+                    @endif
                     @if (!is_null($model['message_new']))
                         @if ($model['message_new'] == 0)
                             <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 25px;"></i></a>
@@ -99,9 +105,14 @@
                 {{-- <div class="mx-2">
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
                 </div> --}}
-                @if (!is_null($model['user']))
-                    @if (!is_null($model['message_new']))
 
+                @if (!is_null($model['user']))
+                    @if ($model['user']['role_id'] > 2 && $model['complaints']->count() > 0)
+                        <a href="{{ url('/cw') }}">
+                            <i class="fa-regular fa-hourglass-half mx-3 align-middle" style="color: #7c0011;"></i>
+                        </a>
+                    @endif
+                    @if (!is_null($model['message_new']))
                         @if ($model['message_new'] == 0)
                             <a href="{{ url('/message') }}"><i class="fa-regular fa-envelope align-middle" style="font-size: 20px;"></i> </a>
                         @else

@@ -49,4 +49,11 @@ class UserManager
         ])->save();
     }
 
+    public static function actionTimeEdit($user)
+    {
+        $user->fill([
+            'action_time' => time()
+        ])->save();
+    }
+
 }

@@ -84,7 +84,9 @@ use App\AppForum\Helpers\ForumHelper;
             <div class="col-12 text-muted">
                 <div class="row pt-1" style="padding-left: 12px !important;">
                     <div class="col d-flex justify-content-start align-items-center text-center forum-desc">
-                        @if ($post['postModer'] || $model['editor']) #{{ $post['id'] }}  &bull; &nbsp;@endif
+                        @if ($post['postModer'] || $model['editor'])
+                            #{{ $post['id'] }} &bull; &nbsp;
+                        @endif
                         @if ($post['moderation'])
                             <a @if ($post['postModer'] || $model['editor']) href="{{ url('/p/' . $post['id'] . '/premod/' . $model['pagination']['page']) }}" @endif><i class="fa-regular fa-hourglass me-2" style="color: #b80000" title="Ожидание публикации"></i></a>
                         @endif
@@ -116,17 +118,21 @@ use App\AppForum\Helpers\ForumHelper;
                                                 </div>
                                             </a></li>
                                     @endif
+                                    @if ($model['user']['id'] != $post['user_id'])
+                                        <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/request/' . $model['pagination']['page']) }}">
+                                                <div class="row">
+                                                    <div class="col-1">
+                                                        <i class="fa-solid fa-triangle-exclamation forum-desc ms-1"></i>
+                                                    </div>
+                                                    <div class="col">
+                                                        Пожаловаться
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endif
-                                <li><a class="dropdown-item" style="background: #fbf6d1;" href="#">
-                                        <div class="row">
-                                            <div class="col-1">
-                                                <i class="fa-solid fa-triangle-exclamation forum-desc ms-1"></i>
-                                            </div>
-                                            <div class="col">
-                                                Пожаловаться
-                                            </div>
-                                        </div>
-                                    </a></li>
+
                                 @if ($post['postModer'] || $model['editor'])
                                     <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/moder/' . $model['pagination']['page']) }}">
                                             <div class="row">

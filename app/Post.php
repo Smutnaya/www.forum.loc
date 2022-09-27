@@ -13,10 +13,19 @@ class Post extends Model
     {
         return $this->belongsTo(Topic::class);
     }
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class);
     }
 
     public function views()

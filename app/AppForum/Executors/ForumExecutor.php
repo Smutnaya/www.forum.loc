@@ -33,6 +33,12 @@ class ForumExecutor extends BaseExecutor
         $out['text'] = $input['text'];
         $out['title'] = $input['title'];
 
+        if (self::$result['success']) {
+            if (!is_null(BaseExecutor::action_time_valid($user))) {
+                self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+            } else self::$result['success'] = true;
+        }
+
         if (self::$result['success']) self::topic_valid(intval($forumId), $input, $out, $user);
 
         $ip = IpHelper::getIp();
@@ -68,6 +74,7 @@ class ForumExecutor extends BaseExecutor
             $data->post_count++;
             $out['DATA'] = json_encode($data);
             UserManager::dataedit($user, $out['DATA']);
+            UserManager::actionTimeEdit($user);
 
             $data = json_decode($post->topic->forum['DATA'], false);
             $data->inf->topic_count++;

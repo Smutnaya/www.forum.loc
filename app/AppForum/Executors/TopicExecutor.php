@@ -32,6 +32,12 @@ class TopicExecutor extends BaseExecutor
         else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result = ['success' => true];
 
+        if (self::$result['success']) {
+            if (!is_null(BaseExecutor::action_time_valid($user))) {
+                self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+            } else self::$result['success'] = true;
+        }
+
         if (self::$result['success']) self::post_valid(intval($topicId), $input, $out, $user);
 
         $out['text'] = $input['text'];
@@ -84,6 +90,7 @@ class TopicExecutor extends BaseExecutor
             $data->last_post->date = $post->datetime;
             $out['DATA'] = json_encode($data);
             ForumManager::dataedit($post->topic->forum, $out['DATA']);
+            UserManager::actionTimeEdit($user);
         }
         return self::$result;
     }
@@ -311,6 +318,12 @@ class TopicExecutor extends BaseExecutor
         else if (!is_null(BaseExecutor::user_valid($user))) self::$result = ['success' => false, 'message' => BaseExecutor::user_valid($user)];
         else self::$result = ['success' => true];
 
+        if (self::$result['success']) {
+            if (!is_null(BaseExecutor::action_time_valid($user))) {
+                self::$result = ['success' => false, 'message' => BaseExecutor::action_time_valid($user)];
+            } else self::$result['success'] = true;
+        }
+
         if (self::$result['success']) self::comment_valid(intval($topicId), $input, $out, $user);
 
         $out['text'] = $input['text'];
@@ -333,6 +346,7 @@ class TopicExecutor extends BaseExecutor
             $data->post_count++;
             $out['DATA'] = json_encode($data);
             UserManager::dataedit($user, $out['DATA']);
+            UserManager::actionTimeEdit($user);
         }
         return self::$result;
     }

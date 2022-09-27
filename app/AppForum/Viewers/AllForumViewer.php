@@ -9,6 +9,7 @@ use App\Section;
 use App\Other_role;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 
 class AllForumViewer
 {
@@ -23,6 +24,7 @@ class AllForumViewer
             'other_roles' => collect(),
             'last_posts' => collect(),
             'new_topics' => collect(),
+            'complaints' => collect(),
         ]);
     }
 
@@ -37,12 +39,11 @@ class AllForumViewer
         if (!is_null($user)) {
             $other_roles = Other_role::where('user_id', $user->id)->get();
             if ($other_roles->count() > 0) $model['other_roles'] = $other_roles;
-        }
 
-        if (!is_null($user)) {
             $model['user'] = $user;
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+            $model['complaints'] = ComplaintHelper::review();
         }
 
         $sections = $sectionsAside;

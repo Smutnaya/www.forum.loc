@@ -7,6 +7,7 @@ use App\Message;
 use App\Section;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class SectionViewer
@@ -20,6 +21,7 @@ class SectionViewer
             'message_new' => null,
             'forums' => collect(),
             'sectionsAside' => collect(),
+            'complaints' => collect(),
         ]);
     }
 
@@ -34,6 +36,7 @@ class SectionViewer
             $model['user'] = $user;
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+            $model['complaints'] = ComplaintHelper::review();
         }
 
         $forums = ModerHelper::getForum($user, intval($sectionId));

@@ -6,16 +6,17 @@ use App\Like;
 use App\Post;
 use App\Role;
 use App\User;
+use App\Forum;
 use App\Topic;
+use App\Comment;
 use App\Message;
 use App\Other_role;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
-use App\AppForum\Helpers\BreadcrumHtmlHelper;
-use App\Comment;
+use App\AppForum\Helpers\ComplaintHelper;
 use App\AppForum\Helpers\ClanAllianceHelper;
-use App\Forum;
+use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class TopicViewer
 {
@@ -46,6 +47,7 @@ class TopicViewer
             'user_clan_moder' => false,
             'user_alliance' => false,
             'user_alliance_moder' => false,
+            'complaints' => collect(),
 
             'pagination' => collect([
                 'page' => null,
@@ -87,6 +89,7 @@ class TopicViewer
             $model['user_clan_moder'] = ClanAllianceHelper::userClanModer($user, $topic->forum);
             $model['user_alliance'] = ClanAllianceHelper::userAlliance($user, $topic->forum);
             $model['user_alliance_moder'] = ClanAllianceHelper::userAllianceModer($user, $topic->forum);
+            $model['complaints'] = ComplaintHelper::review();
         } else $section = null;
 
         if (!is_null($section)) $model['section'] = $section;

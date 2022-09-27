@@ -2,19 +2,19 @@
 
 namespace App\AppForum\Viewers;
 
+use App\News;
 use App\Post;
 use App\Forum;
 use App\Topic;
 use App\Message;
 use App\Section;
 use App\Other_role;
-use App\AppForum\Viewers\MainViewer;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
-use App\AppForum\Helpers\BreadcrumHtmlHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 use App\AppForum\Helpers\ClanAllianceHelper;
-use App\News;
+use App\AppForum\Helpers\BreadcrumHtmlHelper;
 
 class ForumViewer
 {
@@ -43,6 +43,7 @@ class ForumViewer
             'user_clan_moder' => false,
             'user_alliance' => false,
             'user_alliance_moder' => false,
+            'complaints' => collect(),
 
             'pagination' => collect([
                 'page' => null,
@@ -102,6 +103,8 @@ class ForumViewer
 
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+
+            $model['complaints'] = ComplaintHelper::review();
 
             if (!is_null($user->newspaper_id) && $user->newspaper->forum_id == $forum->id) {
                 $model['editor'] = true;
@@ -325,7 +328,6 @@ class ForumViewer
                         $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                     }
                 }
-
             }
         } elseif ($user_role > 0 && is_null($skip)) {
             if ($section_id == 1) {
@@ -508,6 +510,7 @@ class ForumViewer
             $model['user_clan_moder'] = ClanAllianceHelper::userClanModer($user, $forum);
             $model['user_alliance'] = ClanAllianceHelper::userAlliance($user, $forum);
             $model['user_alliance_moder'] = ClanAllianceHelper::userAllianceModer($user, $forum);
+            $model['complaints'] = ComplaintHelper::review();
         }
 
         if (is_null($forum)) return $model;

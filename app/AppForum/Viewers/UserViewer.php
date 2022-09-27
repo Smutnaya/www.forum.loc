@@ -14,6 +14,7 @@ use App\Other_role;
 use App\AppForum\Helpers\AsideHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
+use App\AppForum\Helpers\ComplaintHelper;
 
 class UserViewer
 {
@@ -36,6 +37,7 @@ class UserViewer
             'other_role_bf' => false,
             'other_role_inf' => false,
             'other_role_bf_inf' => false,
+            'complaints' => collect(),
         ]);
     }
 
@@ -50,8 +52,8 @@ class UserViewer
         $user_inf = User::find(intval($user_id));
         if (is_null($user_inf)) return $model;
         $limit = Images::where([['user_id', $user_inf->id], ['datetime', '>=', strtotime(date('Y-m-d'))]])->sum('size');
-        if($limit > 0) $limit /= 1048576;
-        $limit = round( $limit, 1);
+        if ($limit > 0) $limit /= 1048576;
+        $limit = round($limit, 1);
         self::setUser($model, $user_inf, $limit);
 
         $user_id_view = 0;
@@ -63,6 +65,7 @@ class UserViewer
             $user_role_view = $user->role_id;
             $mes = Message::where([['user_id_to',  $user->id], ['hide', false], ['view', false]])->get();
             $model['message_new'] = $mes->count();
+            $model['complaints'] = ComplaintHelper::review();
         }
 
         $user_posts = Post::where('user_id', intval($user_id))->orderByDesc('id')->distinct()->limit(50)->get();

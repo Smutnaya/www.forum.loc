@@ -84,6 +84,8 @@ class UserExecutor extends BaseExecutor
         $user_ban = User::find(intval($user_id));
         if (is_null($user_ban)) return self::$result['message'] = 'Данные о пользователе не найдены';
         $out['user'] = $user_ban;
+        if ($user_ban->id == $user->id) return self::$result['message'] = 'Не стоит себя наказывать :)';
+
         if($user_ban->ban_message)
         {
             $out['ban_message'] = false;

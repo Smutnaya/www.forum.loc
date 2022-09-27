@@ -2,8 +2,6 @@
 
 namespace App\AppForum\Helpers;
 
-use function PHPUnit\Framework\isNull;
-
 class CheckedHelper
 {
     public static function checkTopic($input, $forum)

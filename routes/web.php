@@ -72,6 +72,11 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/p/{id}/unhide/{page?}', 'PostController@unhide');
     Route::any('/p/{id}/del/{page?}', 'PostController@del');
 
+    Route::any('/p/{id}/request/{page?}', 'ComplaintController@request');
+    Route::any('/cw', 'ComplaintController@index');
+    Route::any('/cw/{id}/ok', 'ComplaintController@ok');
+    Route::any('/cw/{id}/no', 'ComplaintController@no');
+
     Route::any('/c/{id}/del', 'CommentController@del');
 
     Route::any('/p/{id}/like/{page?}', 'LikeController@like');

@@ -23,7 +23,7 @@ use App\AppForum\Helpers\ForumHelper;
                     @if ($model['moder'] || $model['editor'] || (!is_null($model['user']) && $model['user']['id'] == $comment['user_id']))
                         <form method='post' action='{{ url('/c/' . $comment['id'] . '/del') }}'>
                             @csrf
-                            <button type="submit" class="btn btn-sm m-0 p-0 form-check-input d-flex justify-content-end align-items-center" style="background-color: transparent !important; border-color: transparent !important;">
+                            <button type="submit" class="btn btn-sm m-0 p-0 form-check-input d-flex justify-content-end align-items-center" style="background-color: transparent !important;  border: none !important; box-shadow: none !important;">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
                         </form>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateComplainsTable extends Migration
+class CreateComplaintsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,15 @@ class CreateComplainsTable extends Migration
      */
     public function up()
     {
-        Schema::create('complains', function (Blueprint $table) {
+        Schema::create('complaints', function (Blueprint $table) {
             $table->id();
             //$table->timestamps();
-            $table->longtext('text');
             $table->longtext('ip')->nullable();
             $table->unsignedInteger('datetime');
             $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->boolean('close')->default(false)->index();
-            $table->boolean('approval')->nullable();
-            $table->unsignedInteger('close_datetime');
-            $table->unsignedBigInteger('user_id_close')->nullable();
+            $table->json('DATA')->default('{"approval":null,"close_date":null,"user_id_close":null,"user_id_close":null,"user_name_close":null,"close_datetime":null}');
         });
     }
 
@@ -35,6 +32,6 @@ class CreateComplainsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('complains');
+        Schema::dropIfExists('complaints');
     }
 }
