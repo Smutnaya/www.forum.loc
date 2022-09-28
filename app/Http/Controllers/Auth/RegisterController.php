@@ -39,6 +39,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        abort(403, 'Access denied'); // off
         $this->middleware('guest');
     }
 

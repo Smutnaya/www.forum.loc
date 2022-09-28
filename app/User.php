@@ -33,6 +33,7 @@ class User extends Authenticatable
 
     protected $guarded = [];
     public $timestamps = false;
+    public $incrementing = false; // id - berem iz UserGame
     protected $with = ['online']; // Eager Loading By default
 
 

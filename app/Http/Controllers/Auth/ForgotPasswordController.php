@@ -19,4 +19,11 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+
+    // Custom
+
+    public function __construct()
+    {
+        abort(403, 'Access denied'); // off
+    }
 }

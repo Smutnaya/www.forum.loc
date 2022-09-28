@@ -56,7 +56,8 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
                             </ul>
                         </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
@@ -71,7 +72,8 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
                             </ul>
 
                             {{-- <a type="button" href="{{ url('/message') }}">
@@ -137,7 +139,8 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
                             </ul>
                         </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
@@ -152,7 +155,8 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/message') }}">Выход</a></li>
+                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
+                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
                             </ul>
                         </span>
                     @endif

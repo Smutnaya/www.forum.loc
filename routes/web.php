@@ -94,5 +94,9 @@ Route::middleware([CheckOnline::class])->group(function () {
 
     Route::post('ckeditor/image_upload', 'CkeditorController@upload')->name('upload');
 
+    #
+
+    Route::get('/dev/check', 'DevController@index');
+
 });
 
