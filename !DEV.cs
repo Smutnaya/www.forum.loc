@@ -58,3 +58,5 @@ sudo chmod -R ugo+rw storage
 # custom ignore
 # git rm --cached public/css/*
 # git rm --cached public/js/*
+
+finish?
