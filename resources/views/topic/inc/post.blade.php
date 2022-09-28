@@ -103,66 +103,68 @@ use App\AppForum\Helpers\ForumHelper;
 
                     </div>
                     <div class="col-1 d-flex justify-content-end align-items-center">
-                        <div class="dropdown">
-                            <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" @if ($post['hide']) style="border: 0; background: #f7f7e4 !important;" @else style="border: 0; background: #ffffe0;" @endif>
-                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                            </button>
-                            <ul style="background: #fbf6d1; font-size: small;" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                @if (!is_null($model['user']))
-                                    @if ($post['postEdit'] || $post['postModer'] || $model['editor'])
-                                        <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/edit/' . $model['pagination']['page']) }}">
+                        @if ((!is_null($model['user']) && $post['postEdit']) || $post['postModer'] || $model['editor'])
+                            <div class="dropdown">
+                                <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" @if ($post['hide']) style="border: 0; background: #f7f7e4 !important;" @else style="border: 0; background: #ffffe0;" @endif>
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <ul style="background: #fbf6d1; font-size: small;" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    @if (!is_null($model['user']))
+                                        @if ($post['postEdit'] || $post['postModer'] || $model['editor'])
+                                            <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/edit/' . $model['pagination']['page']) }}">
+                                                    <div class="row">
+                                                        <div class="col-1">
+                                                            <i class="fa-solid fa-pencil forum-desc ms-1"></i>
+                                                        </div>
+                                                        <div class="col">
+                                                            Редактировать
+                                                        </div>
+                                                    </div>
+                                                </a></li>
+                                        @endif
+                                        @if ($model['user']['id'] != $post['user_id'])
+                                            <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/request/' . $model['pagination']['page']) }}">
+                                                    <div class="row">
+                                                        <div class="col-1">
+                                                            <i class="fa-solid fa-triangle-exclamation forum-desc ms-1"></i>
+                                                        </div>
+                                                        <div class="col">
+                                                            Пожаловаться
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endif
+
+                                    @if ($post['postModer'] || $model['editor'])
+                                        <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/moder/' . $model['pagination']['page']) }}">
                                                 <div class="row">
                                                     <div class="col-1">
-                                                        <i class="fa-solid fa-pencil forum-desc ms-1"></i>
+                                                        <i class="fa-regular fa-sun forum-desc ms-1"></i>
                                                     </div>
                                                     <div class="col">
-                                                        Редактировать
+                                                        Модерация
                                                     </div>
                                                 </div>
                                             </a></li>
                                     @endif
-                                    @if ($model['user']['id'] != $post['user_id'])
-                                        <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/request/' . $model['pagination']['page']) }}">
+                                    @if (!is_null($model['user']) && $model['user']['role_id'] >= 11 && $model['first_post'] != $post['id'])
+                                        <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/del/' . $model['pagination']['page']) }}">
                                                 <div class="row">
                                                     <div class="col-1">
-                                                        <i class="fa-solid fa-triangle-exclamation forum-desc ms-1"></i>
+                                                        <i class="fa-solid fa-circle-minus forum-desc ms-1"></i>
                                                     </div>
                                                     <div class="col">
-                                                        Пожаловаться
+                                                        Удалить ответ
                                                     </div>
                                                 </div>
-                                            </a>
-                                        </li>
+                                            </a></li>
                                     @endif
-                                @endif
 
-                                @if ($post['postModer'] || $model['editor'])
-                                    <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/moder/' . $model['pagination']['page']) }}">
-                                            <div class="row">
-                                                <div class="col-1">
-                                                    <i class="fa-regular fa-sun forum-desc ms-1"></i>
-                                                </div>
-                                                <div class="col">
-                                                    Модерация
-                                                </div>
-                                            </div>
-                                        </a></li>
-                                @endif
-                                @if (!is_null($model['user']) && $model['user']['role_id'] >= 11 && $model['first_post'] != $post['id'])
-                                    <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/del/' . $model['pagination']['page']) }}">
-                                            <div class="row">
-                                                <div class="col-1">
-                                                    <i class="fa-solid fa-circle-minus forum-desc ms-1"></i>
-                                                </div>
-                                                <div class="col">
-                                                    Удалить ответ
-                                                </div>
-                                            </div>
-                                        </a></li>
-                                @endif
-
-                            </ul>
-                        </div>
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -94,10 +94,10 @@
 
     <nav class="navbar navbar-expand-md d-sm-block d-sx-block d-lx-none d-lg-none d-md-none py-0">
         <div class="container-fluid gx-0 ">
-            <div class="text-start col-8 ">
-                <button class="btn btn-sm text-start py-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" style="box-shadow: none !important;">
-                    <h5 id="offcanvasTopLabel">
-                        <img class="min-logo" src="/images/vs logo.png"><span class="ps-3">Форум ВС</span>
+            <div class="text-start col-8 mb-1">
+                <a href={{ url('/main') }}><img class="min-logo" src="/images/vs logo.png"></a><button class="btn btn-sm text-start p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" style="box-shadow: none !important;">
+                    <h5 id="offcanvasTopLabel" style="margin-bottom: 0 !important;">
+                        <span class="ps-3">Форум ВС</span>
                     </h5>
                 </button>
             </div>
@@ -200,8 +200,8 @@
     </nav>
     <hr class="mt-0 mb-2 hr-color shadow-sm">
 
-        <!-- Right Side Of Navbar -->
-        {{-- <ul class="navbar-nav ml-auto">
+    <!-- Right Side Of Navbar -->
+    {{-- <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
             @guest
                 <li class="nav-item">
@@ -218,17 +218,17 @@
                         {{ Auth::user()->name }}
                     </a> --}}
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                          document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
+            {{ __('Logout') }}
+        </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                {{-- </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+    </div>
+    {{-- </li>
             @endguest
         </ul>
     </div> --}}
