@@ -72,7 +72,7 @@ class LoginController extends Controller
             $user = User::create([
                 'id' => $usergame->id,
                 'name' => $usergame->title,
-                'email' => 'no-email',
+                'email' => $usergame->title.'@'.time(),
                 'password' => 'no-password',
             ]);
             $user->save(); // na vsiakij sluchaj
