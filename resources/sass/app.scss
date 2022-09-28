@@ -418,23 +418,6 @@ A:hover,
     border: none !important;
 }
 
-/*
- span {
-    position: relative;
-    display: inline-block;
-    margin-top: 2px;
-  }
-span[title]:hover::after {
-    content: attr(title);
-    //position: absolute;
-    top: -100%;
-    left: 0;
-    border: solid 1px #d6d1b2;
-    border-radius: 5px;
-    background: #e8e0bf;
-    text-align: center;
-} */
-
 // scroll
 .scroll {
     ::-webkit-scrollbar {
