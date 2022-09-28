@@ -94,8 +94,11 @@ use App\AppForum\Helpers\ForumHelper;
                             <a class="fw-bold" @if ($post['postModer'] || $model['editor']) href="{{ url('/p/' . $post['id'] . '/unhide/' . $model['pagination']['page']) }}" @endif><i class="fa-regular fa-eye-slash me-2" style="color: #5c625e;" title="Публикация скрыта"></i></a>
                         @endif
                         <span>{{ $post['date'] }}</span>
-                        @if (!is_null($post['ip'] && $post['postModer']))
-                            &nbsp; &bull; {{ $post['ip'] }}
+
+                        @if (!is_null($post['ip']))
+                            @if ($post['postModer'])
+                                &nbsp; &bull; {{ $post['ip'] }}
+                            @endif
                         @endif
 
                     </div>
@@ -164,9 +167,7 @@ use App\AppForum\Helpers\ForumHelper;
                 </div>
             </div>
 
-            <div class="col-12 my-1"><?php
-            echo htmlspecialchars_decode($post['text']);
-            ?>
+            <div class="col-12 my-1">{!! $post['text'] !!}
             </div>
             {{-- <div class="col-12 my-1" style="color:#6a0000 !important">
                 <i class="fa-solid fa-user-lock forum-desc" style="color:#6a0000 !important" title="Доступ закрыт"></i>

@@ -34,22 +34,22 @@ use App\AppForum\Helpers\ForumHelper;
                     @if (!is_null($model['user']))
                         @if (!$model['forumBlock'] && !$model['userBan'])
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
                             </div>
                         @elseif ($model['moder'])
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
                             </div>
                         @elseif ($model['editor'])
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
                             </div>
                         @elseif ($model['user_alliance_moder'] || $model['user_clan_moder'])
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
                                     тема</a>
                             </div>
                         @endif

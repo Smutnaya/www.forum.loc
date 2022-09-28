@@ -111,13 +111,14 @@ use App\AppForum\Helpers\ForumHelper;
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-9 col-12 d-lg-block d-none" style="color:#4e5256 !important;">
                         <div class="col-12 text-end">
                             @if (!is_null($model['user']))
                                 @if (($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id']) || ($model['other_role_bf'] && $model['user']['role_id'] >= $model['user_inf']['role_id'] && $model['user']['id'] != $model['user_inf']['id']))
                                     <i onclick="toggleBan()" type="button" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан"></i>
                                 @endif
-                                @if ($model['user']['role_id'] > 0 || $model['other_role_bf'])
+                                @if ($model['user']['role_id'] > 1 || $model['other_role_bf'] || $model['user']['id'] == $model['user_inf']['id'])
                                     <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                 @endif
                                 @if ($model['user']['role_id'] > 10 && $model['user']['role_id'] != $model['user_inf']['role_id'])
@@ -178,7 +179,7 @@ use App\AppForum\Helpers\ForumHelper;
                                     @if (($model['user']['role_id'] > 1 && $model['user']['role_id'] != $model['user_inf']['role_id']) || ($model['other_role_bf'] && $model['user']['role_id'] >= $model['user_inf']['role_id'] && $model['user']['id'] != $model['user_inf']['id']))
                                         <i onclick="toggleBan()" type="button" class="fa-solid fa-ban me-2 ms-1 text-end" title="выдать бан" id="btn-user_ban"></i>
                                     @endif
-                                    @if ($model['user']['role_id'] > 0 || $model['other_role_bf'])
+                                    @if ($model['user']['role_id'] > 1 || $model['other_role_bf'] || $model['user']['id'] == $model['user_inf']['id'])
                                         <i onclick="toggleBanInf()" type="button" class="fa-solid fa-circle-info me-2 ms-1 text-end" title="информация о банах"></i>
                                     @endif
                                     @if ($model['user']['role_id'] > 10)
