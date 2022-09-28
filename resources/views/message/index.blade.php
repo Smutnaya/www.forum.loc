@@ -15,6 +15,7 @@
             <div class="mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #009b7421 !important; border-color: #4f5c541c !important; border: 1px solid transparent;
         border-radius: 0.25rem; text-align: center;">{{ Session::get('messageOk') }}</div>
         @endif
+        @include('section.inc.accordion')
         <div class="row mb-2">
             <div class="pb-1 col-12" id="title">
                 <h4 class="title-shadow">Сообщения</h4>

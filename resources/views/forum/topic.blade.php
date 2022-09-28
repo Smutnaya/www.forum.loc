@@ -12,7 +12,7 @@
         <?php
         echo htmlspecialchars_decode($model['breadcrump']);
         ?>
-        <hr class="d-block d-lg-none hr-color">
+        <hr class="d-block my-2 d-lg-none hr-color">
     </div>
     @if ($errors->has('message'))
         <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>

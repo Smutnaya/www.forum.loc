@@ -16,8 +16,6 @@ use App\AppForum\Helpers\ForumHelper;
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
 
             @include('section.inc.accordion')
-            <hr class="hr-color d-md-none d-sm-block ">
-
             @if ($errors->has('message'))
                 <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif

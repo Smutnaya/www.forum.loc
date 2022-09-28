@@ -115,7 +115,7 @@ class BreadcrumHtmlHelper
     public static function breadcrumpHtml($arr)
     {
         $html = '<nav aria-label="breadcrumb">
-        <ol class="breadcrumb">';
+        <ol class="breadcrumb mb-0">';
         foreach($arr as $a)
         {
             if($a['url'] != null)

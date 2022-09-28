@@ -18,8 +18,6 @@ use App\AppForum\Helpers\ForumHelper;
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
 
             @include('section.inc.accordion')
-            <hr class="hr-color d-md-none d-sm-block ">
-
             <div class="pb-1" id="title">
                 <h4 class="title-shadow">{{ $model['sectionTitle'] }}</h4>
             </div>

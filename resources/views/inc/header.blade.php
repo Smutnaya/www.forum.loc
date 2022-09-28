@@ -96,14 +96,14 @@
 
     <nav class="navbar navbar-expand-md d-sm-block d-sx-block d-lx-none d-lg-none d-md-none py-0">
         <div class="container-fluid gx-0 ">
-            <div class="text-start col-12 col-sm-7">
-                <button class="btn btn-sm text-start py-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+            <div class="text-start col-8 ">
+                <button class="btn btn-sm text-start py-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" style="box-shadow: none !important;">
                     <h5 id="offcanvasTopLabel">
-                        <img class="min-logo" src="/images/vs logo.png"><span class="ps-3">Форум игры Времена Смуты </span>
+                        <img class="min-logo" src="/images/vs logo.png"><span class="ps-3">Форум ВС</span>
                     </h5>
                 </button>
             </div>
-            <div class="text-end my-1 col-12 col-sm-5">
+            <div class="text-end col-4">
                 {{-- <div class="mx-2">
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
                 </div> --}}
@@ -169,29 +169,29 @@
                 </span>
             </div>
         </div>
-        <div class="offcanvas offcanvas-top g-0 p-0" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+        <div class="offcanvas offcanvas-top g-0 p-0" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel" style="height: 270px;">
             <div class="offcanvas-header py-3 border-bottom" style="background:#eee9e0;">
                 <h5 class="fs-5" id="offcanvasTopLabel">Форум игры Времена Смуты</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body py-3" style="background:#f8f3eb;">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
+                    <li class="nav-item my-1">
                         <a class="py-1" aria-current="page" href="{{ url('/fs') }}">Форумы</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item my-1">
                         <a class="py-1" aria-current="page" href=#>Газеты и блоги</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item my-1">
                         <a class="py-1" aria-current="page" href=#>FAQ</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item my-1">
                         <a class="py-1" aria-current="page" href="https://vsmuta.com">В игру</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider my-2">
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item my-1">
                         <a class="py-1 fw-bold" aria-current="page" href={{ url('/main') }}>Главная</a>
                     </li>
                 </ul>

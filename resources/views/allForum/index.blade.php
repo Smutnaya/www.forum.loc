@@ -14,11 +14,9 @@ use App\AppForum\Helpers\ForumHelper;
                     <li class="breadcrumb-item active" aria-current="page">Форумы</li>
                 </ol>
             </nav>
-            <hr class="d-block d-lg-none hr-color">
+            <hr class="d-block d-lg-none hr-color mt-md-1">
         </div>
         @include('section.inc.accordion')
-        <hr class="hr-color d-md-none d-sm-block ">
-
         @foreach ($model['sections'] as $section)
             <h4 class="title-shadow">{{ $section['title'] }}</h4> <i class="bi bi-eye-slash"></i>
 

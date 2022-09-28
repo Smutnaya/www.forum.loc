@@ -1,7 +1,7 @@
 @extends('layouts.topic')
 @section('title-block')
     @if (!is_null($model['user']))
-        {{ $model['user']['name'] }} -  {{ $model['message']['title'] }}
+        {{ $model['user']['name'] }} - {{ $model['message']['title'] }}
     @else
         Личные сообщения
     @endif
@@ -40,9 +40,7 @@
                     </div>
                 </div>
                 <div class="text-centre overflow-hidden py-4 p-2" style="background: #ffffe0; border-top: 1px solid #dee2e694 !important;">
-                    <?php
-                    echo htmlspecialchars_decode($model['message']['text']);
-                    ?>
+                    {!! $model['message']['text'] !!}
                 </div>
         </div>
 

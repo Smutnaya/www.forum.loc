@@ -32,14 +32,13 @@
                 <div class="col-lg-2 col-md-3">
                     @include('inc.aside', ['model' => $model])
                 </div>
-                <div class="col-lg-10 col-md-9 col-sm-12">
-                    @yield("content")
+                <div class="col-lg-10 col-md-9 col-sm-12 p-0">
+                    @yield('content')
                 </div>
             </div>
         </div>
 
     </main>
-
 </body>
 
 </html>

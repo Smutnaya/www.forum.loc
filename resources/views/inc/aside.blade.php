@@ -1,6 +1,6 @@
 @section('aside')
-    <div style="position: sticky; top: 15px;">
-        <ul class="navbar-nav mr-auto sidenav p-0 d-none d-md-block fs-6">
+    <div class="d-none d-md-block" style="position: sticky; top: 15px;">
+        <ul class="navbar-nav mr-auto sidenav p-0 fs-6">
             @foreach ($model['sectionsAside'] as $section)
                 <li class="nav-item p-0">
                     <div class="row">

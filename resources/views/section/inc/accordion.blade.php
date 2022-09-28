@@ -1,7 +1,7 @@
 <div class="accordion accordion-flush d-block d-md-none" id="accordionFlushExample">
     <div class="accordion-item" style="background:#f1e9c2; color:#050505;">
         <h2 class="accordion-header" id="flush-headingOne">
-            <button class="accordion-button collapsed fs-6 pt-0 pb-1" type="button" style="background:#f1e9c2; color:#050505;" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            <button class="accordion-button collapsed fs-6 pt-0 pb-1" type="button" style="background:#f1e9c2; color:#050505; box-shadow: none !important;" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                 Форумы
             </button>
         </h2>
@@ -55,3 +55,4 @@
         </div>
     </div>
 </div>
+<hr class="hr-color d-md-none d-sm-block mt-1">
