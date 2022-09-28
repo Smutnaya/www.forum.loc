@@ -11,13 +11,20 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6e89e13bc87c728961d0db21f92ce8b4e9ac1c22
 # custom ignore
 # git rm --cached public/css/*
 # git rm --cached public/js/*
 /public/mix-manifest.json
 /public/css/*
 /public/js/*
+<<<<<<< HEAD
 /public/images/*
 
 /storage/lock/*
+=======
+/public/images/*
+>>>>>>> 6e89e13bc87c728961d0db21f92ce8b4e9ac1c22
