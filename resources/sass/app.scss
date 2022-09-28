@@ -57,6 +57,13 @@ footer {
     height: 60px;
 }
 
+.img-w {
+    img {
+        max-width: 700px;
+        height: auto;
+    }
+}
+
 .forum-desc {
     margin-left: 5px;
     font-size: 9pt;
