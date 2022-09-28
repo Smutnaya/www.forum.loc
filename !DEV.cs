@@ -53,3 +53,8 @@ sudo chmod -R ugo+rw storage
     new project key
     new app name
 
+
+
+# custom ignore
+# git rm --cached public/css/*
+# git rm --cached public/js/*
