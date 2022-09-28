@@ -21,8 +21,10 @@
             <div class="row">
                 <div class="col text-break d-flex justify-content-start align-items-center py-1 mb-2" id="title">
                     <h4 class="m-0 "><span class="title-shadow"><span class="text-secondary" title="ID темы">
-                                @if ($model['user']['role_id'] > 1 || $model['moder'] || $model['editor'])
-                                    [{{ $model['topic']['id'] }}]
+                                @if (!is_null($model['user']))
+                                    @if ($model['user']['role_id'] > 1 || $model['moder'] || $model['editor'])
+                                        [{{ $model['topic']['id'] }}]
+                                    @endif
                                 @endif
                             </span>{{ $model['topic']['title'] }} </span></h4>
                     @if ($model['topicEdit'])
