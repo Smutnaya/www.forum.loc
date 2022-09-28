@@ -167,7 +167,7 @@ use App\AppForum\Helpers\ForumHelper;
                 </div>
             </div>
 
-            <div class="col-12 my-1 img-w">{!! $post['text'] !!}
+            <div class="col-12 my-1">{!! $post['text'] !!}
             </div>
             {{-- <div class="col-12 my-1" style="color:#6a0000 !important">
                 <i class="fa-solid fa-user-lock forum-desc" style="color:#6a0000 !important" title="Доступ закрыт"></i>

@@ -39,7 +39,7 @@
                         {{ $model['message']['datetime'] }}
                     </div>
                 </div>
-                <div class="text-centre overflow-hidden py-4 p-2 img-w" style="background: #ffffe0; border-top: 1px solid #dee2e694 !important;">
+                <div class="text-centre overflow-hidden py-4 p-2" style="background: #ffffe0; border-top: 1px solid #dee2e694 !important;">
                     {!! $model['message']['text'] !!}
                 </div>
         </div>

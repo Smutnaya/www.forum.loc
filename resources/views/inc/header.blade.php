@@ -21,10 +21,6 @@
                     </li>
                 </ul>
 
-                {{-- <div class="mx-2">
-                    <i class="fa-regular fa-bell" width="18" height="18"></i>
-                </div> --}}
-
                 @if (!is_null($model['user']))
                     @if ($model['user']['role_id'] > 2 && $model['complaints']->count() > 0)
                         <a href="{{ url('/cw') }}">
@@ -55,9 +51,10 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход" style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
+                                </li>
                             </ul>
                         </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
@@ -71,9 +68,10 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход" style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
+                                </li>
                             </ul>
 
                             {{-- <a type="button" href="{{ url('/message') }}">
@@ -87,7 +85,7 @@
                     @if (!is_null($model['user']))
                         {{-- <a class="text-break" href="{{ url('/user/' . $model['user']['id']) }}">{{ $model['user']['name'] }}</a> --}}
                     @else
-                        Вход
+                        <a href="{{ route('login') }}">Вход</a>
                     @endif
                 </div>
             </div>
@@ -138,9 +136,10 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход" style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
+                                </li>
                             </ul>
                         </span>
                     @elseif(!is_null($model['user']) && is_null($model['user']['avatar']))
@@ -154,9 +153,10 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 11px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
-                                <li><form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"></form></li>
-                                <li><a class="dropdown-item p-0" style="background: #f9f5dc !important;" href="{{ url('/logout') }}">Выход</a></li>
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
+                                </li>
                             </ul>
                         </span>
                     @endif
@@ -164,7 +164,7 @@
                     @if (!is_null($model['user']))
                         {{-- <a class="text-break" href="{{ url('/user/' . $model['user']['id']) }}">{{ $model['user']['name'] }}</a> --}}
                     @else
-                        Вход
+                        <a href="{{ route('login') }}">Вход</a>
                     @endif
                 </span>
             </div>
@@ -198,10 +198,10 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <hr class="mt-0 mb-2 hr-color shadow-sm">
 
         <!-- Right Side Of Navbar -->
-        <ul class="navbar-nav ml-auto">
+        {{-- <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
             @guest
                 <li class="nav-item">
@@ -216,7 +216,7 @@
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }}
-                    </a>
+                    </a> --}}
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -228,11 +228,11 @@
                             @csrf
                         </form>
                     </div>
-                </li>
+                {{-- </li>
             @endguest
         </ul>
-    </div>
-    <hr class="mt-0 mb-2 hr-color shadow-sm">
+    </div> --}}
+
 
 
 
