@@ -37,6 +37,19 @@ php artisan storage:link
 sozdal dir/ storage/uploads/avatars // navernoe nado avatar 777 i vipolnit shortcut to public
 
 ### dimka linux install ###
+composer install
+npm install
+npm audit fix --force
+
+php artisan storage:link
+
+sudo chown -R www-data.www-data /var/www/forum.vsmuta.com/storage
+sudo chown -R www-data.www-data /var/www/forum.vsmuta.com/bootstrap/cache
+
+sudo chmod -R 775 storage
+sudo chmod -R ugo+rw storage 
+
 .env
     new project key
     new app name
+
