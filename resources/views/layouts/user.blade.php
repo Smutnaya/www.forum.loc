@@ -40,8 +40,8 @@
                 </div>
             </div>
         </div>
-
     </main>
+    @include('inc.footer')
 </body>
 
 </html>
