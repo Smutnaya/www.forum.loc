@@ -49,7 +49,7 @@ Route::middleware([CheckOnline::class])->group(function () {
     Route::any('/u/{id}/image_del', 'UserController@image_del');
     Route::any('/u/{id}/ban_message', 'UserController@ban_message');
 
-    Route::get('/message', 'MessageController@index');
+    Route::get('/message/{page?}', 'MessageController@index');
     Route::get('/new_message', 'MessageController@new_message');
     Route::any('/save_message', 'MessageController@save_message');
     Route::any('/m/{id}', 'MessageController@history');
