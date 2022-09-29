@@ -1,12 +1,3 @@
-<footer class="py-3 my-4" >
-    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <!--
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
--->
-    </ul>
-    <p class="text-center text-muted">by Smutnaya, 2022 </p>
-  </footer>
+<div class="py-1 mt-3">
+    <p class="text-center text-muted">by <a class="text-center text-muted" href="https://vsmuta.com/user/%D0%A1%D0%BC%D1%83%D1%82%D0%BD%D0%B0%D1%8F%20%D0%9B%D0%B5%D0%B4%D0%B8">Смутная Леди</a>, 2022 </p>
+</div>
