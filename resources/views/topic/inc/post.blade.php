@@ -121,19 +121,17 @@ use App\AppForum\Helpers\ForumHelper;
                                                 </div>
                                             </a></li>
                                     @endif
-                                    @if ($model['user']['id'] != $post['user_id'])
-                                        <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/request/' . $model['pagination']['page']) }}">
-                                                <div class="row">
-                                                    <div class="col-1">
-                                                        <i class="fa-solid fa-triangle-exclamation forum-desc ms-1"></i>
-                                                    </div>
-                                                    <div class="col">
-                                                        Пожаловаться
-                                                    </div>
+                                    <li><a class="dropdown-item" style="background: #fbf6d1;" href="{{ url('/p/' . $post['id'] . '/request/' . $model['pagination']['page']) }}">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-triangle-exclamation forum-desc ms-1"></i>
                                                 </div>
-                                            </a>
-                                        </li>
-                                    @endif
+                                                <div class="col">
+                                                    Пожаловаться
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
                                 @endif
 
                                 @if ($post['postModer'] || $model['editor'])

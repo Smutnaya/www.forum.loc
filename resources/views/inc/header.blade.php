@@ -11,10 +11,10 @@
                         <a aria-current="page" class="naw-link" href="{{ url('/fs') }}">Форумы</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-current="page" class="naw-link" href=#>Газеты и блоги</a>
+                        <a aria-current="page" class="naw-link" disabled>Газеты и блоги</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-current="page" class="naw-link" href=#>FAQ</a>
+                        <a aria-current="page" class="naw-link" disabled>FAQ</a>
                     </li>
                     <li class="nav-item">
                         <a aria-current="page" class="naw-link" href="https://vsmuta.com">В игру</a>
@@ -24,7 +24,7 @@
                 @if (!is_null($model['user']))
                     @if ($model['user']['role_id'] > 2 && $model['complaints']->count() > 0)
                         <a href="{{ url('/cw') }}">
-                            <i class="fa-regular fa-hourglass-half mx-3 align-middle" style="color: #7c0011;"></i>
+                            <i class="fa-regular fa-hourglass-half me-3 align-middle" style="color: #7c0011;"></i>
                         </a>
                     @endif
                     @if (!is_null($model['message_new']))
@@ -51,7 +51,13 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -70px; min-width: 120px !important;" aria-labelledby="dropdownMenuLink">
+                                <li class="fw-bold">
+                                    {{ $model['user']['name'] }}
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider my-1">
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход" style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
                                 </li>
@@ -68,7 +74,13 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 65px !important;" aria-labelledby="dropdownMenuLink">
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -70px; min-width: 120px !important;" aria-labelledby="dropdownMenuLink">
+                                <li class="fw-bold">
+                                    {{ $model['user']['name'] }}
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider my-1">
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход" style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
                                 </li>
@@ -94,14 +106,14 @@
 
     <nav class="navbar navbar-expand-md d-sm-block d-sx-block d-lx-none d-lg-none d-md-none py-0">
         <div class="container-fluid gx-0 ">
-            <div class="text-start col-8 ">
-                <button class="btn btn-sm text-start py-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" style="box-shadow: none !important;">
-                    <h5 id="offcanvasTopLabel">
-                        <img class="min-logo" src="/images/vs logo.png"><span class="ps-3">Форум ВС</span>
+            <div class="text-start col-7 mb-1">
+                <a href={{ url('/main') }}><img class="min-logo" src="/images/vs logo.png"></a><button class="btn btn-sm text-start p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" style="box-shadow: none !important;">
+                    <h5 id="offcanvasTopLabel" style="margin-bottom: 0 !important;">
+                        <span class="ps-1">Времена Смуты</span>
                     </h5>
                 </button>
             </div>
-            <div class="text-end col-4">
+            <div class="text-end col-5">
                 {{-- <div class="mx-2">
                     <i class="fa-regular fa-bell" width="18" height="18"></i>
                 </div> --}}
@@ -109,7 +121,7 @@
                 @if (!is_null($model['user']))
                     @if ($model['user']['role_id'] > 2 && $model['complaints']->count() > 0)
                         <a href="{{ url('/cw') }}">
-                            <i class="fa-regular fa-hourglass-half mx-3 align-middle" style="color: #7c0011;"></i>
+                            <i class="fa-regular fa-hourglass-half me-3 align-middle" style="color: #7c0011;"></i>
                         </a>
                     @endif
                     @if (!is_null($model['message_new']))
@@ -136,7 +148,13 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -75px; min-width: 120px !important;" aria-labelledby="dropdownMenuLink">
+                                <li class="fw-bold">
+                                    {{$model['user']['name']}}
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider my-1">
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход" style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
                                 </li>
@@ -153,7 +171,13 @@
                                     <i class="fa-solid fa-chevron-up fa-flip-vertical fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -10px; min-width: 50px !important;" aria-labelledby="dropdownMenuLink">
+                            <ul class="dropdown-menu p-1 mt-3 text-center" style="font-size: 12px; background: #f9f5dc; left: -75px; min-width: 120px !important;" aria-labelledby="dropdownMenuLink">
+                                <li class="fw-bold">
+                                    {{$model['user']['name']}}
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider my-1">
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ url('/logout') }}">@csrf<input type="submit" value="Выход"style="background-color: transparent !important; border: none !important; box-shadow: none !important;"></form>
                                 </li>
@@ -169,21 +193,21 @@
                 </span>
             </div>
         </div>
-        <div class="offcanvas offcanvas-top g-0 p-0" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel" style="height: 270px;">
-            <div class="offcanvas-header py-3 border-bottom" style="background:#eee9e0;">
+        <div class="offcanvas offcanvas-top g-0 p-0" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel" style="height: 245px;">
+            <div class="offcanvas-header pt-3 pb-2 border-bottom" style="background:#eee9e0;">
                 <h5 class="fs-5" id="offcanvasTopLabel">Форум игры Времена Смуты</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body py-3" style="background:#f8f3eb;">
+            <div class="offcanvas-body pt-1 pb-3" style="background:#f8f3eb;">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item my-1">
                         <a class="py-1" aria-current="page" href="{{ url('/fs') }}">Форумы</a>
                     </li>
                     <li class="nav-item my-1">
-                        <a class="py-1" aria-current="page" href=#>Газеты и блоги</a>
+                        <a class="py-1" aria-current="page" disabled>Газеты и блоги</a>
                     </li>
                     <li class="nav-item my-1">
-                        <a class="py-1" aria-current="page" href=#>FAQ</a>
+                        <a class="py-1" aria-current="page" disabled>FAQ</a>
                     </li>
                     <li class="nav-item my-1">
                         <a class="py-1" aria-current="page" href="https://vsmuta.com">В игру</a>
@@ -191,7 +215,7 @@
                     <li>
                         <hr class="dropdown-divider my-2">
                     </li>
-                    <li class="nav-item my-1">
+                    <li class="nav-item mt-1">
                         <a class="py-1 fw-bold" aria-current="page" href={{ url('/main') }}>Главная</a>
                     </li>
                 </ul>
@@ -200,8 +224,8 @@
     </nav>
     <hr class="mt-0 mb-2 hr-color shadow-sm">
 
-        <!-- Right Side Of Navbar -->
-        {{-- <ul class="navbar-nav ml-auto">
+    <!-- Right Side Of Navbar -->
+    {{-- <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
             @guest
                 <li class="nav-item">
@@ -218,17 +242,17 @@
                         {{ Auth::user()->name }}
                     </a> --}}
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                          document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
+            {{ __('Logout') }}
+        </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                {{-- </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+    </div>
+    {{-- </li>
             @endguest
         </ul>
     </div> --}}
