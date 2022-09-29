@@ -47,7 +47,7 @@
                         <div class="row mx-1 py-1 ">
                             <div class="col align-self-center text-break">
                                 <div class="col">
-                                    @if ($message['user']['id'] != $model['user']['id'] && !$message['view'])
+                                    @if (!$message['view'])
                                         <span style="color: #0e7a32 !important; font-size: 15px; margin-left: -10px;" class="font-bold flicker align-items-center">&bull;</span>
                                     @endif
                                     Тема: <span class="fw-bold">
@@ -56,7 +56,7 @@
                                     </span>
 
                                     @if ($message['user']['id'] != $model['user']['id'] && !$message['view'])
-                                        {{-- <span style="color: #0e7a32 !important; font-size: 15px;" class="font-bold flicker">&bull;</span> --}} <span class="font-bold">&bull;</span> <span class="forum-desc fw-bold"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
+                                        <span style="color: #0e7a32 !important; font-size: 15px;" class="font-bold flicker">&bull;</span> <span class="forum-desc fw-bold"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
                                     @else
                                         <span class="font-bold">&bull;</span> <span class="forum-desc"><a href="{{ url('/m/' . $message['id']) }}">{{ $message['datetime'] }}</a></span>
                                     @endif
