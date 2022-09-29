@@ -18,7 +18,7 @@
                 <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
-            <div class="row">
+            <div class="row m-0">
                 <div class="col text-break d-flex justify-content-start align-items-center py-1 mb-2" id="title">
                     <h4 class="m-0 "><span class="title-shadow"><span class="text-secondary" title="ID темы">
                                 @if (!is_null($model['user']))
