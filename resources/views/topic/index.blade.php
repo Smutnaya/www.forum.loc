@@ -132,13 +132,26 @@
                 // CKEDITOR.instances.text.setData('<blockquote style="background: #f1e9c28f; color: #4a4741; margin: 0 0 1rem 1rem; padding: 5px 13px !important; font-size: 14px; font-style: italic; font-family: "Open Sans", "Arial", Helvetica, serif !important; border-style: solid; border-color: #afa4843d; border-width: 0.005rem; border-radius: 0px 15px !important;">'+$(this).data('text')+'<div style="text-align: right; font-size: 9pt;">'+$(this).data('inf')+'</div></blockquote>');
             });
         });
-        // $(document).ready(function() {
-        //     $('[data-bs-toggle="popover"]').popover();
-        // });
-
         $(document).ready(function() {
-            $(this).scrollTop(0);
+            $('[data-bs-toggle="popover"]').popover();
         });
+
+        var timer;
+        var isPaused = false;
+
+        $(window).on('wheel', function() {
+            isPaused = true;
+            clearTimeout(timer);
+            timer = window.setTimeout(function() {
+                isPaused = false;
+            }, 10000000);
+        });
+
+        window.setInterval(function() {
+            if (!isPaused) {
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        }, 500);
 
         var edit = document.getElementById('topic-edit-field');
         var move = document.getElementById('topic-move-field');

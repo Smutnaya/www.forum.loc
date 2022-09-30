@@ -130,9 +130,9 @@ class ForumViewer
         $topics = collect();
 
         if ($user_role == 0 && !is_null($skip)) {
-            return $topics = Topic::where([['forum_id', intval($forum_id)], ['moderation', false], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
         } elseif ($user_role == 0 && is_null($skip)) {
-            return $topics = Topic::where([['forum_id', intval($forum_id)], ['moderation', false], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->get();
+            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->get();
         }
 
         if (!is_null($user)) {
@@ -482,6 +482,7 @@ class ForumViewer
                 }
             }
         }
+
 
         return $topics;
     }
