@@ -167,8 +167,28 @@ class UserViewer
     {
         $topic_id = collect();
         foreach ($user_posts as $post) {
-            if ($post->hide || $post->moderation) {
-                if ($user_role > 1 || $user_id == $post->user_id) {
+            if (!$post->topic->private && !$post->topic->forum->private && !$post->topic->forum->section->private) {
+                if ($post->hide || $post->moderation) {
+                    if ($user_role > 1 || $user_id == $post->user_id) {
+                        if (!$topic_id->contains($post->topic_id)) {
+                            $model['user_posts']->push([
+                                'text' => $post->text,
+                                'id' => $post->id,
+                                'date' => ForumHelper::timeFormat($post->datetime),
+                                'date_d' => $post->datetime,
+                                'hide' => $post->hide,
+                                'moderation' => $post->moderation,
+                                'topic_id' => $post->topic_id,
+                                'topic_title' => $post->topic->title,
+                                'forum_id' => $post->topic->forum_id,
+                                'forum_title' => $post->topic->forum->title,
+                                'section_id' => $post->topic->forum->section_id,
+                                'section_title' => $post->topic->forum->section->title,
+                            ]);
+                            $topic_id->push($post->topic_id);
+                        }
+                    }
+                } else {
                     if (!$topic_id->contains($post->topic_id)) {
                         $model['user_posts']->push([
                             'text' => $post->text,
@@ -186,24 +206,6 @@ class UserViewer
                         ]);
                         $topic_id->push($post->topic_id);
                     }
-                }
-            } else {
-                if (!$topic_id->contains($post->topic_id)) {
-                    $model['user_posts']->push([
-                        'text' => $post->text,
-                        'id' => $post->id,
-                        'date' => ForumHelper::timeFormat($post->datetime),
-                        'date_d' => $post->datetime,
-                        'hide' => $post->hide,
-                        'moderation' => $post->moderation,
-                        'topic_id' => $post->topic_id,
-                        'topic_title' => $post->topic->title,
-                        'forum_id' => $post->topic->forum_id,
-                        'forum_title' => $post->topic->forum->title,
-                        'section_id' => $post->topic->forum->section_id,
-                        'section_title' => $post->topic->forum->section->title,
-                    ]);
-                    $topic_id->push($post->topic_id);
                 }
             }
         }
