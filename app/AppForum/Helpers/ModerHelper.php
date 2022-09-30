@@ -200,6 +200,8 @@ class ModerHelper
         self::$result = false;
         $forum = Forum::find(intval($forum_id));
 
+        if($user_role_id == 12)  return self::$result = true;
+
         if ($user_role_id == 1 && $topic_user_id == $user_id && time() <= $topic_datetime + 900 && is_null($topic_DATA->moder)) return self::$result = true;
         if ($user_role_id > 1 && $topic_user_id == $user_id && time() <= $topic_datetime + 900 && is_null($topic_DATA->moder)) return self::$result = true;
 
@@ -267,6 +269,9 @@ class ModerHelper
     public static function moderPostEdit($user_role_id, $user, $user_id, $post_datetime, $post_DATA, $post_user_id, $forum_id, $section_id, $topic_id)
     {
         self::$result = false;
+
+        if($user_role_id == 12)  return self::$result = true;
+
         $forum = Forum::find(intval($forum_id));
 
         if (is_null($user)) $user_id = 0;
@@ -299,6 +304,9 @@ class ModerHelper
     public static function moderPost($user_role_id, $forum_id, $section_id, $user, $topic_id)
     {
         self::$result = false;
+
+        if($user_role_id == 12)  return self::$result = true;
+
         $forum = Forum::find(intval($forum_id));
 
         if (!is_null($user)) {
@@ -380,6 +388,9 @@ class ModerHelper
     public static function moderForum($user_role_id, $forum_id, $section_id, $user)
     {
         self::$result = false;
+
+        if($user_role_id == 12)  return self::$result = true;
+
         $forum = Forum::find(intval($forum_id));
 
         if (!is_null($user)) {
