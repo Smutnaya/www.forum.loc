@@ -88,7 +88,7 @@ class PostExecutor extends BaseExecutor
 
         if ($newspaper != $post->topic->forum_id && !ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для редактирования тем на данном форуме';
 
-        if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+        if (mb_strlen($input['text']) > 50000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 50000, "...");
 
         $out['post'] = $post;
         $out['check'] = CheckedHelper::checkPostEdit($input, $post->topic);
@@ -180,7 +180,7 @@ class PostExecutor extends BaseExecutor
         }
         if ($newspaper != $post->topic->forum_id && !ModerHelper::visForum($user_role, $post->topic->forum_id, $post->topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для модерации тем на данном форуме';
 
-        if (mb_strlen($input['text']) > 13000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 13000, "...");
+        if (mb_strlen($input['text']) > 50000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 50000, "...");
 
         $out['post'] = $post;
         $out['check'] = CheckedHelper::checkPostEdit($input, $post->topic);

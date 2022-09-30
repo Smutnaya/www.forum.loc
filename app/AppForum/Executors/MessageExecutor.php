@@ -47,7 +47,7 @@ class MessageExecutor extends BaseExecutor
         if (is_null($user_to)) return self::$result['message'] = 'Адресат не найден';
         $out['user_to'] = $user_to;
 
-        if(mb_strlen($out['text']) > 13000) $out['text'] = mb_strimwidth($out['text'], 0, 13000, "...");
+        if(mb_strlen($out['text']) > 50000) $out['text'] = mb_strimwidth($out['text'], 0, 50000, "...");
 
         self::$result = ['success' => true, 'message' => 'Сообщение '. $user_to->name . ' отправлено'];
     }
@@ -83,7 +83,7 @@ class MessageExecutor extends BaseExecutor
         if (is_null($user_to)) return self::$result['message'] = 'Адресат не найден';
         $out['user_to'] = $user_to;
 
-        if(mb_strlen($out['text']) > 13000) $out['text'] = mb_strimwidth($out['text'], 0, 13000, "...");
+        if(mb_strlen($out['text']) > 50000) $out['text'] = mb_strimwidth($out['text'], 0, 50000, "...");
 
         self::$result = ['success' => true, 'message' => 'Ответ '. $user_to->name . ' отправлен'];
     }
