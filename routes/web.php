@@ -30,7 +30,7 @@ Auth::routes();
 
 Route::middleware([CheckOnline::class])->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/main', 'MainController@index')->name('main');
+    Route::get('/main', 'MainController@index');
 
     Route::get('/user/{id}', 'UserController@index');
     Route::any('/u/{id}/forum_ban', 'BanController@forum_ban');
