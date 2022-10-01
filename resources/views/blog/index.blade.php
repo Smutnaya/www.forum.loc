@@ -53,8 +53,11 @@
             <div class="col-12"></div>
             <div class="d-flex justify-content-end">
                 @if (!is_null($model['user']))
-                    @if ((!$model['topic']['block'] && !$model['userBan'] && $model['topic']['forum_id'] != 38 && $model['topic']['forum_id'] != 39) || $model['newPost'] || $model['editor'])
+                    @if ((!$model['topic']['block'] && !$model['userBan']) || $model['newPost'] || $model['editor'])
                         <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+                            @if (($model['topic']['block'] && $model['newPost']) || $model['editor'])
+                                <span class="centre p-2" style="font-size: 11px; color: #6a0000">*Комментарии к теме отключены</span>
+                            @endif
                             <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm" style="width: 100px !important;">Комметарий</a>
                         </div>
             </div>
