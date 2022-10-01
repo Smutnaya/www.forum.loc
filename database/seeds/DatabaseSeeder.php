@@ -153,16 +153,16 @@ class DatabaseSeeder extends Seeder
             ['role' => 'Доверенное лицо', 'description' => 'Администратор'],
             ['role' => 'Администратор', 'description' => 'Администратор'],
         ]);
-        /*
-        User::insert([
-            ['name' => 'смутная леди', 'email' => '12@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 12, 'newspaper_id' => null, 'newspaper_role' => null],
-            ['name' => 'Никудышный Шаромыжник', 'email' => '123@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 1, 'newspaper_id' => 1, 'newspaper_role' => 1],
-        ]);
 
-        Newspaper::insert([
-            ['title' => 'Тестовая газетка', 'description' => 'тест-тест-тест', 'forum_id' => '73'],
-        ]);
+        // User::insert([
+        //     ['name' => 'смутная леди', 'email' => '12@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 12, 'newspaper_id' => null, 'newspaper_role' => null],
+        //     //['name' => 'Никудышный Шаромыжник', 'email' => '123@mail', 'password' => '$2y$10$0M7FyofnRy8gxy/kOuAD6.sYC7Bl8Bwuax.GKQ0HK8t8KorWFJwgy', 'ip' => '127.0.0.1', 'role_id' => 1, 'newspaper_id' => 1, 'newspaper_role' => 1],
+        // ]);
 
-*/
+        // Newspaper::insert([
+        //     ['title' => 'Тестовая газетка', 'description' => 'тест-тест-тест', 'forum_id' => '74'],
+        // ]);
+
+
     }
 }

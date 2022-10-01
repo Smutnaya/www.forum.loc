@@ -357,6 +357,7 @@ class TopicViewer
     private static function setPost($model, $posts, $user, $user_role, $forum_id, $section_id)
     {
         $forum = Forum::find(intval($forum_id));
+
         foreach ($posts as $post) {
             $user_post = User::find($post->user_id);
             if (!is_null($user)) {
@@ -368,11 +369,15 @@ class TopicViewer
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
                     } elseif ($section_id == 6) {
+                        //dd($user_role > 8 && $post->user_id == $user->id);
                         if ($user_role > 0 && $user_role < 8 && $post->user_id == $user->id) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        } elseif ($user_role > 7 && $post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         } elseif ($user->newspaper_id != null && $user->newspaper->forum_id == $post->topic->forum_id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
+
                     }elseif ($section_id == 5) {
                         if ($post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);

@@ -111,13 +111,6 @@ class ForumViewer
             }
         }
 
-        // // последние ответы
-        // $last_posts = Topic::where('time_post', '!=', 'null')->orderBy('time_post', 'desc')->distinct()->limit(20)->get();
-        // if ($last_posts->count() > 0) MainViewer::setLastPost($model, $last_posts);
-        // // новые темы
-        // $new_topics = Topic::orderBy('datetime', 'desc')->limit(20)->get();
-        // if ($new_topics->count() > 0) MainViewer::setNewTopic($model, $new_topics);
-
         $topics = self::getTopic(intval($forumId), $skip, $take, $user_role, $forum->section_id, $user);
         if ($topics->isEmpty()) return $model;
         self::setTopic($model, $topics, $model['moder'], $user, $user_role);

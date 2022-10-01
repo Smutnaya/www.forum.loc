@@ -7,6 +7,7 @@
     @endif
 @endsection
 @section('content')
+    {{-- @dd($model) --}}
     <div class="conteiner">
         @if (is_null($model['topic']))
             <div class="my-3 mb-5 centre error" style="color:red">Тема не найдена</div>

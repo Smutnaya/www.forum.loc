@@ -30,26 +30,35 @@ use App\AppForum\Helpers\ForumHelper;
                         @endif
                     </div>
                     @if (!is_null($model['user']))
-                        @if (!$model['forumBlock'] && !$model['userBan'])
-                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
-                                    тема</a>
-                            </div>
-                        @elseif ($model['moder'])
-                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
-                                    тема</a>
-                            </div>
-                        @elseif ($model['editor'])
-                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
-                                    тема</a>
-                            </div>
-                        @elseif ($model['user_alliance_moder'] || $model['user_clan_moder'])
-                            <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
-                                <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
-                                    тема</a>
-                            </div>
+                        @if ($model['sectionId'] != 6)
+                            @if (!$model['forumBlock'] && !$model['userBan'] && $model['sectionId'] != 6)
+                                <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                    <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                        тема</a>
+                                </div>
+                            @elseif ($model['moder'])
+                                <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                    <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                        тема</a>
+                                </div>
+                            @elseif ($model['editor'])
+                                <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                    <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                        тема</a>
+                                </div>
+                            @elseif ($model['user_alliance_moder'] || $model['user_clan_moder'])
+                                <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                    <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                        тема</a>
+                                </div>
+                            @endif
+                        @elseif ($model['sectionId'] == 6)
+                            @if ($model['editor'] || $model['user']['role_id'] > 11)
+                                <div class="col d-grid gap-2 d-inline-flex justify-content-end" id="title">
+                                    <a class="btn btn-sm btn-custom shadow px-0" href="{{ url($model['forumId'] . '/topic') }}">Новая
+                                        тема</a>
+                                </div>
+                            @endif
                         @endif
                     @endif
                 </div>
