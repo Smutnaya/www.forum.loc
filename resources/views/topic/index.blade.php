@@ -35,6 +35,7 @@
                     @endif
                 </div>
             </div>
+            @include('topic.inc.pagination', ['model' => $model['pagination']])
             @if (is_null($model['topic']) || is_null($model['posts']) || $model['posts']->count() == 0)
                 <div class="my-3 mb-5 centre error post shadow-sm p-0"><span class="p-1" style="background: #ffffde7a">Постов не найдено</span>
                 </div>
@@ -45,7 +46,7 @@
                 @if ($model['topicMove'])
                     @include('topic.inc.topicMove', ['model' => $model])
                 @endif
-                @include('topic.inc.pagination', ['model' => $model['pagination']])
+
 
                 @include('topic.inc.post', ['model' => $model])
             @endif

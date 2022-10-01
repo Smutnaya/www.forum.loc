@@ -64,15 +64,18 @@ class MainViewer
         $int = 1;
 
         foreach ($topics as $topic) {
-            if (($topic->forum->section_id < 5 || $topic->forum->section_id == 6) && $int < 11 && $topic->forum_id != 16 && $topic->forum_id != 17 && $topic->forum_id != 72 && $topic->forum_id != 39 && $topic->forum_id != 40) {
-                $model['last_posts']->push([
-                    'id' => $topic->id,
-                    'title' => $topic->title,
-                    'title_slug' => ForumHelper::slugify($topic->title),
-                    'datetime' => ForumHelper::timeFormat($topic->time_post),
-                    'DATA' => json_decode($topic->DATA, false),
-                ]);
-                $int++;
+            $post_count = Post::where([['topic_id', $topic->id], ['moderation', false], ['hide', false]])->get();
+            if ($post_count->count() > 0) {
+                if (($topic->forum->section_id < 5 || $topic->forum->section_id == 6) && $int < 11 && $topic->forum_id != 16 && $topic->forum_id != 17 && $topic->forum_id != 72 && $topic->forum_id != 39 && $topic->forum_id != 40) {
+                    $model['last_posts']->push([
+                        'id' => $topic->id,
+                        'title' => $topic->title,
+                        'title_slug' => ForumHelper::slugify($topic->title),
+                        'datetime' => ForumHelper::timeFormat($topic->time_post),
+                        'DATA' => json_decode($topic->DATA, false),
+                    ]);
+                    $int++;
+                }
             }
         }
     }
@@ -82,17 +85,20 @@ class MainViewer
         $int = 1;
 
         foreach ($topics as $topic) {
-            if (($topic->forum->section_id < 5 || $topic->forum->section_id == 6) && $int < 11 && $topic->forum_id != 16 && $topic->forum_id != 17 && $topic->forum_id != 72 && $topic->forum_id != 39 && $topic->forum_id != 40) {
-                $model['new_topics']->push([
-                    'id' => $topic->id,
-                    'user_id' => $topic->user_id,
-                    'user_name' => $topic->user->name,
-                    'avatar' => $topic->user->avatar,
-                    'title' => $topic->title,
-                    'title_slug' => ForumHelper::slugify($topic->title),
-                    'datetime' => ForumHelper::timeFormat($topic->datetime),
-                ]);
-                $int++;
+            $post_count = Post::where([['topic_id', $topic->id], ['moderation', false], ['hide', false]])->get();
+            if ($post_count->count() > 0) {
+                if (($topic->forum->section_id < 5 || $topic->forum->section_id == 6) && $int < 11 && $topic->forum_id != 16 && $topic->forum_id != 17 && $topic->forum_id != 72 && $topic->forum_id != 39 && $topic->forum_id != 40) {
+                    $model['new_topics']->push([
+                        'id' => $topic->id,
+                        'user_id' => $topic->user_id,
+                        'user_name' => $topic->user->name,
+                        'avatar' => $topic->user->avatar,
+                        'title' => $topic->title,
+                        'title_slug' => ForumHelper::slugify($topic->title),
+                        'datetime' => ForumHelper::timeFormat($topic->datetime),
+                    ]);
+                    $int++;
+                }
             }
         }
     }

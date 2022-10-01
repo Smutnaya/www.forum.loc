@@ -120,8 +120,10 @@ class ForumHelper
         $topicPage = collect();
         $post_num = 0;
 
-        if ($user_role < 2) {
+        if ($user_role == 1) {
             $post_num = Post::where([['topic_id', intval($topicId)], ['hide', false]])->count();
+        } elseif ($user_role == 0) {
+            $post_num = Post::where([['topic_id', intval($topicId)], ['hide', false], ['moderation', false]])->count();
         } else {
             $post_num = Post::where('topic_id', intval($topicId))->count();
         }

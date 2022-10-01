@@ -96,27 +96,7 @@ class TopicViewer
 
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
 
-        $topicPage = ForumHelper::topicPage(intval($topicId), $user_role);
-        $pages = $topicPage['pages'];
-        $take = $topicPage['take'];
-        $page = ForumHelper::parsePage($page, $pages);
-        $skip = ($page - 1) * $take;
-
-        $posts = self::getPost(intval($topicId), $skip, $take, $user_role, $topic->forum_id, $topic->forum->section_id, $user);
-        if ($posts->isEmpty() || $posts->count() < 1) return $model; // !!!!!!!!!!
-        self::setPost($model, $posts, $user, $user_role, $topic->forum_id, $topic->forum->section_id);
-
-        $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id);
-        $model['userBan'] = ModerHelper::banTopic($user, $topic);
-        if (!is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $topic->forum_id) {
-            $model['editor'] = true;
-        }
-
-        $model['pagination']['topicId'] = $topic->id;
-        $model['pagination']['page'] = $page;
-        $model['pagination']['pages'] = $pages;
-
-        if (!is_null($user)) {
+                if (!is_null($user)) {
             $model['moder'] = ModerHelper::moderForum($user_role, $topic->forum_id, $topic->forum->section_id, $user);
             $model['topicEdit'] = ModerHelper::moderTopicEdit($model['user']['role_id'], $model['user']['id'], $model['topic']['datetime_d'], $model['topic']['DATA'], $model['topic']['user_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $model['topic']['id']);
             $model['topicMove'] = ModerHelper::moderTopicMove($model['user']['role_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $user, $model['topic']['id']);
@@ -131,6 +111,28 @@ class TopicViewer
                 }
             }
         }
+
+        if($user_role < 2 && $model['moder']) {
+            $topicPage = ForumHelper::topicPage(intval($topicId), 2);
+        } else {
+            $topicPage = ForumHelper::topicPage(intval($topicId), $user_role);
+        }
+        $pages = $topicPage['pages'];
+        $take = $topicPage['take'];
+        $page = ForumHelper::parsePage($page, $pages);
+        $skip = ($page - 1) * $take;
+
+        $posts = self::getPost(intval($topicId), $skip, $take, $user_role, $topic->forum_id, $topic->forum->section_id, $user);
+        if ($posts->isEmpty() || $posts->count() > 0) self::setPost($model, $posts, $user, $user_role, $topic->forum_id, $topic->forum->section_id);
+        $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id);
+        $model['userBan'] = ModerHelper::banTopic($user, $topic);
+        if (!is_null($user) && !is_null($user->newspaper_id) && $user->newspaper->forum_id == $topic->forum_id) {
+            $model['editor'] = true;
+        }
+
+        $model['pagination']['topicId'] = $topic->id;
+        $model['pagination']['page'] = $page;
+        $model['pagination']['pages'] = $pages;
 
         //dd(self::visitTopic($topic, $user_role, $user, $model['moder']));
 
