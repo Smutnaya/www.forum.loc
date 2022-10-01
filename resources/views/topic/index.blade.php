@@ -56,13 +56,13 @@
                         @include('topic.inc.pagination', ['model' => $model['pagination']])
                     @endif
                 </div>
-                {{-- @dd($model['newPost']) --}}
 
                 @if (!is_null($model['user']))
                     @if ((!$model['topic']['block'] && !$model['userBan'] && $model['topic']['forum_id'] != 38 && $model['topic']['forum_id'] != 39) || $model['newPost'] || $model['user_alliance_moder'] || $model['user_clan_moder'])
-                        <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
-                            <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
-                        </div>
+                        @if ($model['topic']['forum_id'] != 1 && $model['topic']['forum_id'] != 2)
+                            <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+                                <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
+                            </div>
             </div>
             <div id="menu-post-field" style="display:none">
                 <div class="row">
@@ -76,15 +76,50 @@
                     </form>
                 </div>
             </div>
-        @elseif ($model['userBan'])
-            <span class="centre p-2" style="color: #6a0000">Пользователь заблокирован в теме!</span>
-        @else
-            <span class="centre p-2 text-secondary">Тема закрыта для новых публикаций</span>
-        @endif
-    @else
-        <span class="centre p-2 text-secondary">Войдите на сайт, чтобы оставить ответ в теме</span>
-        @endif
-        @endif
+            @elseif (($model['topic']['forum_id'] == 1 && $model['user']['role_id'] > 10) || $model['moder'])
+            <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+                <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
+            </div>
+    </div>
+    <div id="menu-post-field" style="display:none">
+        <div class="row">
+            <form method='post' action='{{ url('t/' . $model['topic']['id'] . '/post') }}'>
+                @csrf
+                @include('inc.ckeditor')
+                <div class="col d-grid gap-2 d-flex justify-content-end my-2">
+                    <a id="reset" class="btn btn-sm btn-dark btn-custom shadow-sm">Очистить</a>
+                    <input class="btn btn-sm btn-dark btn-custom shadow-sm" type="submit" value="Добавить">
+                </div>
+            </form>
+        </div>
+    </div>
+    @elseif (($model['topic']['forum_id'] == 2 && $model['user']['role_id'] > 8) || $model['moder'])
+            <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+                <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
+            </div>
+    </div>
+    <div id="menu-post-field" style="display:none">
+        <div class="row">
+            <form method='post' action='{{ url('t/' . $model['topic']['id'] . '/post') }}'>
+                @csrf
+                @include('inc.ckeditor')
+                <div class="col d-grid gap-2 d-flex justify-content-end my-2">
+                    <a id="reset" class="btn btn-sm btn-dark btn-custom shadow-sm">Очистить</a>
+                    <input class="btn btn-sm btn-dark btn-custom shadow-sm" type="submit" value="Добавить">
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
+@elseif ($model['userBan'])
+    <span class="centre p-2" style="color: #6a0000">Пользователь заблокирован в теме!</span>
+@else
+    <span class="centre p-2 text-secondary">Тема закрыта для новых публикаций</span>
+    @endif
+@else
+    <span class="centre p-2 text-secondary">Войдите на сайт, чтобы оставить ответ в теме</span>
+    @endif
+    @endif
     </div>
 
     <script>
