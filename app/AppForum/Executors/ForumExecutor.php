@@ -123,7 +123,7 @@ class ForumExecutor extends BaseExecutor
         $user_role = ModerHelper::user_role($user);
         if (!ModerHelper::visForum($user_role, $forum->id, $forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
-        dd(ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id));
+        //dd(ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id));
         if ($forum->block && $newspaper != $forum->id && !ModerHelper::moderPost($user_role, $forum->id, $forum->section_id, $user, $forum->topic_id)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 
         if (mb_strlen($input['text']) > 50000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 50000, "...");
