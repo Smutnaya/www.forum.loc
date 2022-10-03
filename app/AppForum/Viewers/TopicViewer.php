@@ -96,7 +96,7 @@ class TopicViewer
 
         $model['breadcrump'] = BreadcrumHtmlHelper::breadcrumpHtmlTopic(intval($topicId));
 
-                if (!is_null($user)) {
+        if (!is_null($user)) {
             $model['moder'] = ModerHelper::moderForum($user_role, $topic->forum_id, $topic->forum->section_id, $user);
             $model['topicEdit'] = ModerHelper::moderTopicEdit($model['user']['role_id'], $model['user']['id'], $model['topic']['datetime_d'], $model['topic']['DATA'], $model['topic']['user_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $model['topic']['id']);
             $model['topicMove'] = ModerHelper::moderTopicMove($model['user']['role_id'], $model['topic']['forum_id'], $model['topic']['section_id'], $user, $model['topic']['id']);
@@ -112,7 +112,7 @@ class TopicViewer
             }
         }
 
-        if($user_role < 2 && $model['moder']) {
+        if ($user_role < 2 && $model['moder']) {
             $topicPage = ForumHelper::topicPage(intval($topicId), 2);
         } else {
             $topicPage = ForumHelper::topicPage(intval($topicId), $user_role);
@@ -307,7 +307,6 @@ class TopicViewer
                 }
             }
         }
-
         return $posts;
     }
 
@@ -369,6 +368,7 @@ class TopicViewer
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
                     } elseif ($section_id == 6) {
+
                         //dd($user_role > 8 && $post->user_id == $user->id);
                         if ($user_role > 0 && $user_role < 8 && $post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
@@ -377,8 +377,7 @@ class TopicViewer
                         } elseif ($user->newspaper_id != null && $user->newspaper->forum_id == $post->topic->forum_id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
-
-                    }elseif ($section_id == 5) {
+                    } elseif ($section_id == 5) {
                         if ($post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         } elseif (ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) {
@@ -425,25 +424,27 @@ class TopicViewer
                     self::visPost($post, $user_role, $user, $user_post, $model);
                 }
             } else {
-                $model['posts']->push([
-                    'text' => $post->text,
-                    'ip' => $post->ip,
-                    'date' => ForumHelper::timeFormat($post->datetime),
-                    'date_d' => $post->datetime,
-                    'hide' => $post->hide,
-                    'moderation' => $post->moderation,
-                    'DATA' => json_decode($post->DATA, false), //$post->DATA,
-                    'id' => $post->id,
-                    'user_id' => $post->user_id,
-                    'user_post' => $post->user,
-                    'avatar' => $post->user->avatar,
-                    'user_role' => Role::find($user_post->role_id)->description,
-                    'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
-                    'user_DATA' => json_decode($post->user->DATA, false),
-                    'like' => null,
-                    'postEdit' => null,
-                    'postModer' => null,
-                ]);
+                if (!$post->moderation && !$post->hide) {
+                    $model['posts']->push([
+                        'text' => $post->text,
+                        'ip' => $post->ip,
+                        'date' => ForumHelper::timeFormat($post->datetime),
+                        'date_d' => $post->datetime,
+                        'hide' => $post->hide,
+                        'moderation' => $post->moderation,
+                        'DATA' => json_decode($post->DATA, false), //$post->DATA,
+                        'id' => $post->id,
+                        'user_id' => $post->user_id,
+                        'user_post' => $post->user,
+                        'avatar' => $post->user->avatar,
+                        'user_role' => Role::find($user_post->role_id)->description,
+                        'user_role_style' => ForumHelper::roleStyle($user_post->role_id),
+                        'user_DATA' => json_decode($post->user->DATA, false),
+                        'like' => null,
+                        'postEdit' => null,
+                        'postModer' => null,
+                    ]);
+                }
             }
         }
     }

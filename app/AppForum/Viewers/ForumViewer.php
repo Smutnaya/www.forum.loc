@@ -123,9 +123,9 @@ class ForumViewer
         $topics = collect();
 
         if ($user_role == 0 && !is_null($skip)) {
-            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false], ['private', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
         } elseif ($user_role == 0 && is_null($skip)) {
-            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->get();
+            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false], ['private', false]])->orderByDesc('pin')->orderByDesc('time_post')->get();
         }
 
         if (!is_null($user)) {
@@ -159,7 +159,6 @@ class ForumViewer
                 //return $topics;
             }
         }
-
         if ($user_role > 0 && !is_null($skip)) {
             if ($section_id == 1) {
                 if (intval($forum_id) == 1) {
@@ -243,8 +242,6 @@ class ForumViewer
                     $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                 }
             }
-
-
             if ($section_id == 3) {
                 if ($forum_id == 41 || $forum_id == 42 || $forum_id == 43 || $forum_id == 44 || $forum_id == 45 || $forum_id == 46 || $forum_id == 47 || $forum_id == 51) {
                     if ($user_role > 7) {
@@ -261,7 +258,6 @@ class ForumViewer
                     }
                 }
             }
-
             if ($section_id == 4) {
                 if ($user_role > 2) {
                     return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
@@ -269,7 +265,6 @@ class ForumViewer
                     return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                 }
             }
-
             if ($section_id == 5) {
                 if ($user_role > 11) {
                     return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
