@@ -276,12 +276,14 @@ class ModerHelper
 
         if (is_null($user)) $user_id = 0;
         if ($user_role_id == 1 && $post_user_id == $user_id && time() <= $post_datetime + 1800 && is_null($post_DATA->date_moder)) return self::$result = true;
-        if ($user_role_id > 1 && $user_role_id < 9 && $post_user_id == $user_id && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
         if ($section_id == 5) {
             if ($user_role_id == 12) return self::$result = true;
             if ($forum_id == 52 && ($user_role_id > 7 || $user_role_id == 4)) return self::$result = true;
             if ($forum_id != 52 && ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) return self::$result = true;
         }
+        //if ($user_role_id > 1 && $user_role_id < 9 && $post_user_id == $user_id && time() <= $post_datetime + 7200 && is_null($post_DATA->date_moder)) return self::$result = true;
+        if ($user_role_id > 1 && is_null($post_DATA->date_moder)) return self::$result = true;
+
 
         if (!is_null($user)) {
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();

@@ -166,7 +166,7 @@ use App\AppForum\Helpers\ForumHelper;
                 </div>
             </div>
 
-            <div class="col-12 my-1">{!! $post['text'] !!}
+            <div class="col-12 mt-1">{!! $post['text'] !!}
             </div>
             {{-- <div class="col-12 my-1" style="color:#6a0000 !important">
                 <i class="fa-solid fa-user-lock forum-desc" style="color:#6a0000 !important" title="Доступ закрыт"></i>
@@ -174,7 +174,7 @@ use App\AppForum\Helpers\ForumHelper;
                 BETAJIb
             </div> --}}
             <div class="col-12">
-                <div class="row mt-4 mx-0">
+                <div class="row mt-2 mx-0">
                     @if (!is_null($post['DATA']->user_name_edit) && !is_null($post['DATA']->date_edit) && !is_null($post['DATA']->first_edit) && is_null($post['DATA']->date_moder))
                         <div class="col forum-desc fst-italic p-0 d-flex justify-content-start align-items-center text-center">
                             <i class="fa-solid fa-pencil me-1"></i> &nbsp; <span class="fw-bold">{{ $post['DATA']->user_name_edit }} &middot; &nbsp;</span>
