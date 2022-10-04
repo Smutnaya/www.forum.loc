@@ -15,15 +15,15 @@ CKEDITOR.editorConfig = function( config ) {
     //config.disallowedContent = a[href];
 
     config.toolbar = [
-		{ name: 'document', items: [ 'Source', '-',  'Preview'] },
+		//{ name: 'document', items: [ 'Source', '-',  'Preview'] },
 		{ name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
 		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike'] },
 		{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-',  'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
 		{ name: 'insert', items: [  'Smiley', 'Blockquote', 'Link', 'Image', 'Table', 'HorizontalRule'] },
 		{ name: 'tools', items: ['Maximize' ] },
 	];
-	config.removeButtons = 'Clipboard,Save,NewPage,ExportPdf,Print,Templates,Cut,PasteText,Paste,PasteFromWord,SelectAll,Scayt,TextField,Form,Textarea,ImageButton,HiddenField,Select,CopyFormatting,Subscript,Superscript,CreateDiv,Language,Unlink,Anchor,PageBreak,Iframe,UIColor,About,ShowBlocks,Copy,Replace,BidiLtr,BidiRtl,Styles,Undo,Redo,Find,RemoveFormat,Radio,Button,Checkbox,SpecialChar,Table', 'EmojiPanel';
+	config.removeButtons = 'Clipboard,Source,Save,NewPage,Outdent,Indent,ExportPdf,Print,Templates,Cut,PasteText,Paste,PasteFromWord,SelectAll,Scayt,TextField,Form,Textarea,ImageButton,HiddenField,Select,CopyFormatting,Subscript,Superscript,CreateDiv,Language,Unlink,Anchor,PageBreak,Iframe,UIColor,About,ShowBlocks,Copy,Replace,BidiLtr,BidiRtl,Styles,Undo,Redo,Find,RemoveFormat,Radio,Button,Checkbox,SpecialChar,Table', 'EmojiPanel';
 
 
 };
