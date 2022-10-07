@@ -257,8 +257,9 @@ class TopicViewer
         }
 
         if ($section_id == 5) {
-            if ($user_role == 12 && !is_null($skip)) $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
-            if ($user_role == 12 && is_null($skip)) $posts = Post::where('topic_id', intval($topicId))->get();
+            if ($user_role == 12 && !is_null($skip)) return $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
+            if ($user_role == 12 && is_null($skip)) return $posts = Post::where('topic_id', intval($topicId))->get();
+
             if ($forum_id == 52 && !is_null($skip)) {
                 if ($user_role > 7 || $user_role == 4) {
                     $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
@@ -378,10 +379,19 @@ class TopicViewer
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
                     } elseif ($section_id == 5) {
-                        if ($post->user_id == $user->id) {
-                            self::visPost($post, $user_role, $user, $user_post, $model);
-                        } elseif (ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) {
-                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        if ($forum_id == 52) {
+                            if ($user_role >= 1 && $user_role < 12 || $post->user_id == $user->id) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            } elseif ($user_role > 7) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            }
+                        }
+                        if ($forum_id != 52) {
+                            if ($post->user_id == $user->id) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            } elseif (ClanAllianceHelper::userAllianceModer($user, $forum) || ClanAllianceHelper::userClanModer($user, $forum)) {
+                                self::visPost($post, $user_role, $user, $user_post, $model);
+                            }
                         }
                     } else {
                         if ($forum_id == 1 || $forum_id == 3) {
@@ -396,7 +406,7 @@ class TopicViewer
                             } elseif ($user_role > 8) {
                                 self::visPost($post, $user_role, $user, $user_post, $model);
                             }
-                        } elseif ($forum_id == 52 || $forum_id == 53) {
+                        } elseif ($forum_id == 53) {
                             if ($user_role >= 1 && $user_role < 12 || $post->user_id == $user->id) {
                                 self::visPost($post, $user_role, $user, $user_post, $model);
                             } elseif ($user_role > 11) {
