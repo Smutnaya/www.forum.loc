@@ -1,11 +1,11 @@
-<div class="col border border-ligh shadow-sm" style="background:#ffffdeb5" {{-- style="background:#fdfddbb3;" --}}>
-    <div class="row py-1" style="background:#f4efcd;">
-        <div class="col fw-bold">
+<div class="col m-0 p-0 border border-ligh shadow-sm mt-2" style="background:#ffffdeb5" {{-- style="background:#fdfddbb3;" --}}>
+    <div class="row p-0 m-0" style="background:#f4efcd;">
+        <div class="col my-1 fw-bold">
             Пользователи онлайн
         </div>
     </div>
-    <div class="row py-2" style="font-size: 10pt;">
-        <div class="col fst-italic">
+    <div class="row py-2 m-0" style="font-size: 10pt;">
+        <div class="col m-0 fst-italic">
             @if (!is_null($model['onlines']) && $model['onlines']->count() > 0)
                 @foreach ($model['onlines'] as $online)
                     @if ($online['role_id'] == 1)

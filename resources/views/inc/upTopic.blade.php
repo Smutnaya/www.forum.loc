@@ -2,8 +2,8 @@
 use App\AppForum\Helpers\ForumHelper;
 @endphp
 <div class="scroll">
-    <div class="col border border-ligh shadow-sm overflow-auto text-break" style="background:#fbf7d9; max-height: 275px; font-size: 10pt;">
-        <div class="row m-0 fs-6 border-bottom" style="background:#f2edcd; position: sticky; top: 0px; border-bottom-color: #dee2e657 !important;">
+    <div class="col border border-ligh shadow-sm overflow-auto text-break" style="background:#ffffdeb5; max-height: 275px; font-size: 10pt;">
+        <div class="row m-0 fs-6 border-bottom" style="background:#f4efcd; position: sticky; top: 0px; border-bottom-color: #dee2e657 !important;">
             <div class="col py-1 fw-bold">
                 Последние ответы
             </div>
@@ -31,8 +31,8 @@ use App\AppForum\Helpers\ForumHelper;
     </div>
 </div>
 <div class="scroll">
-    <div class="col mt-4 border border-ligh shadow-sm overflow-auto text-break" style="background:#fbf7d9; max-height: 275px; font-size: 10pt;">
-        <div class="row m-0 fs-6 border-bottom" style="background:#f2edcd; position: sticky; top: 0px; border-bottom-color: #dee2e657 !important;">
+    <div class="col mt-3 border border-ligh shadow-sm overflow-auto text-break" style="background:#ffffdeb5; max-height: 275px; font-size: 10pt;">
+        <div class="row m-0 fs-6 border-bottom" style="background:#f4efcd; position: sticky; top: 0px; border-bottom-color: #dee2e657 !important;">
             <div class="col py-1 fw-bold">
                 Новые темы
             </div>
