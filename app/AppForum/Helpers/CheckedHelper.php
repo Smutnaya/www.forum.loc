@@ -68,18 +68,18 @@ class CheckedHelper
         $out = self::setCheck($input, $out);
         return $out;
     }
-    public static function checkPostEdit($input, $topic)
+    public static function checkPostEdit($input, $topic, $post)
     {
         $out = [
             'hide' => 0,
             'moder' => 0
         ];
 
-
-        //if($topic->forum->section->moderation || $topic->forum->moderation || $topic->moderation) $out['moder'] = 1;
-        //if($topic->forum->section->hide || $topic->forum->hide || $topic->moderation) $out['hide'] = 1;
-
-        if(!isset($input['check'])) return $out;
+        if(!isset($input['check'])) {
+            if($post->moderation) $out['moder'] = 1;
+            if($post->moderation) $out['hide'] = 1;
+            return $out;
+        }
 
         $out = self::setCheck($input, $out);
 

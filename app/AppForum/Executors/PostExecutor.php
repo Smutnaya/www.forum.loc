@@ -91,7 +91,7 @@ class PostExecutor extends BaseExecutor
         if (mb_strlen($input['text']) > 50000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 50000, "...");
 
         $out['post'] = $post;
-        $out['check'] = CheckedHelper::checkPostEdit($input, $post->topic);
+        $out['check'] = CheckedHelper::checkPostEdit($input, $post->topic, $post);
 
         $data = json_decode($post->DATA, false);
         $data->user_name_edit = $user->name;
@@ -183,7 +183,7 @@ class PostExecutor extends BaseExecutor
         if (mb_strlen($input['text']) > 50000 && !is_null($input['text'])) $out['text'] = mb_strimwidth($input['text'], 0, 50000, "...");
 
         $out['post'] = $post;
-        $out['check'] = CheckedHelper::checkPostEdit($input, $post->topic);
+        $out['check'] = CheckedHelper::checkPostEdit($input, $post->topic, $post);
 
         $data = json_decode($post->DATA, false);
         $data->user_name_moder = $user->name;
