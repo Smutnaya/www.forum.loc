@@ -59,8 +59,8 @@ class CheckedHelper
         $out = [
             'pin' => 0,
             'block' => 0,
-            'hide' => $topic->hide,
-            'moder' => $topic->moderation
+            'hide' => 0,
+            'moder' => 0
         ];
 
         if(!isset($input['check'])) return $out;
