@@ -77,7 +77,7 @@ class CheckedHelper
 
         if(!isset($input['check'])) {
             if($post->moderation) $out['moder'] = 1;
-            if($post->moderation) $out['hide'] = 1;
+            if($post->hide) $out['hide'] = 1;
             return $out;
         }
 
