@@ -368,6 +368,12 @@ class TopicViewer
                         } elseif ($user_role > 7) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
+                    } elseif ($section_id == 4) {
+                        if ($user_role == 1 && $post->user_id == $user->id) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        } elseif ($user_role > 1) {
+                            self::visPost($post, $user_role, $user, $user_post, $model);
+                        }
                     } elseif ($section_id == 6) {
 
                         //dd($user_role > 8 && $post->user_id == $user->id);
