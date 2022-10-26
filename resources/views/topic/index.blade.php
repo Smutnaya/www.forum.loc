@@ -164,12 +164,22 @@
                 CKEDITOR.instances.text.setData(
                     '<blockquote style=\'background: #f1e9c28f; color: #4a4741; margin: 0 0 1rem 1rem; padding: 5px 13px !important; font-size: 14px; font-style: italic; font-family: "Open Sans", "Arial", Helvetica, serif !important; border-style: solid; border-color: #afa4843d; border-width: 0.005rem; border-radius: 0px 15px !important;\'>' +
                     $(this).data('text') + '<div style="text-align: right; font-size: 9pt;">' + $(this)
-                    .data('inf') + '</div></blockquote>');
+                    .data('inf') + '</div></blockquote><br>');
                 // CKEDITOR.instances.text.setData('<blockquote style="background: #f1e9c28f; color: #4a4741; margin: 0 0 1rem 1rem; padding: 5px 13px !important; font-size: 14px; font-style: italic; font-family: "Open Sans", "Arial", Helvetica, serif !important; border-style: solid; border-color: #afa4843d; border-width: 0.005rem; border-radius: 0px 15px !important;">'+$(this).data('text')+'<div style="text-align: right; font-size: 9pt;">'+$(this).data('inf')+'</div></blockquote>');
             });
         });
         $(document).ready(function() {
             $('[data-bs-toggle="popover"]').popover();
+        });
+
+        CKEDITOR.on( 'dialogDefinition', function( ev ) {
+        var dialogName = ev.data.name;
+        var dialogDefinition = ev.data.definition;
+            if ( dialogName == 'link' ) {
+                var targetTab = dialogDefinition.getContents( 'target' );
+                var targetField = targetTab.get( 'linkTargetType' );
+                targetField[ 'default' ] = '_blank';
+            }
         });
 
         // var timer;
