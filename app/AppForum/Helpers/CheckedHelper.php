@@ -48,7 +48,11 @@ class CheckedHelper
             'moder' => $topic->moderation
         ];
 
-        if(!isset($input['check'])) return $out;
+        if(!isset($input['check'])) {
+            if($topic->moderation) $out['moder'] = 1;
+            if($topic->hide) $out['hide'] = 1;
+            return $out;
+        }
 
         $out = self::setCheck($input, $out);
         return $out;
@@ -63,7 +67,11 @@ class CheckedHelper
             'moder' => 0
         ];
 
-        if(!isset($input['check'])) return $out;
+        if(!isset($input['check'])) {
+            if($topic->moderation) $out['moder'] = 1;
+            if($topic->hide) $out['hide'] = 1;
+            return $out;
+        }
 
         $out = self::setCheck($input, $out);
         return $out;
