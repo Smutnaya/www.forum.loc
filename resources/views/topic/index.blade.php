@@ -18,24 +18,10 @@
                 <div class="alert alert-success mb-1" style="color: rgb(0 0 0 / 84%) !important; background-color: #9b000029 !important; border-color: #5c4f4f1c !important;">{{ $errors->first('message') }}</div>
             @endif
             @include('inc.breadcrump', ['posts' => $model['breadcrump']])
-            <div class="row m-0">
-                <div class="col text-break d-flex justify-content-start align-items-center py-1 mb-2" id="title">
-                    <h4 class="m-0 "><span class="title-shadow"><span class="text-secondary" title="ID темы">
-                                @if (!is_null($model['user']))
-                                    @if ($model['user']['role_id'] > 1 || $model['moder'] || $model['editor'])
-                                        [{{ $model['topic']['id'] }}]
-                                    @endif
-                                @endif
-                            </span>{{ $model['topic']['title'] }} </span></h4>
-                    @if ($model['topicEdit'])
-                        <i onclick="toggleEdit()" type="button" id="topic-edit" class="fa-solid fa-pencil ms-2 mt-1" style="color: #989e9a;" title="Редактировать тему"></i>
-                    @endif
-                    @if ($model['topicMove'])
-                        <i onclick="toggleMove()" type="button" id="topic-move" class="fa-solid fa-truck-arrow-right ms-3 mt-1" style="color: #989e9a;" title="Переместить тему" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
-                    @endif
-                </div>
-            </div>
+            @include('topic.inc.topicInf', ['model' => $model])
+
             @include('topic.inc.pagination', ['model' => $model['pagination']])
+
             @if (is_null($model['topic']) || is_null($model['posts']) || $model['posts']->count() == 0)
                 <div class="my-3 mb-5 centre error post shadow-sm p-0"><span class="p-1" style="background: #ffffde7a">Постов не найдено</span>
                 </div>
@@ -63,7 +49,7 @@
                         @if ($model['topic']['forum_id'] != 1 && $model['topic']['forum_id'] != 2)
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                                 @if ($model['topic']['block'])
-                                    <span class="centre p-2" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
+                                    <span class="centre" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
                                 @endif
                                 <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
                             </div>
@@ -83,7 +69,7 @@
         @elseif (($model['topic']['forum_id'] == 1 && $model['user']['role_id'] > 10) || $model['moder'])
             <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                 @if ($model['topic']['block'])
-                    <span class="centre p-2" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
+                    <span class="centre" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
                 @endif
                 <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
             </div>
@@ -103,7 +89,7 @@
 @elseif (($model['topic']['forum_id'] == 2 && $model['user']['role_id'] > 8) || $model['moder'])
     <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
         @if ($model['topic']['block'])
-            <span class="centre p-2" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
+            <span class="centre" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
         @endif
         <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
     </div>
