@@ -76,7 +76,11 @@ class TopicViewer
         if (is_null($topic)) return $model;
 
         $first_post = Post::where('topic_id', $topic->id)->first();
-        $model['first_post'] = $first_post->id;
+        if (!is_null($first_post)) {
+            $model['first_post'] = $first_post->id;
+        } else {
+            $model['first_post'] = 0;
+        }
 
         self::setTopic($model, $topic, $user_role);
 

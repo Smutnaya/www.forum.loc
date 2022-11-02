@@ -1,7 +1,7 @@
 <div class="row text-break d-flex justify-content-start align-items-center ps-0 py-1 mb-2" id="title">
     <div class="col-12">
         <span class="m-0 fs-3 title-shadow">
-            <span class="text-secondary fs-4" title="ID темы">
+            <span class="text-secondary" title="ID темы">
                 @if (!is_null($model['user']))
                     @if ($model['user']['role_id'] > 1 || $model['moder'] || $model['editor'])
                         [{{ $model['topic']['id'] }}]

@@ -338,7 +338,7 @@ class PostExecutor extends BaseExecutor
 
     public static function last_post($topic_id)
     {
-        $last_post_collect = Post::where([['topic_id', intval($topic_id)], ['moderation', false], ['hide', false]])->orderBy('datetime', 'desc')->limit(1)->get();
+        $last_post_collect = Post::where('topic_id', intval($topic_id))->orderBy('datetime', 'desc')->limit(1)->get();
         if ($last_post_collect->count() < 1) return null;
         if ($last_post_collect->count() == 1) {
             $last_post = $last_post_collect['0']->datetime;
