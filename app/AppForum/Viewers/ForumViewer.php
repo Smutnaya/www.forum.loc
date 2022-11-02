@@ -229,8 +229,6 @@ class ForumViewer
                 if ($forum_id == 39) {
                     if ($user_role > 1) {
                         $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
-                    } else {
-                        $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                     }
                 }
                 if ($forum_id != 40 && $user_role > 1) {
@@ -242,6 +240,13 @@ class ForumViewer
                     $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
                 } elseif ($forum_id != 40 && $forum_id != 39 && $user_role < 2) {
                     $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+                }
+                if ($forum_id == 40) {
+                    if ($user_role == 4 || $user_role > 8) {
+                        $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+                    } else {
+                        $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->skip($skip)->take($take)->get();
+                    }
                 }
             }
             if ($section_id == 3) {
@@ -387,8 +392,6 @@ class ForumViewer
                     if ($forum_id == 39) {
                         if ($user_role > 1) {
                             return $topics = Topic::where('forum_id', intval($forum_id))->orderByDesc('pin')->orderByDesc('time_post')->get();
-                        } else {
-                            return $topics = Topic::where([['forum_id', intval($forum_id)], ['hide', false]])->orderByDesc('pin')->orderByDesc('time_post')->get();
                         }
                     }
                     if ($forum_id != 40 && $forum_id != 39 && $user_role > 1) {

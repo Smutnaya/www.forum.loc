@@ -173,6 +173,7 @@ class ModerHelper
             if ($user_role < 6 && ($forum_id == 54 || $forum_id == 55 || $forum_id == 57 || $forum_id == 59 || $forum_id == 60 || $forum_id == 61 || $forum_id == 66)) $vis = false;
             if ($user_role < 5 && ($forum_id == 65 || $forum_id == 71)) $vis = false;
             if ($user_role < 2 && $forum_id == 40) $vis = false;
+            if ($user_role < 2 && $forum_id == 39) $vis = false;
         }
 
         if (!is_null($user)) {
