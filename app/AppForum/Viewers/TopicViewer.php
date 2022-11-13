@@ -107,6 +107,8 @@ class TopicViewer
 
             $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
 
+
+
             if (!$model['moder'] && $other_roles->count() > 0) {
                 foreach ($other_roles as $other_role) {
                     if ($other_role->section_id != null && $other_role->section_id == $topic->forum->section_id && $other_role->moderation == true) $model['moder'] = true;
@@ -126,7 +128,7 @@ class TopicViewer
         $page = ForumHelper::parsePage($page, $pages);
         $skip = ($page - 1) * $take;
 
-        $posts = self::getPost(intval($topicId), $skip, $take, $user_role, $topic->forum_id, $topic->forum->section_id, $user);
+        $posts = self::getPost(intval($topicId), $skip, $take, $user_role, $topic->forum_id, $topic->forum->section_id, $user, $model['moder']);
         if ($posts->isEmpty() || $posts->count() > 0) self::setPost($model, $posts, $user, $user_role, $topic->forum_id, $topic->forum->section_id);
         $model['newPost'] = ModerHelper::moderPost($user_role, $topic->forum_id, $topic->forum->section_id, $user, $topic->id);
         $model['userBan'] = ModerHelper::banTopic($user, $topic);
@@ -178,10 +180,13 @@ class TopicViewer
         }
     }
 
-    public static function getPost($topicId, $skip = null, $take = null, $user_role, $forum_id, $section_id, $user)
+    public static function getPost($topicId, $skip = null, $take = null, $user_role, $forum_id, $section_id, $user, $moder)
     {
         $posts = collect();
         $forum = Forum::find(intval($forum_id));
+
+        if ($moder && !is_null($skip)) return $posts = Post::where('topic_id', intval($topicId))->skip($skip)->take($take)->get();
+        if ($moder && is_null($skip)) return $posts = Post::where('topic_id', intval($topicId))->get();
 
         if ($user_role == 0 && !is_null($skip)) {
             $posts = Post::where([['topic_id', intval($topicId)], ['moderation', false], ['hide', false]])->skip($skip)->take($take)->get();
@@ -365,7 +370,18 @@ class TopicViewer
         foreach ($posts as $post) {
             $user_post = User::find($post->user_id);
             if (!is_null($user)) {
-                if ($post->moderation) {
+                $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
+
+                if (!is_null($other_roles) && $post->moderation  && $user->id != $post->user_id) {
+                    foreach ($other_roles as $other_role) {
+                        if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
+                        if ($other_role->forum_id != null && $other_role->forum_id == $forum_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
+                        if ($other_role->topic_id != null) {
+                            $topic = Topic::find($other_role->topic_id);
+                            if ($topic->id == $post->topic_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
+                        }
+                    }
+                } elseif ($post->moderation) {
                     if ($section_id == 3) {
                         if ($user_role > 0 && $user_role < 8 && $post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
@@ -424,20 +440,6 @@ class TopicViewer
                             }
                         } elseif ($user_role > 1) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
-                        }
-                        if (!is_null($user)) {
-                            $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
-
-                            if (!is_null($other_roles) && $post->moderation  && $user->id != $post->user_id) {
-                                foreach ($other_roles as $other_role) {
-                                    if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
-                                    if ($other_role->forum_id != null && $other_role->forum_id == $forum_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
-                                    if ($other_role->topic_id != null) {
-                                        $topic = Topic::find($other_role->topic_id);
-                                        if ($topic->id == $post->topic_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
-                                    }
-                                }
-                            }
                         }
                     }
                 } else {
