@@ -367,12 +367,14 @@ class TopicViewer
     {
         $forum = Forum::find(intval($forum_id));
 
+
         foreach ($posts as $post) {
+
             $user_post = User::find($post->user_id);
             if (!is_null($user)) {
                 $other_roles = Other_role::where([['user_id', $user->id], ['moderation', true]])->get();
 
-                if (!is_null($other_roles) && $post->moderation  && $user->id != $post->user_id) {
+                if ($other_roles->count() > 0 && $post->moderation && $user->id != $post->user_id) {
                     foreach ($other_roles as $other_role) {
                         if ($other_role->section_id != null && $other_role->section_id == $section_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
                         if ($other_role->forum_id != null && $other_role->forum_id == $forum_id && $other_role->moderation == true) self::visPost($post, $user_role, $user, $user_post, $model);
@@ -395,7 +397,6 @@ class TopicViewer
                             self::visPost($post, $user_role, $user, $user_post, $model);
                         }
                     } elseif ($section_id == 6) {
-
                         //dd($user_role > 8 && $post->user_id == $user->id);
                         if ($user_role > 0 && $user_role < 8 && $post->user_id == $user->id) {
                             self::visPost($post, $user_role, $user, $user_post, $model);
