@@ -47,10 +47,10 @@ class MainViewer
         $user_role = ModerHelper::user_role($user);
 
         // последние ответы
-        $last_posts = Topic::where('time_post', '!=', 'null')->orderByDesc('time_post')->distinct()->limit(20)->get();
+        $last_posts = Topic::where('time_post', '!=', 'null')->orderByDesc('time_post')->distinct()->limit(50)->get();
         if ($last_posts->count() > 0) self::setLastPost($model, $last_posts, $user_role);
         // новые темы
-        $new_topics = Topic::orderBy('datetime', 'desc')->limit(20)->get();
+        $new_topics = Topic::orderBy('datetime', 'desc')->limit(50)->get();
         if ($new_topics->count() > 0) self::setNewTopic($model, $new_topics);
 
         $onlines = Online::where('datetime', '>=', strtotime('-15 minute'))->orderBy('datetime', 'desc')->get();
