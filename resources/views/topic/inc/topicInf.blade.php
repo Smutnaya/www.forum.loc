@@ -25,6 +25,9 @@
             @if ($model['topic']['moderation'])
                 <i class="fa-regular fa-hourglass" style="padding-top: 13px;"></i>
             @endif
+            @if ($model['topic']['private'] && $model['section_id'] == 5)
+                <i class="fa-solid fa-chess-rook" style="color: #7c0011; font-size: 12px;"></i>
+            @endif
         </span>
         <span>
             @if ($model['topicEdit'])
@@ -36,4 +39,3 @@
         </span>
     </div>
 </div>
-

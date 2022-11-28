@@ -28,7 +28,7 @@ class BaseExecutor
     {
         if (is_null($user)) return self::$message = 'Пожалуйста, выполните вход на форум!';
         if (!is_null($user->action_time)) {
-            if($user->action_time > strtotime('-15 seconds')) return self::$message = 'Пожалуйста, не флудите!';
+            if($user->action_time > strtotime('-5 seconds')) return self::$message = 'Пожалуйста, не флудите!';
         }
 
         return self::$message;
