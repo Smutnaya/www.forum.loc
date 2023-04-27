@@ -69,7 +69,7 @@
                 <div class="border border-ligh shadow-sm">
                     @foreach ($model['topics'] as $topic)
                         <div class="table-color text-break">
-                            <div class="row mx-1 py-1 @if (!is_null($model['user']) && $model['user']['role_id'] < 6  || !$model['moder'] || !$model['visForum']) align-items-center @endif ">
+                            <div class="row mx-1 py-1 @if (!is_null($model['user']) && $model['user']['role_id'] < 6  || !$model['moder']) align-items-center @endif ">
                                 <div class="col align-self-center">
                                     @if ($topic['pin'])
                                         <i class="fa fa-thumb-tack forum-desc me-1" title="Закрепеленная тема"></i>
@@ -160,7 +160,7 @@
 
                                         @if ($model['sectionId'] == 3)
                                             <div class="row">
-                                                @if (!is_null($model['user']) && $model['user']['role_id'] > 5 || $model['moder'] || $model['visForum'])
+                                                @if (!is_null($model['user']) && $model['user']['role_id'] > 5 || $model['moder'])
                                                     <div class="col-2 d-none d-xl-block p-1 align-self-center">
                                                         @if (!is_null($topic['DATA']->last_post->avatar))
                                                             <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" src="/storage{{ $topic['DATA']->last_post->avatar }}">
@@ -175,7 +175,7 @@
                                                     </div>
                                                 @endif
                                                 <div class="col-10 align-self-center px-1" style="font-size: 10pt;">
-                                                    @if (!is_null($model['user']) && $model['user']['role_id'] > 5 || $model['moder'] || $model['visForum'])
+                                                    @if (!is_null($model['user']) && $model['user']['role_id'] > 5 || $model['moder'])
                                                         <div class="row m-0">
                                                             <div class="col px-2">
                                                                 <a class="post-a-color" href="{{ url('/user/' . $topic['DATA']->last_post->user_id) }}"> {{ $topic['DATA']->last_post->user_name }} </a>
