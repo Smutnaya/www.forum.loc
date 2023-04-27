@@ -90,7 +90,7 @@
 
                                     @if ($forum['section_id'] == 3)
                                         <div class="row">
-                                            @if ($model['user']['role_id'] > 5)
+                                            @if (!is_null($model['user']) && $model['user']['role_id'] > 5)
                                                 <div class="col-2 d-none d-xl-block p-1 align-self-center">
                                                     <img style="background-color: #f9f5dc !important; border: 1px solid #d4d1bb9e !important;" class="min-avatar rounded" alt="Cinque Terre" @if (!is_null($forum['DATA']->last_post->avatar)) src="/storage{{ $forum['DATA']->last_post->avatar }}"
                                             @else
@@ -102,7 +102,7 @@
                                             src="/images/av.png" @endif>
                                                 </div>
                                             @endif
-                                            <div @if ($model['user']['role_id'] > 5) class="col-10 align-self-center p-0  ps-2 pe-0" @else class="col-12 align-self-center" @endif>
+                                            <div @if (!is_null($model['user']) && $model['user']['role_id'] > 5) class="col-10 align-self-center p-0  ps-2 pe-0" @else class="col-12 align-self-center" @endif>
                                                 <div class="row m-0">
                                                     <div class="col p-0">
                                                         <a class="post-a-color" style="font-size: 10pt !important;" href="{{ url('/t/' . $forum['DATA']->last_post->post_id) }} ">
@@ -112,13 +112,13 @@
                                                 <div class="row m-0">
                                                     <div class="col p-0">
                                                         <span class="forum-desc">
-                                                            @if ($model['user']['role_id'] > 5)
+                                                            @if (!is_null($model['user']) && $model['user']['role_id'] > 5)
                                                                 <span>
                                                                     <a class="text-dark" style="font-size: 10pt;" href="{{ url('/user/' . $forum['DATA']->last_post->user_id) }}">{{ $forum['DATA']->last_post->user_name }}</a>
                                                                 </span>
                                                             @endif
                                                             <span style="font-size: 8pt;" class="text-muted d-inline-block">
-                                                                @if ($model['user']['role_id'] > 5)
+                                                                @if (!is_null($model['user']) && $model['user']['role_id'] > 5)
                                                                     &bull;&nbsp;
                                                                 @endif
                                                                 <a href="{{ url('/t/' . $forum['DATA']->last_post->post_id . '/end') }} ">{{ ForumHelper::timeFormat($forum['DATA']->last_post->date) }}
