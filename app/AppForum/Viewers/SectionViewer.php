@@ -17,6 +17,7 @@ class SectionViewer
         return collect([
             'breadcrump' => null,
             'sectionTitle' => null,
+            'sectionTitle' => null,
             'user' => null,
             'message_new' => null,
             'forums' => collect(),

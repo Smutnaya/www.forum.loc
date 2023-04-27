@@ -46,7 +46,7 @@
 
                 @if (!is_null($model['user']))
                     @if ((!$model['topic']['block'] && !$model['userBan'] && $model['topic']['forum_id'] != 38 && $model['topic']['forum_id'] != 39) || $model['newPost'] || $model['user_alliance_moder'] || $model['user_clan_moder'])
-                        @if ($model['topic']['forum_id'] != 1 && $model['topic']['forum_id'] != 2)
+                        @if ($model['topic']['forum_id'] != 1 && $model['topic']['forum_id'] != 2 && $model['topic']['forum_id'] != 42)
                             <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                                 @if ($model['topic']['block'])
                                     <span class="centre" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
@@ -66,13 +66,40 @@
                     </form>
                 </div>
             </div>
-        @elseif (($model['topic']['forum_id'] == 1 && $model['user']['role_id'] > 10) || $model['moder'])
+        @elseif ($model['topic']['forum_id'] == 42)
+        @if($model['user']['role_id'] > 5 || $model['moder'] && $model['posts']->count() > 0)
             <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
                 @if ($model['topic']['block'])
                     <span class="centre" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
                 @endif
                 <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
             </div>
+    </div>
+    <div id="menu-post-field" style="display:none">
+        <div class="row">
+            <form method='post' action='{{ url('t/' . $model['topic']['id'] . '/post') }}'>
+                @csrf
+                @include('inc.ckeditor')
+                <div class="col d-grid gap-2 d-flex justify-content-end my-2">
+                    <a id="reset" class="btn btn-sm btn-dark btn-custom shadow-sm">Очистить</a>
+                    <input class="btn btn-sm btn-dark btn-custom shadow-sm" type="submit" value="Добавить">
+                </div>
+            </form>
+        </div>
+    </div>
+    @else
+    <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+            <span class="centre" style="color: #6a0000">Ожидайте ответа модератора</span>
+    </div>
+
+    @endif
+@elseif (($model['topic']['forum_id'] == 1 && $model['user']['role_id'] > 10) || $model['moder'])
+    <div class="col d-grid gap-2 d-inline-flex justify-content-end mb-2">
+        @if ($model['topic']['block'])
+            <span class="centre" style="font-size: 11px; color: #6a0000">*Тема закрыта</span>
+        @endif
+        <a id="btn-post-field" class="btn btn-sm btn-dark btn-custom shadow-sm">Ответить</a>
+    </div>
     </div>
     <div id="menu-post-field" style="display:none">
         <div class="row">

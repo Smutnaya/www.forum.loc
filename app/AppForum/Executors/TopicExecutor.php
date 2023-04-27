@@ -7,6 +7,7 @@ use App\View;
 use App\Forum;
 use App\Topic;
 use App\Images;
+use App\Other_role;
 use App\AppForum\Helpers\IpHelper;
 use App\AppForum\Helpers\ForumHelper;
 use App\AppForum\Helpers\ModerHelper;
@@ -16,6 +17,8 @@ use App\AppForum\Managers\ViewManager;
 use App\AppForum\Helpers\CheckedHelper;
 use App\AppForum\Managers\ForumManager;
 use App\AppForum\Managers\TopicManager;
+use App\AppForum\Executors\BaseExecutor;
+use App\AppForum\Executors\PostExecutor;
 use App\AppForum\Managers\ImagesManager;
 use App\AppForum\Managers\CommentManager;
 use App\AppForum\Helpers\ClanAllianceHelper;
@@ -101,12 +104,23 @@ class TopicExecutor extends BaseExecutor
         $topic = Topic::find(intval($topicId));
         if (is_null($topic)) return self::$result['message'] = 'Тема не найдена';
 
+
         $user_role = ModerHelper::user_role($user);
+
         if (is_null($user->newspaper_id)) {
             $newspaper = 0;
         } else {
             $newspaper = $user->newspaper->forum_id;
         }
+
+        $other_roles = Other_role::where('user_id', $user->id)->get();
+        $moder = false;
+        if (!is_null($other_roles)) {
+            foreach ($other_roles as $other_role)
+                if ($other_role->moderation) $moder = true;
+        }
+
+        if ($topic->forum_id == 42 && $user_role < 6 && count($topic->posts) > 0 && !$moder) return self::$result['message'] = 'Дождитесь ответа модератора';
         if ($newspaper != $topic->forum_id && !ModerHelper::visForum($user_role, $topic->forum_id, $topic->forum->section_id, $user)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
         if ($topic->private && !ClanAllianceHelper::userAllianceModer($user, $topic->forum) && !ClanAllianceHelper::userClanModer($user, $topic->forum)) return self::$result['message'] = 'Отсутвует доступ для публикаций на данном форуме';
 

@@ -31,7 +31,7 @@ class ForumViewer
             'forumId' => null,
             'section_id' => null,
             'forum_id' => null,
-            'visForum' => null,
+            'visForum' => false,
             'moder' => false,
             'editor' => false,
             'sections' => collect(),
